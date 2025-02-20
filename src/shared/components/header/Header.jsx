@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { ROUTER_PATH } from "../../../router/constant";
 
 const Header = () => {
   return (
@@ -7,13 +6,14 @@ const Header = () => {
       <nav>
         <ul>
           <li>
-            <Link to={ROUTER_PATH.CALENDAR}>캘린더</Link>
+            <Link to="/">캘린더</Link> {/* 경로를 직접 지정 */}
           </li>
           <li>
-            <Link to={ROUTER_PATH.MYSALARY}>급여 확인</Link>
+            <Link to="/MySalary">급여 확인</Link> {/* 경로를 직접 지정 */}
           </li>
           <li>
-            <Link to={ROUTER_PATH.SALARYADJUSTMENT}>정정 내역/신청</Link>
+            <Link to="/SalaryAdjustment">정정 내역/신청</Link>{" "}
+            {/* 경로를 직접 지정 */}
           </li>
         </ul>
       </nav>
