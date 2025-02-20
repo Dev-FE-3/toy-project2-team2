@@ -4,7 +4,7 @@ import Calendar from "../pages/calendar/Calendar";
 import MySalary from "../pages/mySalary/MySalary";
 import SalaryAdjustment from "../pages/salaryAdjustment/SalaryAdjustment";
 import NotFoundPage from "../pages/not-found/NotFound";
-import { ROUTER_PATH } from "../constant/constant";
+import { ROUTER_PATH } from "./constant";
 
 const Router = () => {
   return (

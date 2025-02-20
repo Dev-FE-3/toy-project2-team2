@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ROUTER_PATH } from "../../constant/constant";
+import { ROUTER_PATH } from "../../../router/constant";
 
 const Header = () => {
   return (
