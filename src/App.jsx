@@ -5,22 +5,37 @@ import MySalary from "./pages/mySalary/MySalary";
 import SalaryAdjustment from "./pages/salaryAdjustment/SalaryAdjustment";
 import { RouterProvider } from "react-router-dom";
 import Layout from "./shared/Layout";
+import { useEffect, useState } from "react";
+import { auth } from "./firebase";
+import styled from "styled-components";
+import LoadingScreen from "./shared/components/Loading-screen";
+import ProtectedRoute from "./shared/components/protected-route";
+
+const Wrapper = styled.div`
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+`;
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: (
+      <ProtectedRoute>
+        <Layout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "",
         element: <Calendar />,
       },
       {
-        path: "mySalary",
+        path: "MySalary",
         element: <MySalary />,
       },
       {
-        path: "salaryAdjustment",
+        path: "SalaryAdjustment",
         element: <SalaryAdjustment />,
       },
     ],
@@ -32,10 +47,21 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
+  const [isLoading, setLoading] = useState(true);
+  const init = async () => {
+    //wait for firebase login check
+    await auth.authStateReady();
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
+
   return (
-    <>
-      <RouterProvider router={router} />
-    </>
+    <Wrapper>
+      {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
+    </Wrapper>
   );
 };
 

@@ -1,11 +1,27 @@
 // Layout.jsx
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
+import styled from "styled-components";
+import LogOutButton from "./components/LogOutButton";
+
+const Wrapper = styled.div``;
+
+const Menu = styled.div``;
+
+const MenuItem = styled.div``;
 
 export default function Layout() {
   return (
-    <>
-      <Outlet /> {/* 여기서 자식 컴포넌트가 렌더링됨 */}
-    </>
+    <Wrapper>
+      <Menu>
+        <MenuItem>svg 넣는 칸</MenuItem>
+        <Link to="/">내 일정</Link>
+        <Link to="/MySalary">급여 확인</Link>
+        <Link to="/SalaryAdjustment">정정 신청 / 내역</Link>
+        <MenuItem>김이삭 메이트</MenuItem>
+        <LogOutButton />
+      </Menu>
+      <Outlet />
+    </Wrapper>
   );
 }
 
