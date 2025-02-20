@@ -28,6 +28,16 @@ const GlobalStyle = createGlobalStyle`
 	// reset css
 	${reset}
 
+	button {
+    border: none;
+    cursor: pointer;
+  }
+
+	a {
+    text-decoration: none;
+		color: var(--text-disabled);
+  }
+
 	body {
 		font-family: 'Noto Sans KR', sans-serif;
 	}
