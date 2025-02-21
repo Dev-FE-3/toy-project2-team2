@@ -1,20 +1,6 @@
 import { auth } from "../../firebase";
-import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-
-const LogOutButton = styled.button`
-  padding: 8px 10px;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -0.32px;
-  color: var(--text-disabled);
-  border-radius: 8px;
-  background-color: var(--background-color);
-
-  &:hover {
-    background-color: var(--disabled);
-  }
-`
+import Button from '../components/button/Button'
 
 const LogOut = () => {
   const navigate = useNavigate();
@@ -30,7 +16,7 @@ const LogOut = () => {
       });
   };
 
-  return <LogOutButton onClick={logOut}>Log out</LogOutButton>;
+  return <Button onClick={logOut} size="sm" color="gray">로그아웃</Button>;
 };
 
 export default LogOut;
