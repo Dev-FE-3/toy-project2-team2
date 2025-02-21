@@ -3,8 +3,18 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 const LogOutButton = styled.button`
-  margin-left: 10px;
-`;
+  padding: 8px 10px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.32px;
+  color: var(--text-disabled);
+  border-radius: 8px;
+  background-color: var(--background-color);
+
+  &:hover {
+    background-color: var(--disabled);
+  }
+`
 
 const LogOut = () => {
   const navigate = useNavigate();
