@@ -8,8 +8,8 @@ import Layout from "./shared/Layout";
 import { useEffect, useState } from "react";
 import { auth } from "./firebase";
 import styled from "styled-components";
-import LoadingScreen from "./shared/components/Loading-screen";
-import ProtectedRoute from "./shared/components/protected-route";
+import LoadingScreen from "./shared/components/LoadingScreen";
+import ProtectedRoute from "./shared/components/ProtectedRoute";
 
 const Wrapper = styled.div`
   height: 100vh;

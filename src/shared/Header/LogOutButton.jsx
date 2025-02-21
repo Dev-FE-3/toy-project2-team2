@@ -6,15 +6,14 @@ const LogOutButton = styled.button`
   margin-left: 10px;
 `;
 
-export default function LogOut() {
+const LogOut = () => {
   const navigate = useNavigate();
 
   const logOut = () => {
     auth
       .signOut()
       .then(() => {
-        // 로그아웃 후 로그인 페이지로 리다이렉션
-        navigate("/login"); // 로그인 페이지로 이동 (경로는 상황에 맞게 조정)
+        navigate("/login");
       })
       .catch((error) => {
         console.error("로그아웃 실패:", error);
@@ -22,4 +21,6 @@ export default function LogOut() {
   };
 
   return <LogOutButton onClick={logOut}>Log out</LogOutButton>;
-}
+};
+
+export default LogOut;
