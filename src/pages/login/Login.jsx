@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "@firebase/util";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Button from './../../shared/components/button/Button'
 
 const Title = styled.h1`
   font-size: 32px;
@@ -102,7 +103,7 @@ const Login = () => {
           type="password"
           required
         />
-        <Input type="submit" value={isLoading ? "Loading..." : "Login"} />
+        <Button type="submit" size="lg" color="gray">{isLoading ? "Loading..." : "Login"}</Button>
       </Form>
       {error !== "" ? <Error>{error}</Error> : null}
     </Wrapper>
