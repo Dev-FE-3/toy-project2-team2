@@ -5,9 +5,7 @@ import { FirebaseError } from "@firebase/util";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-const Title = styled.h1`
-  font-size: 32px;
-`;
+const Title = styled.h1``;
 
 const Wrapper = styled.div`
   height: 100%;
@@ -26,19 +24,7 @@ const Form = styled.form`
   width: 100%;
 `;
 
-const Input = styled.input`
-  padding: 10px 20px;
-  border-radius: 50px;
-  border: none;
-  width: 100%;
-  font-size: 16px;
-  &[type="submit"] {
-    cursor: pointer;
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-`;
+const Input = styled.input``;
 
 const Error = styled.span`
   font-weight: 600;
@@ -51,6 +37,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
   const onChange = (e) => {
     const {
       target: { name, value },
