@@ -1,5 +1,9 @@
+import PageTitle from '../../shared/components/titles/PageTitle'
+
 const Calendar = () => {
-  return <h1>📅 캘린더 페이지</h1>;
+  return (
+    <PageTitle title="내 일정" />
+  )
 };
 
 export default Calendar;
