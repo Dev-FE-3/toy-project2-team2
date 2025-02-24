@@ -2,20 +2,15 @@ import { useState } from "react";
 import styled from "styled-components";
 
 const TextBoxWrapper = styled.textarea`
-  display: flex;
-  width: 344px;
+  width: 100%;
+  height: 100%;
   padding: 10px 15px;
-  align-items: flex-start;
-  gap: 10px;
-  flex-shrink: 0;
   border-radius: 8px;
-  align-self: stretch;
-  font-size: 16px;
+  color: var(--Text-Primary);
+  font-size: var(--font-size-primary);
   font-weight: 400;
   font-style: normal;
-  color: var(--Text-Primary);
   line-height: 24px; /* 150% */
-
   border: 1px solid
     ${(props) =>
       props.isFocused
@@ -41,7 +36,7 @@ const TextBox = ({ isSubmitted }) => {
 
   return (
     <TextBoxWrapper
-      maxLength={100}
+      maxLength={100} // 우선 100 설정
       type="text"
       onFocus={handleFocus}
       onBlur={handleBlur}

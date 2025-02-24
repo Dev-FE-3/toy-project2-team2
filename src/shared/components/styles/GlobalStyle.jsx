@@ -47,8 +47,6 @@ const GlobalStyle = createGlobalStyle`
 	input {
     all: unset; // 기본 스타일 제거
     box-sizing: border-box;
-    width: 100%;
-    height: 100%;
     }
 	
   	textarea {
