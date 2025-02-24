@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const TextBoxWrapper = styled.textarea`
   width: 100%;
-  height: 100%;
+  height: 100%; // height 관련 modal에 적용하면서 봐주세요
   padding: 10px 15px;
   border-radius: 8px;
   color: var(--Text-Primary);
