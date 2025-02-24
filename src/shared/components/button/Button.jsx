@@ -18,6 +18,10 @@ const StyledButton = styled.button`
 		background-color: ${({ color }) =>
       color === "gray" ? "var(--disabled)" : "var(--primary-dark)"};
 	}
+
+  &:disabled {
+    pointer-events: none;
+  }
 `
 
 const Button = ({ color, size, children, ...props }) => {

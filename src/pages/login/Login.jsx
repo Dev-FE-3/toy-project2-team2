@@ -52,6 +52,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const isDisabled = isLoading || email === "" || password === "";
+
   const onChange = (e) => {
     const {
       target: { name, value },
@@ -66,7 +68,7 @@ const Login = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    if (isLoading || email === "" || password === "") return;
+    if (isDisabled) return;
     try {
       setIsLoading(true);
       await signInWithEmailAndPassword(auth, email, password);
@@ -103,7 +105,14 @@ const Login = () => {
           type="password"
           required
         />
-        <Button type="submit" size="lg" color="gray">{isLoading ? "Loading..." : "Login"}</Button>
+        <Button
+          type="submit"
+          size="lg"
+          color={isDisabled ? "gray" : undefined}
+          disabled={isDisabled}
+        >
+          {isLoading ? "Loading..." : "Login"}
+        </Button>
       </Form>
       {error !== "" ? <Error>{error}</Error> : null}
     </Wrapper>
