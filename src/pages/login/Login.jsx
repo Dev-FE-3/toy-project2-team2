@@ -4,13 +4,40 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "@firebase/util";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Button from "./../../shared/components/button/Button";
+import PageTitle from "../../shared/components/titles/PageTitle";
 import Input from "../../shared/components/input/LoginInput";
 
-const Title = styled.h1``;
+const Wrapper = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 420px;
+`;
 
-const Wrapper = styled.div``;
+const Form = styled.form`
+  margin-top: 50px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+`;
 
-const Form = styled.form``;
+const Input = styled.input`
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: none;
+  width: 100%;
+  font-size: 16px;
+  &[type="submit"] {
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+`;
 
 const Error = styled.span`
   font-weight: 600;
@@ -23,6 +50,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const isDisabled = isLoading || email === "" || password === "";
 
   const onChange = (e) => {
     const {
@@ -38,7 +66,7 @@ const Login = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    if (isLoading || email === "" || password === "") return;
+    if (isDisabled) return;
     try {
       setIsLoading(true);
       await signInWithEmailAndPassword(auth, email, password);
@@ -57,7 +85,7 @@ const Login = () => {
 
   return (
     <Wrapper>
-      <Title>로그인</Title>
+      <PageTitle title="로그인" className="login"/>
       <Form onSubmit={onSubmit}>
         <Input
           onChange={onChange}
@@ -75,7 +103,14 @@ const Login = () => {
           type="password"
           required
         />
-        <Input type="submit" value={isLoading ? "Loading..." : "Login"} />
+        <Button
+          type="submit"
+          size="lg"
+          color={isDisabled ? "gray" : undefined}
+          disabled={isDisabled}
+        >
+          {isLoading ? "Loading..." : "Login"}
+        </Button>
       </Form>
       {error !== "" ? <Error>{error}</Error> : null}
     </Wrapper>

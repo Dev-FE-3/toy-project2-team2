@@ -3,6 +3,7 @@ import Calendar from "./pages/calendar/Calendar";
 import Login from "./pages/login/Login";
 import MySalary from "./pages/mySalary/MySalary";
 import SalaryAdjustment from "./pages/salaryAdjustment/SalaryAdjustment";
+import Guide from "./pages/guide/guide";
 import { RouterProvider } from "react-router-dom";
 import Layout from "./shared/Layout";
 import { useEffect, useState } from "react";
@@ -11,12 +12,6 @@ import styled from "styled-components";
 import LoadingScreen from "./shared/components/LoadingScreen";
 import ProtectedRoute from "./shared/components/ProtectedRoute";
 import GlobalStyle from "./shared/components/styles/GlobalStyle"
-
-const Wrapper = styled.div`
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-`;
 
 const router = createBrowserRouter([
   {
@@ -38,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "SalaryAdjustment",
         element: <SalaryAdjustment />,
+      },
+      {
+        path: "Guide",
+        element: <Guide />,
       },
     ],
   },
@@ -62,9 +61,7 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
-      <Wrapper>
-        {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
-      </Wrapper>
+      {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
     </>
   );
 };
