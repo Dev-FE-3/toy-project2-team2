@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "@firebase/util";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Button from './../../shared/components/button/Button'
 import PageTitle from '../../shared/components/titles/PageTitle'
 
 const Wrapper = styled.div`
@@ -48,6 +49,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const isDisabled = isLoading || email === "" || password === "";
+
   const onChange = (e) => {
     const {
       target: { name, value },
@@ -62,7 +65,7 @@ const Login = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    if (isLoading || email === "" || password === "") return;
+    if (isDisabled) return;
     try {
       setIsLoading(true);
       await signInWithEmailAndPassword(auth, email, password);
@@ -99,7 +102,14 @@ const Login = () => {
           type="password"
           required
         />
-        <Input type="submit" value={isLoading ? "Loading..." : "Login"} />
+        <Button
+          type="submit"
+          size="lg"
+          color={isDisabled ? "gray" : undefined}
+          disabled={isDisabled}
+        >
+          {isLoading ? "Loading..." : "Login"}
+        </Button>
       </Form>
       {error !== "" ? <Error>{error}</Error> : null}
     </Wrapper>
