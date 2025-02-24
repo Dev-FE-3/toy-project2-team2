@@ -4,11 +4,11 @@ import LogOutButton from "./LogOutButton";
 import Nav from "./Nav";
 import { Link } from "react-router-dom";
 
-const Wrapper = styled.div`
+const HeaderWrap = styled.div`
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
 `
 
-const HeaderWrap = styled.header`
+const HeaderInner = styled.header`
   width: 1440px;
   margin: 0 auto;
   padding: 18px 100px;
@@ -38,8 +38,8 @@ const User = styled.span`
 
 const Header = () => {
   return (
-    <Wrapper>
-      <HeaderWrap>
+    <HeaderWrap>
+      <HeaderInner>
           <Link to="/">
             <Logo src={logo} alt="Sweet Ten" />
           </Link>
@@ -48,8 +48,8 @@ const Header = () => {
             <User>김이삭 ・ 메이트</User>
             <LogOutButton />
           </Wrap>
-      </HeaderWrap>
-    </Wrapper>
+      </HeaderInner>
+    </HeaderWrap>
   );
 };
 
