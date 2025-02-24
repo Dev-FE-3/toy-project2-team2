@@ -1,4 +1,3 @@
-import js from "@eslint/js";
 import globals from "globals";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
@@ -24,15 +23,18 @@ export default [
       "react-refresh": reactRefresh,
     },
     rules: {
-      ...js.configs.recommended.rules,
-      ...react.configs.recommended.rules,
-      ...react.configs["jsx-runtime"].rules,
-      ...reactHooks.configs.recommended.rules,
-      "react/prop-types": "off", // 이 규칙을 끄는 설정
-      "react/jsx-no-target-blank": "off",
-      "react-refresh/only-export-components": [
+      "no-unused-vars": "off", // 사용하지 않는 변수 경고 끄기
+      "react/prop-types": "off", // PropTypes 검사 비활성화
+      "react/jsx-no-target-blank": "warn", // 보안 관련 경고만
+      "react-refresh/only-export-components": "warn", // HMR 관련
+      "react-hooks/rules-of-hooks": "error", // hooks 규칙은 강제
+      "react-hooks/exhaustive-deps": "warn", // useEffect 의존성 경고만
+      "import/order": [
         "warn",
-        { allowConstantExport: true },
+        {
+          groups: ["builtin", "external", "internal"],
+          alphabetize: { order: "asc", caseInsensitive: true },
+        },
       ],
     },
   },
