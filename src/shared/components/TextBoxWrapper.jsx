@@ -10,6 +10,12 @@ const TextBoxWrapper = styled.textarea`
   flex-shrink: 0;
   border-radius: 8px;
   align-self: stretch;
+  font-size: 16px;
+  font-weight: 400;
+  font-style: normal;
+  color: var(--Text-Primary);
+  line-height: 24px; /* 150% */
+
   border: 1px solid
     ${(props) =>
       props.isFocused
@@ -17,7 +23,7 @@ const TextBoxWrapper = styled.textarea`
         : props.isSubmitted
         ? "var(--disabled)" // 제출된 상태일 때
         : "var(--disabled)"}; // 기본 비활성 상태
-  background: ${(props) =>
+  background-color: ${(props) =>
     props.isFocused
       ? "var(--white)" // 클릭 상태일 때
       : props.isSubmitted
@@ -35,12 +41,13 @@ const TextBox = ({ isSubmitted }) => {
 
   return (
     <TextBoxWrapper
+      maxLength={100}
       type="text"
       onFocus={handleFocus}
       onBlur={handleBlur}
       isFocused={isFocused}
       isSubmitted={isSubmitted}
-      placeholder="Enter something here"
+      placeholder="내용"
     />
   );
 };
