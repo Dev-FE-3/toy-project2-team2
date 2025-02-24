@@ -9,7 +9,7 @@ const StyledTitleWrap = styled.div`
 `
 
 const StyledTitle = styled.h1`
-	font-size: 32px;
+	font-size: var(--font-size-title-large);
 	font-weight: 500;
 	letter-spacing: -0.64px;
 	color: var(--text-primary);
@@ -17,7 +17,7 @@ const StyledTitle = styled.h1`
 
 const StyledSubTitle = styled.h2`
 	margin-top: 37px;
-	font-size: 24px;
+	font-size: var(--font-size-title-medium);
 	font-weight: 700;
 	letter-spacing: -0.48px;
 	color: var(--text-disabled);
