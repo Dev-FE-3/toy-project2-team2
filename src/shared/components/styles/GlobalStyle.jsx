@@ -18,6 +18,7 @@ const GlobalStyle = createGlobalStyle`
 		--text-primary: #1E2A2E;
 		--text-sencondary: #4A4A4A;
 		--text-disabled: #828282;
+		--text-disabled-2: #CACACA;
 
 		/* font-size */
 		--font-size-title-large: 32px;
