@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "@firebase/util";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Modal from "../../shared/components/Modal";
 
 const Title = styled.h1`
   font-size: 32px;
@@ -45,12 +46,28 @@ const Error = styled.span`
   color: tomato;
 `;
 
+const Button = styled.button`
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  &:hover {
+    background-color: #0056b3;
+  }
+`; //모달 테스트용 예시 스타일 적용
+
 const Login = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [modalType, setModalType] = useState(null);
+
   const onChange = (e) => {
     const {
       target: { name, value },
@@ -105,6 +122,12 @@ const Login = () => {
         <Input type="submit" value={isLoading ? "Loading..." : "Login"} />
       </Form>
       {error !== "" ? <Error>{error}</Error> : null}
+      <Button onClick={() => setModalType("request")}>정정 신청 모달</Button>
+      <Button onClick={() => setModalType("history")}>정정 내역 모달</Button>
+      <Button onClick={() => setModalType("schedule")}>일정 등록 모달</Button>
+      {modalType && (
+        <Modal type={modalType} onClose={() => setModalType(null)} />
+      )}
     </Wrapper>
   );
 };
