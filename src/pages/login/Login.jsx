@@ -25,20 +25,6 @@ const Form = styled.form`
   width: 100%;
 `;
 
-const Input = styled.input`
-  padding: 10px 20px;
-  border-radius: 50px;
-  border: none;
-  width: 100%;
-  font-size: 16px;
-  &[type="submit"] {
-    cursor: pointer;
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-`;
-
 const Error = styled.span`
   font-weight: 600;
   color: tomato;
