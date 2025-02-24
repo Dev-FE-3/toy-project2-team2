@@ -5,10 +5,7 @@ import { FirebaseError } from "@firebase/util";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Button from './../../shared/components/button/Button'
-
-const Title = styled.h1`
-  font-size: 32px;
-`;
+import PageTitle from '../../shared/components/titles/PageTitle'
 
 const Wrapper = styled.div`
   height: 100%;
@@ -87,7 +84,7 @@ const Login = () => {
 
   return (
     <Wrapper>
-      <Title>로그인</Title>
+      <PageTitle title="로그인" className="login"/>
       <Form onSubmit={onSubmit}>
         <Input
           onChange={onChange}
