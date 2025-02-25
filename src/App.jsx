@@ -1,20 +1,17 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Layout from "./shared/Layout"; // 전체 레이아웃 적용
+import { createBrowserRouter } from "react-router-dom";
 import Calendar from "./pages/calendar/Calendar";
+import Login from "./pages/login/Login";
 import MySalary from "./pages/mySalary/MySalary";
 import SalaryAdjustment from "./pages/salaryAdjustment/SalaryAdjustment";
-import Login from "./pages/login/Login";
+import Guide from "./pages/guide/guide";
+import { RouterProvider } from "react-router-dom";
+import Layout from "./shared/Layout";
 import { useEffect, useState } from "react";
-import LoadingScreen from "./shared/components/Loading-screen";
-import auth from "./firebase";
-import ProtectedRoute from "./shared/components/protected-route/ProtectedRoute";
+import { auth } from "./firebase";
 import styled from "styled-components";
-
-const Wrapper = styled.div`
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-`;
+import LoadingScreen from "./shared/components/LoadingScreen";
+import ProtectedRoute from "./shared/components/ProtectedRoute";
+import GlobalStyle from "./shared/components/styles/GlobalStyle";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +34,10 @@ const router = createBrowserRouter([
         path: "SalaryAdjustment",
         element: <SalaryAdjustment />,
       },
+      {
+        path: "Guide",
+        element: <Guide />,
+      },
     ],
   },
   {
@@ -58,9 +59,10 @@ const App = () => {
   }, []);
 
   return (
-    <Wrapper>
+    <>
+      <GlobalStyle />
       {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
-    </Wrapper>
+    </>
   );
 };
 
