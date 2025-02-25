@@ -59,11 +59,15 @@ const GlobalStyle = createGlobalStyle`
 
 	body {
 		font-family: 'Noto Sans KR', sans-serif;
-	}
+    }
 
 	input {
     all: unset; // 기본 스타일 제거
+    box-sizing: border-box;
     }
-`;
+	
+  	textarea {
+		all:unset;
+	}
 
 export default GlobalStyle;
