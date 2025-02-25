@@ -2,14 +2,15 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import styled from "styled-components";
-import CalendarIconSrc from "../../assets/images/Group.svg";
+import CalendarIconSrc from "../../../assets/images/Group.svg";
+import React, { useState } from "react";
 
 registerLocale("ko", ko);
 
 const DatePickerWrapper = styled.div`
   display: flex;
   align-items: center;
-  width: ${(props) => (props.type === "year-month" ? "170px" : "220px")};
+  width: ${(props) => (props.$type === "year-month" ? "170px" : "220px")};
   height: 42px;
   border: 2px solid #d9d9d9;
   border-radius: 8px;
@@ -73,11 +74,11 @@ const formatDate = (date, type) => {
     : `${year} / ${month} / ${day}`;
 };
 
-const CustomInput = React.forwardRef(({ value, onClick }, ref) => {
+const CustomInput = React.forwardRef(({ value, onClick, ...rest }, ref) => {
   const [year, month, day] = value ? value.split("/") : ["----", "--", "--"];
 
   return (
-    <CustomInputWrapper onClick={onClick} ref={ref}>
+    <CustomInputWrapper onClick={onClick} ref={ref} {...rest}>
       <DateTextBox>
         {year} <Separator>/</Separator> {month}{" "}
         {day && (
@@ -102,7 +103,7 @@ const StyledDatePicker = ({ type = "date", onChange }) => {
   };
 
   return (
-    <DatePickerWrapper type={type}>
+    <DatePickerWrapper $type={type}>
       <DatePicker
         selected={selectedDate}
         onChange={handleDateChange}
