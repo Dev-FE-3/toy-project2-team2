@@ -3,6 +3,7 @@ import Calendar from "./pages/calendar/Calendar";
 import Login from "./pages/login/Login";
 import MySalary from "./pages/mySalary/MySalary";
 import SalaryAdjustment from "./pages/salaryAdjustment/SalaryAdjustment";
+import Guide from "./pages/guide/Guide";
 import { RouterProvider } from "react-router-dom";
 import Layout from "./shared/Layout";
 import { useEffect, useState } from "react";
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: "SalaryAdjustment",
         element: <SalaryAdjustment />,
+      },
+      {
+        path: "Guide",
+        element: <Guide />,
       },
     ],
   },
