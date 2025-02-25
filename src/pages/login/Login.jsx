@@ -4,8 +4,8 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "@firebase/util";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Button from './../../shared/components/button/Button'
-import PageTitle from '../../shared/components/titles/PageTitle'
+import Button from "./../../shared/components/button/Button";
+import PageTitle from "../../shared/components/titles/PageTitle";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -84,7 +84,7 @@ const Login = () => {
 
   return (
     <Wrapper>
-      <PageTitle title="로그인" className="login"/>
+      <PageTitle title="로그인" className="login" />
       <Form onSubmit={onSubmit}>
         <Input
           onChange={onChange}

@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   margin: 0 auto;
   padding: 0 100px;
   box-sizing: border-box;
-`
+`;
 
 const Layout = () => {
   return (
