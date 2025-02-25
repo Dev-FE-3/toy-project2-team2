@@ -50,12 +50,12 @@ const GlobalStyle = createGlobalStyle`
 	button {
     border: none;
     cursor: pointer;
-  }
+    }
 
 	a {
     text-decoration: none;
 		color: var(--text-disabled);
-  }
+    }
 
 	body {
 		font-family: 'Noto Sans KR', sans-serif;
@@ -69,6 +69,5 @@ const GlobalStyle = createGlobalStyle`
   	textarea {
 		all:unset;
 	}
-`;
 
 export default GlobalStyle;

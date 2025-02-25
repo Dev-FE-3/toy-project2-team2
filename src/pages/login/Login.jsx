@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Button from "./../../shared/components/button/Button";
 import PageTitle from "../../shared/components/titles/PageTitle";
+import LoginInput from "./../../shared/components/input/LoginInput";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -23,8 +24,6 @@ const Form = styled.form`
   gap: 10px;
   width: 100%;
 `;
-
-const Input = styled.input``;
 
 const Error = styled.span`
   font-weight: 600;
@@ -74,7 +73,7 @@ const Login = () => {
     <Wrapper>
       <PageTitle title="로그인" className="login" />
       <Form onSubmit={onSubmit}>
-        <Input
+        <LoginInput
           onChange={onChange}
           name="email"
           value={email}
@@ -82,7 +81,7 @@ const Login = () => {
           type="email"
           required
         />
-        <Input
+        <LoginInput
           onChange={onChange}
           name="password"
           value={password}
