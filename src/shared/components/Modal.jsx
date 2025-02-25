@@ -153,7 +153,7 @@ const Modal = ({ type, onClose }) => {
         </ModalHeader>
         <ModalContent>{content}</ModalContent>
         <ModalFooter>
-          <Button onClick={onClose}>닫기</Button>
+          <button onClick={onClose}>닫기</button>
         </ModalFooter>
       </ModalContainer>
     </Overlay>
