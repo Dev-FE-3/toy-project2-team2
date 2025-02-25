@@ -1,19 +1,5 @@
 import styled from "styled-components";
 
-const Button = styled.button`
-  margin-top: 20px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  background-color: #007bff;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  &:hover {
-    background-color: #0056b3;
-  }
-`; //모달 테스트용 예시 스타일 적용
-
 const Overlay = styled.div`
   position: fixed;
   top: 0;
@@ -30,10 +16,8 @@ const ModalContainer = styled.div`
   background: white;
   width: 400px;
   height: 598px;
-  top: 170px;
-  left: 6285px;
   border-radius: 10px;
-  border-width: 1px;
+  border: 1px solid #ddd;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -169,7 +153,7 @@ const Modal = ({ type, onClose }) => {
         </ModalHeader>
         <ModalContent>{content}</ModalContent>
         <ModalFooter>
-          <Button onClick={onClose}>닫기</Button>
+          <button onClick={onClose}>닫기</button>
         </ModalFooter>
       </ModalContainer>
     </Overlay>

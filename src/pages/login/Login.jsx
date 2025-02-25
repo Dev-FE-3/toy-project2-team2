@@ -4,8 +4,9 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "@firebase/util";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Modal from "../../shared/components/Modal";
+import Button from "./../../shared/components/button/Button";
 import PageTitle from "../../shared/components/titles/PageTitle";
+import LoginInput from "./../../shared/components/input/LoginInput";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -24,38 +25,10 @@ const Form = styled.form`
   width: 100%;
 `;
 
-const Input = styled.input`
-  padding: 10px 20px;
-  border-radius: 50px;
-  border: none;
-  width: 100%;
-  font-size: 16px;
-  &[type="submit"] {
-    cursor: pointer;
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-`;
-
 const Error = styled.span`
   font-weight: 600;
   color: tomato;
 `;
-
-const Button = styled.button`
-  margin-top: 20px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  background-color: #007bff;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  &:hover {
-    background-color: #0056b3;
-  }
-`; //모달 테스트용 예시 스타일 적용
 
 const Login = () => {
   const navigate = useNavigate();
@@ -63,7 +36,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [modalType, setModalType] = useState(null);
+  const isDisabled = isLoading || email === "" || password === "";
 
   const onChange = (e) => {
     const {
@@ -79,7 +52,7 @@ const Login = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    if (isLoading || email === "" || password === "") return;
+    if (isDisabled) return;
     try {
       setIsLoading(true);
       await signInWithEmailAndPassword(auth, email, password);
@@ -100,7 +73,7 @@ const Login = () => {
     <Wrapper>
       <PageTitle title="로그인" className="login" />
       <Form onSubmit={onSubmit}>
-        <Input
+        <LoginInput
           onChange={onChange}
           name="email"
           value={email}
@@ -108,7 +81,7 @@ const Login = () => {
           type="email"
           required
         />
-        <Input
+        <LoginInput
           onChange={onChange}
           name="password"
           value={password}
@@ -116,15 +89,16 @@ const Login = () => {
           type="password"
           required
         />
-        <Input type="submit" value={isLoading ? "Loading..." : "Login"} />
+        <Button
+          type="submit"
+          size="lg"
+          color={isDisabled ? "gray" : undefined}
+          disabled={isDisabled}
+        >
+          {isLoading ? "Loading..." : "Login"}
+        </Button>
       </Form>
       {error !== "" ? <Error>{error}</Error> : null}
-      <Button onClick={() => setModalType("request")}>정정 신청 모달</Button>
-      <Button onClick={() => setModalType("history")}>정정 내역 모달</Button>
-      <Button onClick={() => setModalType("schedule")}>일정 등록 모달</Button>
-      {modalType && (
-        <Modal type={modalType} onClose={() => setModalType(null)} />
-      )}
     </Wrapper>
   );
 };
