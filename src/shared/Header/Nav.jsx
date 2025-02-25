@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 const NavList = styled.ul`
@@ -13,22 +13,31 @@ const NavList = styled.ul`
       font-weight: 700;
       color: var(--text-disabled);
       letter-spacing: -0.36px;
+      &.active {
+        color: var(--text-primary);
+      }
     }
   }
-`
+`;
 
 const Nav = () => {
   return (
     <nav>
       <NavList>
         <li>
-          <Link to="/">내 일정</Link>
+          <NavLink to="/" activeClassName="active">
+            내 일정
+          </NavLink>
         </li>
         <li>
-          <Link to="/MySalary">급여 확인</Link>
+          <NavLink to="/MySalary" activeClassName="active">
+            급여 확인
+          </NavLink>
         </li>
         <li>
-          <Link to="/SalaryAdjustment">정정 신청 / 내역</Link>
+          <NavLink to="/SalaryAdjustment" activeClassName="active">
+            정정 신청 / 내역
+          </NavLink>
         </li>
       </NavList>
     </nav>
