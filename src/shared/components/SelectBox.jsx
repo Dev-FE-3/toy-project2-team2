@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import toggleIcon from "../../assets/images/Down.png";
+import toggleIcon from "../../assets/images/Down.svg";
 
 const Container = styled.div`
   position: relative;
