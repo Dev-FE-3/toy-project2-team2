@@ -2,7 +2,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import styled from "styled-components";
-import CalendarIconSrc from "../../../assets/images/Group.svg";
+import CalendarIconSrc from "../../assets/images/Group.svg";
 import React, { useState } from "react";
 
 registerLocale("ko", ko);
@@ -61,8 +61,8 @@ const CalendarIconBox = styled.div`
 `;
 
 const CalendarIcon = styled.img`
-  width: 16.5px;
-  height: 18.83px;
+  width: 16px;
+  height: 18px;
   cursor: pointer;
 `;
 
