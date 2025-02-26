@@ -39,9 +39,6 @@ const Wrapper = styled.div`
 
 const LoginBox = styled.div`
   width: 400px;
-  /* height: 630px; */
-  /* min-width: 300px; */
-  /* min-height: 630px; */
   padding: 44px;
   background-color: var(--white);
   border-radius: 12px;
@@ -50,10 +47,7 @@ const LoginBox = styled.div`
 `;
 
 const Form = styled.form`
-  margin-top: 90px;
-  /* display: flex;
-  flex-direction: column;
-  gap: 10px; */
+  margin-top: 110px;
   width: 100%;
 
   .loginBtn {
@@ -62,13 +56,10 @@ const Form = styled.form`
 `;
 
 const Error = styled.span`
-  font-size: var(--font-size-small);
-  display: inline-block;
-  margin-top: 10px;
-  font-weight: 600;
+  font-size: var(--font-size-samll);
+  font-weight: 500;
   color: var(--red);
   padding-left: 10px;
-  height: 18px;
   visibility: ${(props) => (props.$hasError ? "visible" : "hidden")};
 `;
 
@@ -78,22 +69,17 @@ const Logo = styled.img`
 `;
 
 const InputWrapper = styled.div`
-  /* display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  gap: 10px; */
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 `;
 const Switcher = styled.div`
   color: var(--text-disabled-2);
   text-align: center;
   width: 100%;
-  margin-top: 180px;
+  margin-top: 146px;
 `;
-const InputAndError = styled.div`
-  & + & {
-    margin-top: 20px;
-  }
+const ErrorWrapper = styled.div`
+  padding-top: 5px;
+  height: 34px;
 `;
 
 const Login = () => {
@@ -118,9 +104,9 @@ const Login = () => {
     if (name === "email") {
       setEmail(value);
 
-      const valid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
-        value
-      );
+      const valid =
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value) ||
+        value === "";
       setEmailValid(valid);
 
       if (!valid) {
@@ -182,31 +168,30 @@ const Login = () => {
         <PageTitle title="로그인" className="login" />
         <Form onSubmit={onSubmit}>
           <InputWrapper>
-            <InputAndError>
-              <LoginInput
-                onChange={onChange}
-                name="email"
-                value={email}
-                placeholder="Email"
-                error={error.email || error.common}
-              />
+            <LoginInput
+              onChange={onChange}
+              name="email"
+              value={email}
+              placeholder="Email"
+              error={error.email || error.common}
+            />
+            <ErrorWrapper>
               <Error $hasError={!!(error.email || error.common)}>
                 {error.email || error.common || " "}
               </Error>
-            </InputAndError>
-            <InputAndError>
-              <LoginInput
-                onChange={onChange}
-                name="password"
-                value={password}
-                placeholder="Password"
-                type="password"
-                error={error.common}
-              />
+            </ErrorWrapper>
+            <LoginInput
+              onChange={onChange}
+              name="password"
+              value={password}
+              placeholder="Password"
+              type="password"
+              error={error.common}
+            />
+            <ErrorWrapper>
               <Error $hasError={!!error.common}>{error.common || " "}</Error>
-            </InputAndError>
+            </ErrorWrapper>
           </InputWrapper>
-
           <Button
             className="loginBtn"
             type="submit"

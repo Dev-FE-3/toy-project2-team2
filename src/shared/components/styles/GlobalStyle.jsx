@@ -59,7 +59,6 @@ const GlobalStyle = createGlobalStyle`
 
 	body {
 		font-family: 'Noto Sans KR', sans-serif;
-		overflow: hidden; // 위 아래 스크롤 방지
     }
 
 	input {
