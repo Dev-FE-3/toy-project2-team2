@@ -5,16 +5,32 @@ import styled from "styled-components";
 import Input from "./../../shared/components/input/Input";
 import LoginInput from "./../../shared/components/input/LoginInput";
 import PageTitle from "../../shared/components/titles/PageTitle";
-import Modal from "../../shared/components/Modal";
+import Modal from "../../shared/components/modal/Modal";
 
 const Wrapper = styled.div`
   width: 150px;
   height: 150px;
 `;
 
-const Guide = () => {
-  const [modalType, setModalType] = useState(null);
+const ScheduleRegisterContent = () => (
+  <div>
+    <p>일정을 등록하는 방법:</p>
+    <ul>
+      <li>날짜 선택</li>
+      <li>시간 입력</li>
+      <li>메모 작성</li>
+    </ul>
+  </div>
+);
 
+const ScheduleCheckContent = () => (
+  <div>
+    <p>일정 확인 페이지입니다.</p>
+    <p>등록된 일정 목록을 확인하세요.</p>
+  </div>
+);
+
+const Guide = () => {
   return (
     <>
       <h1>page title</h1>
@@ -51,15 +67,21 @@ const Guide = () => {
       </Wrapper>
       <br />
       <h1>modal</h1>
-      <Button onClick={() => setModalType("request")}>정정 신청</Button>
-      <Button onClick={() => setModalType("history")}>정정 내역</Button>
-      <Button onClick={() => setModalType("schedule")}>일정 등록</Button>
-      <Button onClick={() => setModalType("check-schedule")}>일정 확인</Button>
-      {modalType && (
-        <Modal type={modalType} onClose={() => setModalType(null)} />
-      )}
-      <h1>select box</h1>
-      <h1>date</h1>
+      <Modal
+        title="일정 등록"
+        content={<ScheduleRegisterContent />}
+        hasSubmitButton
+      >
+        <Button>일정 등록</Button>
+      </Modal>
+
+      <Modal
+        title="일정 확인"
+        content={<ScheduleCheckContent />}
+        hasSubmitButton={false}
+      >
+        <Button>일정 확인</Button>
+      </Modal>
     </>
   );
 };
