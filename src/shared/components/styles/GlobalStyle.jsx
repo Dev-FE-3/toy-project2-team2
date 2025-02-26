@@ -68,6 +68,6 @@ const GlobalStyle = createGlobalStyle`
 	
   	textarea {
 		all:unset;
-	}
+	}`
 
 export default GlobalStyle;
