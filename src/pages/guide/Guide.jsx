@@ -4,7 +4,8 @@ import styled from "styled-components";
 import Input from "./../../shared/components/input/Input";
 import LoginInput from "./../../shared/components/input/LoginInput";
 import PageTitle from "../../shared/components/titles/PageTitle";
-import SelectBox from "../../shared/components/modal-contents/SelectBox";
+import DateSelectBox from "../../shared/components/modal-contents/SelectBox";
+import GeneralSelect from "../../shared/components/modal-contents/GeneralSelect";
 
 const Wrapper = styled.div`
   width: 150px;
@@ -40,7 +41,7 @@ const Guide = () => {
       <LoginInput type="password" placeholder="password" />
 
       <h1>date select box</h1>
-      <SelectBox />
+      <DateSelectBox />
       <h1>textarea</h1>
       <Wrapper>
         <TextBox
@@ -49,8 +50,9 @@ const Guide = () => {
         />
       </Wrapper>
       <br />
-      <h1>modal</h1>
       <h1>select box</h1>
+      <GeneralSelect />
+      <h1>modal</h1>
       <h1>date</h1>
     </>
   );
