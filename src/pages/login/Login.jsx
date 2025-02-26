@@ -9,6 +9,25 @@ import PageTitle from "../../shared/components/titles/PageTitle";
 import LoginInput from "./../../shared/components/input/LoginInput";
 import logo from "./../../assets/images/logo.svg";
 
+const errors = {
+  "auth/invalid-credential": {
+    field: "common",
+    message: "이메일 혹은 비밀번호가 잘못되었습니다.",
+  },
+  "auth/invalid-login-credentials": {
+    field: "common",
+    message: "이메일 혹은 비밀번호가 잘못되었습니다.",
+  },
+  "auth/wrong-password": {
+    field: "common",
+    message: "이메일 혹은 비밀번호가 잘못되었습니다.",
+  },
+  "auth/user-not-found": {
+    field: "common",
+    message: "이메일 혹은 비밀번호가 잘못되었습니다.",
+  },
+};
+
 const Wrapper = styled.div`
   display: flex;
   width: 100vw;
@@ -20,9 +39,9 @@ const Wrapper = styled.div`
 
 const LoginBox = styled.div`
   width: 400px;
-  height: 630px;
-  min-width: 380px;
-  min-height: 630px;
+  /* height: 630px; */
+  /* min-width: 300px; */
+  /* min-height: 630px; */
   padding: 44px;
   background-color: var(--white);
   border-radius: 12px;
@@ -32,16 +51,25 @@ const LoginBox = styled.div`
 
 const Form = styled.form`
   margin-top: 90px;
-  margin-bottom: 10px;
-  display: flex;
+  /* display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 10px; */
   width: 100%;
+
+  .loginBtn {
+    width: 100%;
+  }
 `;
 
 const Error = styled.span`
+  font-size: var(--font-size-small);
+  display: inline-block;
+  margin-top: 10px;
   font-weight: 600;
   color: var(--red);
+  padding-left: 10px;
+  height: 18px;
+  visibility: ${(props) => (props.$hasError ? "visible" : "hidden")};
 `;
 
 const Logo = styled.img`
@@ -50,10 +78,10 @@ const Logo = styled.img`
 `;
 
 const InputWrapper = styled.div`
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   justify-content: space-around;
-  gap: 10px;
+  gap: 10px; */
   margin-bottom: 30px;
 `;
 const Switcher = styled.div`
@@ -62,45 +90,89 @@ const Switcher = styled.div`
   width: 100%;
   margin-top: 180px;
 `;
+const InputAndError = styled.div`
+  & + & {
+    margin-top: 20px;
+  }
+`;
 
 const Login = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const isDisabled = isLoading || email === "" || password === "";
+  const [error, setError] = useState({
+    common: "",
+    email: "",
+  });
+  const [isEmailValid, setEmailValid] = useState(true);
+
+  const isDisabled =
+    isLoading || !isEmailValid || email === "" || password === "";
 
   const onChange = (e) => {
     const {
       target: { name, value },
     } = e;
-    if (name === "password") {
-      setPassword(value);
-    } else if (name === "email") {
+
+    if (name === "email") {
       setEmail(value);
+
+      const valid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+        value
+      );
+      setEmailValid(valid);
+
+      if (!valid) {
+        setError((prev) => ({
+          ...prev,
+          email: "올바른 이메일 형식을 입력하세요.",
+          common: "",
+        }));
+      } else {
+        setError((prev) => ({
+          ...prev,
+          email: "",
+          common: "",
+        }));
+      }
+    } else if (name === "password") {
+      setPassword(value);
+      setError((prev) => ({
+        ...prev,
+        common: "",
+      }));
     }
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    if (isDisabled) return;
+    if (isLoading || !email || !password) return;
     try {
       setIsLoading(true);
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/");
     } catch (e) {
       if (e instanceof FirebaseError) {
-        console.log(e.message);
-        setError(e.message);
+        const errorInfo = errors[e.code];
+
+        if (errorInfo) {
+          setError((prev) => {
+            const updatedError = { ...prev };
+
+            if (errorInfo.field === "common") {
+              updatedError.common = errorInfo.message;
+            }
+
+            return updatedError;
+          });
+        } else {
+          alert("예상치 못한 오류가 발생하였습니다.");
+        }
       }
     } finally {
       setIsLoading(false);
     }
-    // create an account
-    // set name of the user profile
-    // redirect to home page
   };
 
   return (
@@ -110,24 +182,33 @@ const Login = () => {
         <PageTitle title="로그인" className="login" />
         <Form onSubmit={onSubmit}>
           <InputWrapper>
-            <LoginInput
-              onChange={onChange}
-              name="email"
-              value={email}
-              placeholder="Email"
-              type="email"
-              required
-            />
-            <LoginInput
-              onChange={onChange}
-              name="password"
-              value={password}
-              placeholder="Password"
-              type="password"
-              required
-            />
+            <InputAndError>
+              <LoginInput
+                onChange={onChange}
+                name="email"
+                value={email}
+                placeholder="Email"
+                error={error.email || error.common}
+              />
+              <Error $hasError={!!(error.email || error.common)}>
+                {error.email || error.common || " "}
+              </Error>
+            </InputAndError>
+            <InputAndError>
+              <LoginInput
+                onChange={onChange}
+                name="password"
+                value={password}
+                placeholder="Password"
+                type="password"
+                error={error.common}
+              />
+              <Error $hasError={!!error.common}>{error.common || " "}</Error>
+            </InputAndError>
           </InputWrapper>
+
           <Button
+            className="loginBtn"
             type="submit"
             size="lg"
             color={isDisabled ? "primary" : undefined}
