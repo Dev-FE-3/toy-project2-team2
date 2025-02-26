@@ -5,7 +5,7 @@ import { FirebaseError } from "@firebase/util";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Button from "./../../shared/components/button/Button";
-import PageTitle from "../../shared/components/titles/PageTitle";
+import { PageTitle } from "../../shared/components/titles/PageTitle";
 import LoginInput from "./../../shared/components/input/LoginInput";
 
 const Wrapper = styled.div`
