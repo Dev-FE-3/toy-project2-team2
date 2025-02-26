@@ -63,6 +63,7 @@ const Guide = () => {
       <h1>select box</h1>
       <h1>Date</h1>
       <StyledDatePicker type="date" onChange={handleFullDateChange} />
+      <br></br>
       <StyledDatePicker type="year-month" onChange={handleYearMonthChange} />
 
       <h2>선택된 날짜</h2>

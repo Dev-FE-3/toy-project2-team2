@@ -8,26 +8,28 @@ import React, { useState } from "react";
 registerLocale("ko", ko);
 
 const DatePickerWrapper = styled.div`
-  display: flex;
   align-items: center;
   width: ${(props) => (props.$type === "year-month" ? "170px" : "220px")};
-  height: 42px;
-  border: 2px solid #d9d9d9;
+  height: 38px;
+  border: 1px solid var(--disabled);
   border-radius: 8px;
-  background: white;
+  background: var(--white);
   overflow: hidden;
+  justify-content: space-between;
+  font-family: Noto Sans KR;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0%;
 `;
 
 const CustomInputWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
   width: 100%;
   height: 100%;
-  font-size: 16px;
   padding: 0 12px;
   box-sizing: border-box;
-  font-weight: 500;
 `;
 
 const DateTextBox = styled.div`
@@ -37,13 +39,13 @@ const DateTextBox = styled.div`
   flex-grow: 1;
   text-align: center;
   font-size: 16px;
-  color: #333;
+  color: var(--text-primary);
   letter-spacing: 1px;
 `;
 
 const Separator = styled.span`
   margin: 0 12px;
-  color: #aaa;
+  color: var(--disabled);
 `;
 
 const CalendarIconBox = styled.div`
@@ -52,15 +54,15 @@ const CalendarIconBox = styled.div`
   justify-content: center;
   width: 54px;
   height: 38px;
-  background: #f5f5f5;
-  border: 2px solid #d9d9d9;
+  background: var(--background-color-3);
+  border: 1px solid var(--disabled);
   border-radius: 0 8px 8px 0;
-  margin-left: 10px;
+  margin-left: 13px;
 `;
 
 const CalendarIcon = styled.img`
-  width: 25px;
-  height: 25px;
+  width: 16.5px;
+  height: 18.83px;
   cursor: pointer;
 `;
 
