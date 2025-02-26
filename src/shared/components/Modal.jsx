@@ -13,15 +13,21 @@ const Overlay = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  background: white;
+  background: var(--white);
+  font-family: Noto Sans KR;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
   width: 400px;
   height: 598px;
   border-radius: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--disabled);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 30px 28px;
+  gap: 32px;
+  box-sizing: border-box;
 `;
 
 const ModalHeader = styled.div`
@@ -30,8 +36,6 @@ const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
 `;
 
 const ModalContent = styled.div`
@@ -39,14 +43,18 @@ const ModalContent = styled.div`
   font-size: 14px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 20px;
+  height: 412px;
+  width: 344px;
+`;
+const Label = styled.label`
+  color: var(--text-disabled);
 `;
 
 const ModalFooter = styled.div`
   display: flex;
-  justify-content: flex-end;
-  border-top: 1px solid #ddd;
-  padding-top: 10px;
+  height: 35px;
+  justify-content: space-between;
 `;
 
 const CloseButton = styled.button`
@@ -56,25 +64,38 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
+const FormGroup = styled.div`
+  display: flex;
+  gap: 30px; /* 라벨과 인풋 간격 조정 */
+`;
+
 const Modal = ({ type, onClose }) => {
   let title = "";
   let content = "";
+  let hasSubmitButton = false;
 
   switch (type) {
     case "request":
       title = "정정 신청";
+      hasSubmitButton = true;
       content = (
         <>
-          <label>정정 대상</label>
-          <input type="text" placeholder="정정 대상 입력" />
-          <label>정정 유형</label>
-          <select>
-            <option>유형 선택</option>
-            <option>유형 1</option>
-            <option>유형 2</option>
-          </select>
-          <label>정정 사유</label>
-          <textarea placeholder="내용 입력"></textarea>
+          <FormGroup>
+            <Label>정정 대상</Label>
+            <input type="text" placeholder="정정 대상 입력" />
+          </FormGroup>
+          <FormGroup>
+            <Label>정정 유형</Label>
+            <select>
+              <option>유형 선택</option>
+              <option>유형 1</option>
+              <option>유형 2</option>
+            </select>
+          </FormGroup>
+          <FormGroup>
+            <Label>정정 사유</Label>
+            <textarea placeholder="내용 입력"></textarea>
+          </FormGroup>
         </>
       );
       break;
@@ -82,60 +103,112 @@ const Modal = ({ type, onClose }) => {
       title = "정정 내역";
       content = (
         <>
-          <label>정정 대상</label>
-          <input type="text" value="유급 휴가" readOnly />
-          <label>정정 유형</label>
-          <input type="text" value="2025 / 02" readOnly />
-          <label>정정 사유</label>
-          <textarea readOnly>
-            유급 휴가가 반영되지 않았습니다. 정정 부탁드립니다.
-          </textarea>
+          <FormGroup>
+            <Label>정정 대상</Label>
+            <input type="text" value="유급 휴가" readOnly />
+          </FormGroup>
+          <FormGroup>
+            <Label>정정 유형</Label>
+            <input type="text" value="2025 / 02" readOnly />
+          </FormGroup>
+          <FormGroup>
+            <Label>정정 사유</Label>
+            <textarea readOnly>
+              유급 휴가가 반영되지 않았습니다. 정정 부탁드립니다.
+            </textarea>
+          </FormGroup>
         </>
       );
       break;
     case "schedule":
       title = "일정 등록";
+      hasSubmitButton = true;
       content = (
         <>
-          <label>제목</label>
-          <input type="text" placeholder="제목 입력" />
-          <label>시작일</label>
-          <input type="date" />
-          <label>종료일</label>
-          <input type="date" />
-          <label>라벨</label>
-          <div>
-            <span
-              style={{
-                backgroundColor: "orange",
-                padding: "5px",
-                borderRadius: "50%",
-              }}
-            ></span>
-            <span
-              style={{
-                backgroundColor: "red",
-                padding: "5px",
-                borderRadius: "50%",
-              }}
-            ></span>
-            <span
-              style={{
-                backgroundColor: "green",
-                padding: "5px",
-                borderRadius: "50%",
-              }}
-            ></span>
-            <span
-              style={{
-                backgroundColor: "blue",
-                padding: "5px",
-                borderRadius: "50%",
-              }}
-            ></span>
-          </div>
-          <label>내용</label>
-          <textarea placeholder="내용 입력"></textarea>
+          <FormGroup>
+            <Label>제목</Label>
+            <input type="text" placeholder="제목 입력" />
+          </FormGroup>
+          <FormGroup>
+            <Label>시작일</Label>
+            <input type="date" />
+          </FormGroup>
+          <FormGroup>
+            <Label>종료일</Label>
+            <input type="date" />
+          </FormGroup>
+          <FormGroup>
+            <Label>라벨</Label>
+            <div>
+              <span
+                style={{
+                  backgroundColor: "orange",
+                  padding: "5px",
+                  borderRadius: "50%",
+                }}
+              ></span>
+              <span
+                style={{
+                  backgroundColor: "red",
+                  padding: "5px",
+                  borderRadius: "50%",
+                }}
+              ></span>
+              <span
+                style={{
+                  backgroundColor: "green",
+                  padding: "5px",
+                  borderRadius: "50%",
+                }}
+              ></span>
+              <span
+                style={{
+                  backgroundColor: "blue",
+                  padding: "5px",
+                  borderRadius: "50%",
+                }}
+              ></span>
+            </div>
+          </FormGroup>
+          <FormGroup>
+            <Label>내용</Label>
+            <textarea placeholder="내용 입력"></textarea>
+          </FormGroup>
+        </>
+      );
+      break;
+    case "check-schedule":
+      title = "일정 확인";
+      content = (
+        <>
+          <FormGroup>
+            <Label>제목</Label>
+            <input type="text" value="휴가" readOnly />
+          </FormGroup>
+          <FormGroup>
+            <Label>시작일</Label>
+            <input type="text" value="2025 / 02 / 20" readOnly />
+          </FormGroup>
+          <FormGroup>
+            <Label>종료일</Label>
+            <input type="text" value="2025 / 02 / 21" readOnly />
+          </FormGroup>
+          <FormGroup>
+            <Label>라벨</Label>
+            <div>
+              <span
+                style={{
+                  backgroundColor: "red",
+                  padding: "5px",
+                  borderRadius: "50%",
+                }}
+              ></span>
+            </div>
+          </FormGroup>
+          <FormGroup>
+            <Label>내용</Label>
+            <textarea readOnly>가족 여행 계획이 있습니다.</textarea>
+          </FormGroup>
         </>
       );
       break;
@@ -154,6 +227,7 @@ const Modal = ({ type, onClose }) => {
         <ModalContent>{content}</ModalContent>
         <ModalFooter>
           <button onClick={onClose}>닫기</button>
+          {hasSubmitButton && <button>등록하기</button>}
         </ModalFooter>
       </ModalContainer>
     </Overlay>

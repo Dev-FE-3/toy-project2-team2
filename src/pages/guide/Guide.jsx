@@ -54,6 +54,7 @@ const Guide = () => {
       <Button onClick={() => setModalType("request")}>정정 신청</Button>
       <Button onClick={() => setModalType("history")}>정정 내역</Button>
       <Button onClick={() => setModalType("schedule")}>일정 등록</Button>
+      <Button onClick={() => setModalType("check-schedule")}>일정 확인</Button>
       {modalType && (
         <Modal type={modalType} onClose={() => setModalType(null)} />
       )}
