@@ -55,7 +55,7 @@ const CalendarIconBox = styled.div`
   width: 54px;
   height: 38px;
   background: var(--background-color-3);
-  border: 1px solid var(--disabled);
+  border-left: 1px solid var(--disabled);
   border-radius: 0 8px 8px 0;
   margin-left: 13px;
 `;
