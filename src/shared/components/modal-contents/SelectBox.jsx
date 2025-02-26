@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { format, subMonths } from "date-fns";
+import toggleIcon from "../../../assets/images/Down.png";
 
-// Styled Components
 const Container = styled.div`
   position: relative;
   display: inline-block;
-  font-family: Noto Sans KR;
+  font-family: "Noto Sans KR", sans-serif;
   font-weight: 500;
   font-size: 18px;
   line-height: 21.6px;
@@ -14,16 +14,31 @@ const Container = styled.div`
 
 const Button = styled.button`
   font-size: 18px;
+  font-family: inherit;
   border: 1px solid var(--disabled);
   border-radius: 10px;
   background: white;
   cursor: pointer;
   width: 154px;
   height: 42px;
-  gap: 10px;
-  border-width: 1px;
-  padding-right: 14px;
-  padding-left: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 14px;
+`;
+
+const ButtonText = styled.span`
+  flex-grow: 1;
+  text-align: left;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 21.6px;
+`;
+
+const Icon = styled.img`
+  width: 16px;
+  height: 10px;
 `;
 
 const Dropdown = styled.ul`
@@ -44,8 +59,8 @@ const Dropdown = styled.ul`
 
 const Option = styled.li`
   color: var(--text-disabled-2);
-  width: 107;
-  height: 30;
+  width: 107px;
+  height: 30px;
   gap: 10px;
   padding: 8px 12px;
   cursor: pointer;
@@ -71,7 +86,8 @@ const SelectBox = () => {
   return (
     <Container>
       <Button onClick={() => setIsOpen(!isOpen)}>
-        {format(selectedDate, "yyyy년 MM월")} ▼
+        <ButtonText>{format(selectedDate, "yyyy년 MM월")}</ButtonText>
+        <Icon src={toggleIcon} alt="Toggle Dropdown" />
       </Button>
 
       {isOpen && (

@@ -1,28 +1,42 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import toggleIcon from "../../../assets/images/Down.png";
 
 const Container = styled.div`
   position: relative;
   display: inline-block;
-  font-family: Noto Sans KR;
-  font-weight: 500;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 400;
   font-size: 18px;
   line-height: 21.6px;
 `;
 
 const Button = styled.button`
-  font-size: 18px;
+  font-family: inherit;
   border: 1px solid var(--disabled);
   border-radius: 10px;
   background: white;
   cursor: pointer;
   width: 154px;
   height: 42px;
-  padding: 0 14px;
   display: flex;
-  text-align: right;
-  justify-content: space-between; /* 양쪽 끝 정렬 */
+  justify-content: space-between;
   align-items: center;
+  padding: 0 14px;
+`;
+
+const ButtonText = styled.span`
+  flex-grow: 1;
+  text-align: left;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21.6px;
+`;
+
+const Icon = styled.img`
+  width: 16px;
+  height: 10px;
 `;
 
 const Dropdown = styled.ul`
@@ -43,8 +57,8 @@ const Dropdown = styled.ul`
 
 const Option = styled.li`
   color: var(--text-disabled-2);
-  width: 107;
-  height: 30;
+  width: 107px;
+  height: 30px;
   gap: 10px;
   padding: 8px 12px;
   cursor: pointer;
@@ -66,7 +80,10 @@ const GeneralSelect = () => {
 
   return (
     <Container>
-      <Button onClick={() => setIsOpen(!isOpen)}>{selectedOption} ▼</Button>
+      <Button onClick={() => setIsOpen(!isOpen)}>
+        <ButtonText>{selectedOption}</ButtonText>
+        <Icon src={toggleIcon} alt="Toggle Dropdown" />
+      </Button>
 
       {isOpen && (
         <Dropdown>
