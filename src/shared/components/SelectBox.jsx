@@ -24,7 +24,7 @@ const Button = styled.button`
   font-family: "Noto Sans KR", sans-serif;
   font-weight: 400;
 
-  width: ${(props) => (props.size === "large" ? "170px" : "164px")};
+  width: ${(props) => (props.size === "large" ? "170px" : "154px")};
   height: ${(props) => (props.size === "large" ? "38px" : "42px")};
 `;
 
