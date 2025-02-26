@@ -1,6 +1,6 @@
-import { createGlobalStyle } from 'styled-components'
-import reset from 'styled-reset'
-import './fonts.css'
+import { createGlobalStyle } from "styled-components";
+import reset from "styled-reset";
+import "./fonts.css";
 
 const GlobalStyle = createGlobalStyle`
 	:root {
@@ -50,16 +50,24 @@ const GlobalStyle = createGlobalStyle`
 	button {
     border: none;
     cursor: pointer;
-  }
+    }
 
 	a {
     text-decoration: none;
 		color: var(--text-disabled);
-  }
+    }
 
 	body {
 		font-family: 'Noto Sans KR', sans-serif;
-	}
-`
+    }
 
-export default GlobalStyle
+	input {
+    all: unset; // 기본 스타일 제거
+    box-sizing: border-box;
+    }
+	
+  	textarea {
+		all:unset;
+	}
+`;
+export default GlobalStyle;
