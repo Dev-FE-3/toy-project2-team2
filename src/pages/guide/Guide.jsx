@@ -4,8 +4,7 @@ import styled from "styled-components";
 import Input from "./../../shared/components/input/Input";
 import LoginInput from "./../../shared/components/input/LoginInput";
 import PageTitle from "../../shared/components/titles/PageTitle";
-import DateSelectBox from "../../shared/components/modal-contents/SelectBox";
-import GeneralSelect from "../../shared/components/modal-contents/GeneralSelect";
+import SelectBox from "../../shared/components/SelectBox";
 
 const Wrapper = styled.div`
   width: 150px;
@@ -13,6 +12,16 @@ const Wrapper = styled.div`
 `;
 
 const Guide = () => {
+  const Options1 = ["무급휴가", "연차", "병가", "기타"];
+  const Options2 = [
+    "2025년 2월",
+    "2025년 3월",
+    "2025년 4월",
+    "2025년 5월",
+    "2025년 6월",
+    "2025년 7월",
+  ];
+
   return (
     <>
       <h1>page title</h1>
@@ -40,8 +49,6 @@ const Guide = () => {
       <LoginInput type="email" placeholder="email" />
       <LoginInput type="password" placeholder="password" />
 
-      <h1>date select box</h1>
-      <DateSelectBox />
       <h1>textarea</h1>
       <Wrapper>
         <TextBox
@@ -51,7 +58,9 @@ const Guide = () => {
       </Wrapper>
       <br />
       <h1>select box</h1>
-      <GeneralSelect />
+      <SelectBox options={Options1} defaultOption="유형" size="large" />
+      <br></br>
+      <SelectBox options={Options2} defaultOption="날짜" size="small" />
       <h1>modal</h1>
       <h1>date</h1>
     </>

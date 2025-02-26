@@ -1,30 +1,31 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { format, subMonths } from "date-fns";
-import toggleIcon from "../../../assets/images/Down.png";
+import toggleIcon from "../../assets/images/Down.png";
 
 const Container = styled.div`
   position: relative;
   display: inline-block;
   font-family: "Noto Sans KR", sans-serif;
-  font-weight: 500;
+  font-weight: 400;
   font-size: 18px;
   line-height: 21.6px;
 `;
 
 const Button = styled.button`
-  font-size: 18px;
   font-family: inherit;
   border: 1px solid var(--disabled);
   border-radius: 10px;
   background: white;
   cursor: pointer;
-  width: 154px;
-  height: 42px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 14px;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 400;
+
+  width: ${(props) => (props.size === "large" ? "170px" : "164px")};
+  height: ${(props) => (props.size === "large" ? "38px" : "42px")};
 `;
 
 const ButtonText = styled.span`
@@ -69,32 +70,35 @@ const Option = styled.li`
   }
 `;
 
-const SelectBox = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+const GeneralSelect = ({
+  options = [],
+  defaultOption = "선택",
+  onSelect,
+  size = "large",
+}) => {
+  const [selectedOption, setSelectedOption] = useState(defaultOption);
   const [isOpen, setIsOpen] = useState(false);
 
-  // 지난 12개월 생성
-  const pastMonths = Array.from({ length: 12 }, (_, i) =>
-    subMonths(new Date(), i)
-  );
-
-  const handleSelect = (date) => {
-    setSelectedDate(date);
+  const handleSelect = (option) => {
+    setSelectedOption(option);
     setIsOpen(false);
+    if (onSelect) {
+      onSelect(option); // 부모 컴포넌트에서 선택값 받기
+    }
   };
 
   return (
     <Container>
-      <Button onClick={() => setIsOpen(!isOpen)}>
-        <ButtonText>{format(selectedDate, "yyyy년 MM월")}</ButtonText>
+      <Button onClick={() => setIsOpen(!isOpen)} size={size}>
+        <ButtonText>{selectedOption}</ButtonText>
         <Icon src={toggleIcon} alt="Toggle Dropdown" />
       </Button>
 
       {isOpen && (
         <Dropdown>
-          {pastMonths.map((date, index) => (
-            <Option key={index} onClick={() => handleSelect(date)}>
-              {format(date, "yyyy년 MM월")}
+          {options.map((option, index) => (
+            <Option key={index} onClick={() => handleSelect(option)}>
+              {option}
             </Option>
           ))}
         </Dropdown>
@@ -103,4 +107,4 @@ const SelectBox = () => {
   );
 };
 
-export default SelectBox;
+export default GeneralSelect;
