@@ -15,6 +15,7 @@ const Container = styled.div`
 const TableContainer = styled.div`
   width: 100%;
   margin-top: 45px;
+  margin-bottom: 138px;
 `;
 
 const HeaderTable = styled.table`
