@@ -48,13 +48,25 @@ const HeaderTable = styled.table`
 `;
 
 const BodyContainer = styled.div`
-  //max-height: 540px;
-  max-height: 600px;
-  overflow-y: auto;
+  max-height: 620px;
+  overflow-y: scroll;
   border-bottom: 2px solid var(--background-color);
   margin-top: 10px;
   border-top: 2px solid var(--background-color);
   border-bottom: 2px solid var(--background-color);
+  /* 스크롤바 스타일 강제 표시 (Chrome, Edge, Safari) */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb, var(--text-disabled));
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-track, var(--disabled));
+  }
 `;
 
 const BodyTable = styled.table`
@@ -94,24 +106,25 @@ const StatusCell = styled.span`
   padding: 7px;
   border-radius: 8px;
   color: ${(props) =>
-    props.status === "정정 완료"
+    props.$status === "정정 완료"
       ? "var(--blue)"
-      : props.status === "정정 불가"
+      : props.$status === "정정 불가"
       ? "var(--text-disabled)"
-      : props.status === "대기 중"
+      : props.$status === "대기 중"
       ? "var(--green)"
       : "var(--text-secondary)"};
   background-color: ${(props) =>
-    props.status === "정정 완료"
+    props.$status === "정정 완료"
       ? "var(--blue-bg)"
-      : props.status === "정정 불가"
+      : props.$status === "정정 불가"
       ? "var(--background-color)"
-      : props.status === "대기 중"
+      : props.$status === "대기 중"
       ? "var(--green-bg)"
       : "transparent"};
   box-sizing: border-box;
 `;
 
+// 라벨 색 사용법 참고를 위한 tbody 입니다. data 불러와서 띄우면서 수정 충분히 가능합니다
 const SalaryAdjustment = () => {
   const subtitle = "정정 내역";
   return (
@@ -144,7 +157,7 @@ const SalaryAdjustment = () => {
                   읽어보시겠어요?
                 </td>
                 <td>
-                  <StatusCell status="정정 완료">정정 완료</StatusCell>
+                  <StatusCell $status="정정 완료">정정 완료</StatusCell>
                 </td>
               </tr>
               <tr>
@@ -152,7 +165,7 @@ const SalaryAdjustment = () => {
                 <td>유급 휴가</td>
                 <td>유급 휴가가 반영되지 않았습니다. 정정해주세요</td>
                 <td>
-                  <StatusCell status="정정 불가">정정 불가</StatusCell>
+                  <StatusCell $status="정정 불가">정정 불가</StatusCell>
                 </td>
               </tr>
               <tr>
@@ -160,7 +173,7 @@ const SalaryAdjustment = () => {
                 <td>유급 휴가</td>
                 <td>유급 휴가가 반영되지 않았습니다. 정정해주세요</td>
                 <td>
-                  <StatusCell status="대기 중">대기 중</StatusCell>
+                  <StatusCell $status="대기 중">대기 중</StatusCell>
                 </td>
               </tr>
               <tr>
@@ -168,7 +181,7 @@ const SalaryAdjustment = () => {
                 <td>유급 휴가</td>
                 <td>유급 휴가가 반영되지 않았습니다. 정정해주세요</td>
                 <td>
-                  <StatusCell status="대기 중">대기 중</StatusCell>
+                  <StatusCell $status="대기 중">대기 중</StatusCell>
                 </td>
               </tr>
               <tr>
@@ -176,7 +189,7 @@ const SalaryAdjustment = () => {
                 <td>유급 휴가</td>
                 <td>유급 휴가가 반영되지 않았습니다. 정정해주세요</td>
                 <td>
-                  <StatusCell status="대기 중">대기 중</StatusCell>
+                  <StatusCell $status="대기 중">대기 중</StatusCell>
                 </td>
               </tr>
               <tr>
@@ -184,7 +197,7 @@ const SalaryAdjustment = () => {
                 <td>유급 휴가</td>
                 <td>유급 휴가가 반영되지 않았습니다. 정정해주세요</td>
                 <td>
-                  <StatusCell status="대기 중">대기 중</StatusCell>
+                  <StatusCell $status="대기 중">대기 중</StatusCell>
                 </td>
               </tr>
               <tr>
@@ -192,7 +205,7 @@ const SalaryAdjustment = () => {
                 <td>유급 휴가</td>
                 <td>유급 휴가가 반영되지 않았습니다. 정정해주세요</td>
                 <td>
-                  <StatusCell status="대기 중">대기 중</StatusCell>
+                  <StatusCell $status="대기 중">대기 중</StatusCell>
                 </td>
               </tr>
             </tbody>
