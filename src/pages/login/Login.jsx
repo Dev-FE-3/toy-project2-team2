@@ -76,6 +76,9 @@ const Switcher = styled.div`
   text-align: center;
   width: 100%;
   margin-top: 146px;
+  a {
+    margin-left: 5px;
+  }
 `;
 const ErrorWrapper = styled.div`
   padding-top: 5px;
@@ -203,7 +206,7 @@ const Login = () => {
           </Button>
         </Form>
         <Switcher>
-          계정이 없으신가요?&nbsp;&nbsp;
+          계정이 없으신가요?
           <Link to="/">회원가입</Link>
         </Switcher>
       </LoginBox>
