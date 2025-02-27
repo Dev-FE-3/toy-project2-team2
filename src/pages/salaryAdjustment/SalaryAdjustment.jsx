@@ -24,8 +24,8 @@ const HeaderTable = styled.table`
   font-size: var(--font-size-title-small);
   font-weight: 500;
   table-layout: fixed;
-  /* border-spacing: 0;
-  border-collapse: separate; */
+  border-spacing: 0;
+  border-collapse: separate;
 
   th {
     padding: 24px 0;
@@ -48,7 +48,8 @@ const HeaderTable = styled.table`
 `;
 
 const BodyContainer = styled.div`
-  max-height: 520px;
+  //max-height: 540px;
+  max-height: 600px;
   overflow-y: auto;
   border-bottom: 2px solid var(--background-color);
   margin-top: 10px;
@@ -65,9 +66,8 @@ const BodyTable = styled.table`
   table-layout: fixed;
   border-spacing: 0 10px;
   border-collapse: separate;
-
   td {
-    padding: 22px 0;
+    padding: 30px 0;
     text-align: center;
   }
 
