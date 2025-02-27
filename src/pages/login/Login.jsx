@@ -56,7 +56,7 @@ const Form = styled.form`
 `;
 
 const Error = styled.span`
-  font-size: var(--font-size-samll);
+  font-size: var(--font-size-small);
   font-weight: 500;
   color: var(--red);
   padding-left: 10px;
