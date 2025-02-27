@@ -13,9 +13,8 @@ const Box = styled.div`
 `;
 
 const Title = styled.span`
-  color: var(--text-sencondary);
-  font-size: 20px;
-  font-style: normal;
+  color: var(--text-secondary);
+  font-size: 20px; // 20? 어디에....
   font-weight: 700;
   line-height: normal;
   margin-bottom: 44px;
@@ -25,12 +24,14 @@ const Wrapper = styled.div`
   flex-grow: 1; /* Wrapper가 가능한 공간을 모두 차지하도록 설정 */
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;
 
-const Content = styled.p`
-  color: var(--text-sencondary);
-  font-size: 18px;
-  font-style: normal;
+const Content = styled.div`
+  color: var(--text-secondary);
+  font-size: var(--font-size-title-small);
+  display: flex;
+  justify-content: space-between;
   font-weight: 500;
   line-height: normal;
   &:not(:first-child) {
@@ -38,12 +39,20 @@ const Content = styled.p`
   }
 `;
 
+const Left = styled.span``;
+
+const Right = styled.span`
+  text-align: right; /* 오른쪽 항목을 오른쪽 끝에 정렬 */
+`;
+
 const Calc = styled.span`
   color: var(--text-primary);
   font-size: 20px;
-  font-style: normal;
   font-weight: 700;
   line-height: normal;
+  display: flex;
+  justify-content: space-between; /* 좌측과 우측으로 배치 */
+  width: 100%;
 `;
 
 const Line = styled.div`
@@ -53,16 +62,35 @@ const Line = styled.div`
   margin-top: 32px;
 `;
 
-const CalcBox = () => {
+const salaryMapping = {
+  baseSalary: "기본급",
+  overtimePay: "초과근무수당",
+  mealAllowance: "식대",
+  pension: "국민연금",
+  healthInsurance: "건강보험",
+  employmentInsurance: "고용보험",
+  incomeTax: "소득세",
+  localIncomeTax: "지방소득세",
+};
+
+const CalcBox = ({ type, data }) => {
+  const totalAmount = Object.values(data).reduce((acc, val) => acc + val, 0);
+
   return (
     <Box>
-      <Title>지급 내역</Title>
+      <Title>{type === "payments" ? "지급 내역" : "공제 내역"}</Title>
       <Wrapper>
-        <Content>기본급</Content>
-        <Content>초과근무수당</Content>
-        <Content>식비</Content>
+        {Object.keys(data).map((key, index) => (
+          <Content key={index}>
+            <Left>{salaryMapping[key] || key}</Left>
+            <Right>{data[key].toLocaleString("ko-KR")} 원</Right>
+          </Content>
+        ))}
       </Wrapper>
-      <Calc>총 지급액</Calc>
+      <Calc>
+        <Left>{type === "payments" ? "총 지급액" : "총 공제액"}</Left>
+        <Right>{totalAmount.toLocaleString("ko-KR")} 원</Right>
+      </Calc>
       <Line />
     </Box>
   );
