@@ -13,14 +13,14 @@ const DatePickerWrapper = styled.div`
   height: 38px;
   border: 1px solid var(--disabled);
   border-radius: 8px;
-  background: var(--white);
+  background-color: var(--white);
   overflow: hidden;
   justify-content: space-between;
-  font-family: Noto Sans KR;
   font-weight: 400;
-  font-size: 16px;
+  font-size: var(--font-size-primary);
   line-height: 24px;
   letter-spacing: 0%;
+  cursor: pointer;
 `;
 
 const CustomInputWrapper = styled.div`
@@ -38,7 +38,7 @@ const DateTextBox = styled.div`
   justify-content: center;
   flex-grow: 1;
   text-align: center;
-  font-size: 16px;
+  font-size: var(--font-size-primary);
   color: var(--text-primary);
   letter-spacing: 1px;
 `;
@@ -63,7 +63,6 @@ const CalendarIconBox = styled.div`
 const CalendarIcon = styled.img`
   width: 16px;
   height: 18px;
-  cursor: pointer;
 `;
 
 const formatDate = (date, type) => {
