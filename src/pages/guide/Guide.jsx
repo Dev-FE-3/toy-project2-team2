@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Input from "./../../shared/components/input/Input";
 import LoginInput from "./../../shared/components/input/LoginInput";
 import PageTitle from "../../shared/components/titles/PageTitle";
-import Modal from "../../shared/components/modal/Modal";
+import Modal from "../../shared/components/Modal";
 
 const Wrapper = styled.div`
   width: 150px;
@@ -30,6 +30,42 @@ const ScheduleCheckContent = () => (
   </div>
 );
 
+const ScheduleRegisterButton = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setIsOpen(true)}>일정 등록</Button>
+      {isOpen && (
+        <Modal
+          title="일정 등록"
+          content={<ScheduleRegisterContent />}
+          hasSubmitButton
+          onClose={() => setIsOpen(false)}
+        />
+      )}
+    </>
+  );
+};
+
+const ScheduleCheckButton = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setIsOpen(true)}>일정 확인</Button>
+      {isOpen && (
+        <Modal
+          title="일정 확인"
+          content={<ScheduleCheckContent />}
+          hasSubmitButton={false}
+          onClose={() => setIsOpen(false)}
+        />
+      )}
+    </>
+  );
+};
+
 const Guide = () => {
   return (
     <>
@@ -48,8 +84,6 @@ const Guide = () => {
       <Button size="lg" color="gray">
         큰 버튼
       </Button>
-      <h1>page title</h1>
-      <h1>input</h1>
 
       <h1>input</h1>
       <Input />
@@ -62,26 +96,14 @@ const Guide = () => {
       <Wrapper>
         <TextBox
           disabled={false}
-          placeholder="임의로 임력하면 됩니다 wrapper가 있는 이유는 사이즈가 100%여서.."
+          placeholder="임의로 입력하면 됩니다 wrapper가 있는 이유는 사이즈가 100%여서.."
         />
       </Wrapper>
       <br />
-      <h1>modal</h1>
-      <Modal
-        title="일정 등록"
-        content={<ScheduleRegisterContent />}
-        hasSubmitButton
-      >
-        <Button>일정 등록</Button>
-      </Modal>
 
-      <Modal
-        title="일정 확인"
-        content={<ScheduleCheckContent />}
-        hasSubmitButton={false}
-      >
-        <Button>일정 확인</Button>
-      </Modal>
+      <h1>modal</h1>
+      <ScheduleRegisterButton />
+      <ScheduleCheckButton />
     </>
   );
 };
