@@ -6,7 +6,7 @@ const Modal = ({ title, content, hasSubmitButton, children }) => {
 
   return (
     <>
-      <span onClick={() => setIsOpen(true)}>{children}</span>
+      <button onClick={() => setIsOpen(true)}>{children}</button>
 
       {isOpen && (
         <ModalUI
