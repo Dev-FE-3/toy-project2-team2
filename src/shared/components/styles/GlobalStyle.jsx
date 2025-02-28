@@ -32,7 +32,7 @@ const GlobalStyle = createGlobalStyle`
 
 		/* text-color */
 		--text-primary: #1E2A2E;
-		--text-sencondary: #4A4A4A;
+		--text-secondary: #4A4A4A;
 		--text-disabled: #828282;
 		--text-disabled-2: #CACACA;
 
@@ -41,7 +41,7 @@ const GlobalStyle = createGlobalStyle`
 		--font-size-title-medium: 24px;
 		--font-size-title-small: 18px;
 		--font-size-primary: 16px;
-		--font-size-samll: 14px;
+		--font-size-small: 14px;
 	}
 
 	// reset css
@@ -50,6 +50,7 @@ const GlobalStyle = createGlobalStyle`
 	button {
     border: none;
     cursor: pointer;
+		font-family: inherit;
   }
 
 	a {
@@ -59,16 +60,27 @@ const GlobalStyle = createGlobalStyle`
 
 	body {
 		font-family: 'Noto Sans KR', sans-serif;
-    }
+  }
 
 	input {
     all: unset; // 기본 스타일 제거
     box-sizing: border-box;
-    }
+  }
 	
-  	textarea {
+  textarea {
 		all:unset;
 	}
-`;
 
+	&::-webkit-scrollbar {
+    width: 8px;
+  }	
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb, var(--text-disabled-2));
+    border-radius: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-track, var(--background-color));
+		border-radius: 8px;
+  }
+`;
 export default GlobalStyle;

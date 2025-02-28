@@ -11,13 +11,7 @@ import { auth } from "./firebase";
 import styled from "styled-components";
 import LoadingScreen from "./shared/components/LoadingScreen";
 import ProtectedRoute from "./shared/components/ProtectedRoute";
-import GlobalStyle from "./shared/components/styles/GlobalStyle"
-
-const Wrapper = styled.div`
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-`;
+import GlobalStyle from "./shared/components/styles/GlobalStyle";
 
 const router = createBrowserRouter([
   {
@@ -67,9 +61,7 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
-      <Wrapper>
-        {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
-      </Wrapper>
+      {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
     </>
   );
 };
