@@ -59,7 +59,6 @@ const Guide = () => {
       <br />
       <h1>select box</h1>
       <SelectBox options={Options1} defaultOption="유형" size="large" />
-      <br></br>
       <SelectBox options={Options2} defaultOption="2025년 2월" size="small" />
       <h1>modal</h1>
       <h1>date</h1>
