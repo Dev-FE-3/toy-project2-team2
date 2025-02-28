@@ -70,4 +70,5 @@ const GlobalStyle = createGlobalStyle`
 		all:unset;
 	}
 `;
+
 export default GlobalStyle;
