@@ -20,6 +20,7 @@ const StyledButton = styled.button`
 	}
 
   &:disabled {
+		opacity: 0.3;
     pointer-events: none;
   }
 `
