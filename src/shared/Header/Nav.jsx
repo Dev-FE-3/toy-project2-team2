@@ -13,6 +13,7 @@ const NavList = styled.ul`
       font-weight: 700;
       color: var(--text-disabled);
       letter-spacing: -0.36px;
+
       &.active {
         color: var(--text-primary);
       }
@@ -25,17 +26,26 @@ const Nav = () => {
     <nav>
       <NavList>
         <li>
-          <NavLink to="/" activeClassName="active">
+          <NavLink
+            to="/"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
             내 일정
           </NavLink>
         </li>
         <li>
-          <NavLink to="/MySalary" activeClassName="active">
+          <NavLink
+            to="/MySalary"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
             급여 확인
           </NavLink>
         </li>
         <li>
-          <NavLink to="/SalaryAdjustment" activeClassName="active">
+          <NavLink
+            to="/SalaryAdjustment"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
             정정 신청 / 내역
           </NavLink>
         </li>
