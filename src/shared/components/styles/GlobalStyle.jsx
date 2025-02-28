@@ -60,6 +60,15 @@ const GlobalStyle = createGlobalStyle`
 	body {
 		font-family: 'Noto Sans KR', sans-serif;
 	}
+
+	input {
+		all : unset;
+		box-sizing: border-box;
+	}
+
+	textarea {
+		all : unset;
+	}
 `;
 
 export default GlobalStyle;

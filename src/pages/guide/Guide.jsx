@@ -70,6 +70,18 @@ const ScheduleCheckButton = () => {
 const Guide = () => {
   const [fullDate, setFullDate] = useState(null); // 년/월/일 선택
   const [yearMonth, setYearMonth] = useState(null); // 년/월 선택
+  // input 관련 상태 - 입력 필드와 버튼을 제출 후 비활성화 할거야? false 입력 가능, true 비활성화
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  // input 관련 상태 - 사용자가 입력한 값을 저장하는 상태 : setInputValue(e.target.value)로 업데이트
+  const [inputValue, setInputValue] = useState("");
+  // input 관련 상태 - 제출을 누르면 true - 비활성화
+  const handleSubmit = () => {
+    setIsSubmitted(true);
+  };
+  // input 관련 상태 - 수정하기 누르면 수정이 가능하게 false - 활성화
+  const handleEdit = () => {
+    setIsSubmitted(false);
+  };
 
   const handleFullDateChange = (date) => {
     setFullDate(date);
@@ -84,7 +96,6 @@ const Guide = () => {
       <h1>page title</h1>
       <PageTitle title="페이지명1" />
       <PageTitle title="페이지명2" subtitle="페이지 설명" />
-
       <h1>button</h1>
       <Button size="sm">작은 버튼</Button>
       <Button size="sm" color="gray">
@@ -98,12 +109,25 @@ const Guide = () => {
       </Button>
       <h1>page title</h1>
       <h1>input</h1>
-      <Input />
+      <p>코드상 위에 상태 관련 설명 있어요</p>
+      <br />
+      <Input
+        id="name"
+        label="어짜피 모달 안에서 섹션 잡을 때 너비를 줄 거니까 space between 설정했어요"
+        isSubmitted={isSubmitted}
+        placeholder="내용을 입력하세요"
+        onChange={(e) => setInputValue(e.target.value)}
+      />
+      <Button onClick={handleSubmit} disabled={isSubmitted}>
+        제출
+      </Button>
+      <Button onClick={handleEdit} color="gray">
+        수정하기
+      </Button>
       <Input disabled placeholder="disabled input 입니다" />
       <LoginInput placeholder="login input 입니다" />
       <LoginInput type="email" placeholder="email" />
       <LoginInput type="password" placeholder="password" />
-
       <h1>textarea</h1>
       <Wrapper>
         <TextBox
@@ -112,14 +136,12 @@ const Guide = () => {
         />
       </Wrapper>
       <br />
-
       <h1>modal</h1>
       <h1>select box</h1>
       <h1>Date</h1>
       <StyledDatePicker type="date" onChange={handleFullDateChange} />
       <br></br>
       <StyledDatePicker type="year-month" onChange={handleYearMonthChange} />
-
       <h2>선택된 날짜</h2>
       <p>
         📆 년/월/일: {fullDate ? fullDate.toLocaleDateString() : "선택 안 됨"}

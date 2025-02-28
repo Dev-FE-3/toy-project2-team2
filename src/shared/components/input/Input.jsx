@@ -1,8 +1,22 @@
 import React from "react";
 import styled from "styled-components";
 
-const InputFieldWrapper = styled.input`
-  width: 100%;
+const InputWrapper = styled.div`
+  display: flex;
+  align-items: center; /* 수직 정렬 */
+  justify-content: space-between;
+`;
+
+const Label = styled.label`
+  font-size: var(--font-size-primary);
+  font-weight: 400;
+  color: var(--text-disabled);
+  //margin-bottom: 5px;
+  display: inline-block;
+`;
+
+const InputStyle = styled.input`
+  width: 269px;
   height: auto;
   padding: 10px 10px;
   border-radius: 8px;
@@ -12,38 +26,43 @@ const InputFieldWrapper = styled.input`
   line-height: 24px;
   border: 1px solid var(--disabled);
   background-color: var(--background-color-3);
-  color: var(--disabled);
+  color: var(--text-primary);
   transition: all 0.2s ease;
 
   &:focus {
     border: 1px solid var(--accent);
     background-color: var(--white);
     color: var(--text-primary);
-    outline: none;
   }
 
   ${(props) =>
-    props.isSubmitted &&
+    props.$issubmitted &&
     `
       border: 1px solid var(--disabled);
       background-color: var(--white);
-      color: var(--Text-Primary);
+      color: var(--text-primary);
       pointer-events: none;
     `}
 `;
 
 const Input = ({
+  id,
+  label,
   isSubmitted,
   placeholder = "필요에 의한 내용을 바꿔주세요",
   onChange,
 }) => {
   return (
-    <InputFieldWrapper
-      type="text"
-      isSubmitted={isSubmitted}
-      placeholder={placeholder}
-      onChange={onChange}
-    />
+    <InputWrapper>
+      {label && <Label htmlFor={id}>{label}</Label>}
+      <InputStyle
+        id={id}
+        type="text"
+        placeholder={placeholder}
+        onChange={onChange}
+        $issubmitted={isSubmitted} // 여기서 'issubmitted'로 전달!!!
+      />
+    </InputWrapper>
   );
 };
 
