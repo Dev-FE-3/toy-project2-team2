@@ -5,10 +5,9 @@ import toggleIcon from "../../assets/images/Down.svg";
 const Container = styled.div`
   position: relative;
   display: inline-block;
-  font-family: "Noto Sans KR", sans-serif;
   font-weight: 400;
   font-size: var(--font-size-title-small);
-  line-height: 21.6px;
+  line-height: 22px;
 `;
 
 const Button = styled.button`
@@ -32,7 +31,7 @@ const ButtonText = styled.span`
   flex-grow: 1;
   text-align: left;
   font-weight: 400;
-  line-height: 21.6px;
+  line-height: 22px;
 `;
 
 const Icon = styled.img`
@@ -47,7 +46,7 @@ const Dropdown = styled.ul`
   background: var(--white);
   border: 1px solid var(--disabled);
   border-radius: 10px;
-  box-shadow: 0px 6px 12.7px 0px #00000026;
+  box-shadow: 0px 6px 12px 0px #00000026;
   max-height: 200px;
   overflow-y: auto;
 
