@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const InputWrapper = styled.div`
   display: flex;
-  align-items: center; /* 수직 정렬 */
+  align-items: center;
   justify-content: space-between;
 `;
 
@@ -11,7 +11,6 @@ const Label = styled.label`
   font-size: var(--font-size-primary);
   font-weight: 400;
   color: var(--text-disabled);
-  //margin-bottom: 5px;
   display: inline-block;
 `;
 

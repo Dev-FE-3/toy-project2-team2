@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Input from "./../../shared/components/input/Input";
 import LoginInput from "./../../shared/components/input/LoginInput";
 import PageTitle from "../../shared/components/titles/PageTitle";
+import SelectBox from "../../shared/components/SelectBox";
 import StyledDatePicker from "../../shared/components/StyledDatePicker";
 import Modal from "../../shared/components/Modal";
 
@@ -68,6 +69,16 @@ const ScheduleCheckButton = () => {
 };
 
 const Guide = () => {
+  const Options1 = ["무급휴가", "연차", "병가", "기타"];
+  const Options2 = [
+    "2025년 2월",
+    "2025년 3월",
+    "2025년 4월",
+    "2025년 5월",
+    "2025년 6월",
+    "2025년 7월",
+  ];
+
   const [fullDate, setFullDate] = useState(null); // 년/월/일 선택
   const [yearMonth, setYearMonth] = useState(null); // 년/월 선택
   // input 관련 상태 - 입력 필드와 버튼을 제출 후 비활성화 할거야? false 입력 가능, true 비활성화
@@ -107,7 +118,7 @@ const Guide = () => {
       <Button size="lg" color="gray">
         큰 버튼
       </Button>
-      <h1>page title</h1>
+
       <h1>input</h1>
       <p>코드상 위에 상태 관련 설명 있어요</p>
       <br />
@@ -136,8 +147,11 @@ const Guide = () => {
         />
       </Wrapper>
       <br />
-      <h1>modal</h1>
+
       <h1>select box</h1>
+      <SelectBox options={Options1} defaultOption="유형" size="large" />
+      <SelectBox options={Options2} defaultOption="2025년 2월" size="small" />
+
       <h1>Date</h1>
       <StyledDatePicker type="date" onChange={handleFullDateChange} />
       <br></br>
@@ -154,6 +168,7 @@ const Guide = () => {
             ).padStart(2, "0")}`
           : "선택 안 됨"}
       </p>
+      <h1>modal</h1>
       <ScheduleRegisterButton />
       <ScheduleCheckButton />
     </>
