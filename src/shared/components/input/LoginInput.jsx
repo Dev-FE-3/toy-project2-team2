@@ -1,31 +1,29 @@
 import { styled } from "styled-components";
 
 const InputWrapper = styled.div`
-  margin-left: 11px;
-  margin-right: 11px;
+  margin: 0 4px;
 `;
 
 const StyledInput = styled.input`
-  padding: 0 0 20px 0;
-  border: none;
+  padding: 0 5px 10px;
   width: 100%;
-  max-width: 100%;
-  height: auto;
   font-size: var(--font-size-title-small);
-  font-style: normal;
   font-weight: 700;
-  line-height: normal;
   letter-spacing: -0.36px;
-  margin-bottom: 20px;
   color: var(--text-primary);
-  box-sizing: border-box;
-  border-bottom: 2px solid var(--text-disabled-2);
+  border-bottom: 2px solid
+    ${(props) => (props.error ? "var(--red)" : "var(--text-disabled-2)")};
+  transition: border-bottom 0.3s;
+  &:focus {
+    border-bottom: 2px solid
+      ${(props) => (props.error ? "var(--red)" : "var(--primary)")};
+  }
   &::placeholder {
     color: var(--text-disabled-2);
   }
 `;
 
-const LoginInput = ({ name, value, onChange, placeholder, type }) => {
+const LoginInput = ({ name, value, onChange, placeholder, type, error }) => {
   return (
     <InputWrapper>
       <StyledInput
@@ -34,11 +32,10 @@ const LoginInput = ({ name, value, onChange, placeholder, type }) => {
         value={value}
         placeholder={placeholder}
         type={type}
-        required
+        error={error}
       />
     </InputWrapper>
   );
 };
 
 export default LoginInput;
-//export default { InputWrapper, Input };
