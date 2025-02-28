@@ -114,7 +114,6 @@ const Guide = () => {
       <Button size="lg" color="gray">
         큰 버튼
       </Button>
-      <h1>page title</h1>
 
       <h1>input</h1>
       <Input />

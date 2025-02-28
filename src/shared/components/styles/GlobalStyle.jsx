@@ -83,4 +83,5 @@ const GlobalStyle = createGlobalStyle`
 		border-radius: 8px;
   }
 `;
+
 export default GlobalStyle;
