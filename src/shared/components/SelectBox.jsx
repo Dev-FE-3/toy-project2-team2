@@ -18,22 +18,17 @@ const sizes = {
 const Container = styled.div`
   position: relative;
   display: inline-block;
-  line-height: 22px;
+  cursor: pointer;
 `;
 
 const Button = styled.button`
   border: 1px solid var(--disabled);
   border-radius: 10px;
   background-color: var(--white);
-  cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 14px;
-  height: 38px;
-  flex-grow: 1;
-  text-align: left;
-  line-height: 22px;
+  padding: 7px 14px;
 
   ${({ size }) => `
     font-size: ${sizes[size]?.fontSize || "16px"};
@@ -41,17 +36,6 @@ const Button = styled.button`
     font-weight: ${sizes[size]?.fontWeight || "400"};
   `}
 `;
-
-// const ButtonText = styled.span`
-//   flex-grow: 1;
-//   text-align: left;
-//   line-height: 22px;
-
-//   ${({ size }) => `
-//   font-size: ${sizes[size]?.fontSize || "16px"};
-//     font-weight: ${sizes[size]?.fontWeight || "400"};
-//   `}
-// `;
 
 const Icon = styled.img`
   width: 16px;
@@ -61,11 +45,11 @@ const Icon = styled.img`
 const Dropdown = styled.ul`
   position: absolute;
   left: 0;
-  height: 154px;
+  max-height: 154px;
   background: var(--white);
   border: 1px solid var(--disabled);
   border-radius: 10px;
-  box-shadow: 0px 6px 12px 0px #00000026;
+  box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.15);
   overflow-y: auto;
   z-index: 1;
 
@@ -79,7 +63,6 @@ const Dropdown = styled.ul`
 const Option = styled.li`
   color: var(--text-disabled-2);
   padding: 8px 12px;
-  cursor: pointer;
   &:hover {
     color: var(--text-primary);
   }
