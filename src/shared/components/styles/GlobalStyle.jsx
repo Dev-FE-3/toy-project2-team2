@@ -50,6 +50,7 @@ const GlobalStyle = createGlobalStyle`
 	button {
     border: none;
     cursor: pointer;
+		font-family: inherit;
     }
 
 	a {
@@ -66,9 +67,20 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     }
 	
-  	 textarea {
+  textarea {
 		all:unset;
 	}
-`;
 
+	&::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb, var(--text-disabled-2));
+    border-radius: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-track, var(--background-color));
+		border-radius: 8px;
+  }
+`;
 export default GlobalStyle;
