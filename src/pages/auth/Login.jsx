@@ -4,9 +4,9 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "@firebase/util";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Button from "./../../shared/components/button/Button";
+import Button from "../../shared/components/button/Button";
 import PageTitle from "../../shared/components/titles/PageTitle";
-import LoginInput from "./../../shared/components/input/LoginInput";
+import LoginInput from "../../shared/components/input/LoginInput";
 import logo from "./../../assets/images/logo.svg";
 
 const errors = {
@@ -38,6 +38,10 @@ const Wrapper = styled.div`
 `;
 
 const LoginBox = styled.div`
+  height: 650px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 400px;
   padding: 44px;
   background-color: var(--white);
@@ -47,12 +51,11 @@ const LoginBox = styled.div`
 `;
 
 const Form = styled.form`
-  margin-top: 110px;
   width: 100%;
-
   .loginBtn {
     width: 100%;
   }
+  margin-bottom: 40px;
 `;
 
 const Error = styled.span`
@@ -69,21 +72,22 @@ const Logo = styled.img`
 `;
 
 const InputWrapper = styled.div`
-  margin-bottom: 40px;
+  margin-bottom: 10px;
 `;
 const Switcher = styled.div`
   color: var(--text-disabled-2);
   text-align: center;
   width: 100%;
-  margin-top: 146px;
   a {
     margin-left: 5px;
+    color: var(--text-primary);
   }
 `;
 const ErrorWrapper = styled.div`
   padding-top: 5px;
   height: 34px;
 `;
+const LoginBoxHeader = styled.div``;
 
 const Login = () => {
   const navigate = useNavigate();
@@ -167,15 +171,17 @@ const Login = () => {
   return (
     <Wrapper>
       <LoginBox>
-        <Logo src={logo} alt="Sweet Ten" />
-        <PageTitle title="로그인" className="login" />
+        <LoginBoxHeader>
+          <Logo src={logo} alt="Sweet Ten" />
+          <PageTitle title="로그인" className="login" />
+        </LoginBoxHeader>
         <Form onSubmit={onSubmit}>
           <InputWrapper>
             <LoginInput
               onChange={onChange}
               name="email"
               value={email}
-              placeholder="Email"
+              placeholder="이메일을 입력하세요"
               error={error.email || error.common}
             />
             <ErrorWrapper>
@@ -187,7 +193,7 @@ const Login = () => {
               onChange={onChange}
               name="password"
               value={password}
-              placeholder="Password"
+              placeholder="비밀번호를 입력하세요"
               type="password"
               error={error.common}
             />
@@ -207,7 +213,7 @@ const Login = () => {
         </Form>
         <Switcher>
           계정이 없으신가요?
-          <Link to="/">회원가입</Link>
+          <Link to="/signup">회원가입</Link>
         </Switcher>
       </LoginBox>
     </Wrapper>

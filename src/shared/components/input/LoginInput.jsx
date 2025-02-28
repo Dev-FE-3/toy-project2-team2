@@ -8,7 +8,7 @@ const StyledInput = styled.input`
   padding: 0 5px 10px;
   width: 100%;
   font-size: var(--font-size-title-small);
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: -0.36px;
   color: var(--text-primary);
   border-bottom: 2px solid
@@ -22,10 +22,24 @@ const StyledInput = styled.input`
     color: var(--text-disabled-2);
   }
 `;
+const Label = styled.label`
+  padding-left: 4px;
+  color: var(--text-disabled);
+  font-size: var(--text-size-primary);
+`;
 
-const LoginInput = ({ name, value, onChange, placeholder, type, error }) => {
+const LoginInput = ({
+  name,
+  value,
+  onChange,
+  placeholder,
+  type,
+  error,
+  label,
+}) => {
   return (
     <InputWrapper>
+      {label && <Label>{label}</Label>}
       <StyledInput
         onChange={onChange}
         name={name}
