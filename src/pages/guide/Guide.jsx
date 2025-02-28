@@ -1,10 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Button from "../../shared/components/button/Button";
 import TextBox from "../../shared/components/TextBoxWrapper";
 import styled from "styled-components";
 import Input from "./../../shared/components/input/Input";
 import LoginInput from "./../../shared/components/input/LoginInput";
 import PageTitle from "../../shared/components/titles/PageTitle";
+import StyledDatePicker from "../../shared/components/StyledDatePicker";
 import Modal from "../../shared/components/Modal";
 
 const Wrapper = styled.div`
@@ -67,6 +68,17 @@ const ScheduleCheckButton = () => {
 };
 
 const Guide = () => {
+  const [fullDate, setFullDate] = useState(null); // 년/월/일 선택
+  const [yearMonth, setYearMonth] = useState(null); // 년/월 선택
+
+  const handleFullDateChange = (date) => {
+    setFullDate(date);
+  };
+
+  const handleYearMonthChange = (date) => {
+    setYearMonth(date);
+  };
+
   return (
     <>
       <h1>page title</h1>
@@ -84,7 +96,7 @@ const Guide = () => {
       <Button size="lg" color="gray">
         큰 버튼
       </Button>
-
+      <h1>page title</h1>
       <h1>input</h1>
       <Input />
       <Input disabled placeholder="disabled input 입니다" />
@@ -102,6 +114,24 @@ const Guide = () => {
       <br />
 
       <h1>modal</h1>
+      <h1>select box</h1>
+      <h1>Date</h1>
+      <StyledDatePicker type="date" onChange={handleFullDateChange} />
+      <br></br>
+      <StyledDatePicker type="year-month" onChange={handleYearMonthChange} />
+
+      <h2>선택된 날짜</h2>
+      <p>
+        📆 년/월/일: {fullDate ? fullDate.toLocaleDateString() : "선택 안 됨"}
+      </p>
+      <p>
+        📆 년/월:{" "}
+        {yearMonth
+          ? `${yearMonth.getFullYear()} / ${String(
+              yearMonth.getMonth() + 1
+            ).padStart(2, "0")}`
+          : "선택 안 됨"}
+      </p>
       <ScheduleRegisterButton />
       <ScheduleCheckButton />
     </>
