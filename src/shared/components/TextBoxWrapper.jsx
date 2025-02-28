@@ -8,7 +8,6 @@ const TextBoxWrapper = styled.textarea`
   color: var(--Text-Primary);
   font-size: var(--font-size-primary);
   font-weight: 400;
-  font-style: normal;
   line-height: 24px; /* 150% */
   background-color: var(--background-color-3);
   border: 1px solid var(--disabled);

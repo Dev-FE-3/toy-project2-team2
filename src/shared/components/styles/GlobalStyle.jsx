@@ -32,7 +32,7 @@ const GlobalStyle = createGlobalStyle`
 
 		/* text-color */
 		--text-primary: #1E2A2E;
-		--text-sencondary: #4A4A4A;
+		--text-secondary: #4A4A4A;
 		--text-disabled: #828282;
 		--text-disabled-2: #CACACA;
 
@@ -41,7 +41,7 @@ const GlobalStyle = createGlobalStyle`
 		--font-size-title-medium: 24px;
 		--font-size-title-small: 18px;
 		--font-size-primary: 16px;
-		--font-size-samll: 14px;
+		--font-size-small: 14px;
 	}
 
 	// reset css
@@ -66,8 +66,9 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     }
 	
-  	textarea {
+  	 textarea {
 		all:unset;
-	}`;
+	}
+`;
 
 export default GlobalStyle;
