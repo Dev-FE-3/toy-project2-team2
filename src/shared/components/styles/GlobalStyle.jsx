@@ -66,8 +66,8 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     }
 	
-  	textarea {
+  	 textarea {
 		all:unset;
-	}`;
-
+	}
+`;
 export default GlobalStyle;
