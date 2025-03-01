@@ -50,16 +50,38 @@ const GlobalStyle = createGlobalStyle`
 	button {
     border: none;
     cursor: pointer;
-  }
+		font-family: inherit;
+    }
 
 	a {
     text-decoration: none;
 		color: var(--text-disabled);
-  }
+    }
 
 	body {
 		font-family: 'Noto Sans KR', sans-serif;
+  }
+
+	input {
+    all: unset; // 기본 스타일 제거
+    box-sizing: border-box;
+    }
+	
+  textarea {
+		all:unset;
 	}
+
+	&::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb, var(--text-disabled-2));
+    border-radius: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-track, var(--background-color));
+		border-radius: 8px;
+  }
 `;
 
 export default GlobalStyle;

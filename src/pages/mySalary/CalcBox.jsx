@@ -80,12 +80,19 @@ const CalcBox = ({ type, data }) => {
     <Box>
       <Title>{type === "payments" ? "지급 내역" : "공제 내역"}</Title>
       <Wrapper>
-        {Object.keys(data).map((key, index) => (
-          <Content key={index}>
-            <Left>{salaryMapping[key] || key}</Left>
-            <Right>{data[key].toLocaleString("ko-KR")} 원</Right>
+        {Object.keys(data).length === 0 ? (
+          <Content>
+            <Left>데이터 없음</Left>
+            <Right>0 원</Right>
           </Content>
-        ))}
+        ) : (
+          Object.keys(data).map((key, index) => (
+            <Content key={index}>
+              <Left>{salaryMapping[key] || key}</Left>
+              <Right>{data[key].toLocaleString("ko-KR")} 원</Right>
+            </Content>
+          ))
+        )}
       </Wrapper>
       <Calc>
         <Left>{type === "payments" ? "총 지급액" : "총 공제액"}</Left>
