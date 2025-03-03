@@ -1,4 +1,3 @@
-import { styled } from "styled-components";
 import { auth } from "../../firebase";
 import { FirebaseError } from "@firebase/util";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,89 +7,24 @@ import PageTitle from "../../shared/components/titles/PageTitle";
 import LoginInput from "../../shared/components/input/LoginInput";
 import logo from "./../../assets/images/logo.svg";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  Wrapper,
+  LoginBox,
+  LoginBoxHeader,
+  ErrorWrapper,
+  Switcher,
+  InputWrapper,
+  Logo,
+  Error,
+  Form,
+} from "./auth-component";
 
 const errors = {
-  "auth/invalid-credential": {
-    field: "common",
-    message: "이메일 혹은 비밀번호가 잘못되었습니다.",
-  },
-  "auth/invalid-login-credentials": {
-    field: "common",
-    message: "이메일 혹은 비밀번호가 잘못되었습니다.",
-  },
-  "auth/wrong-password": {
-    field: "common",
-    message: "이메일 혹은 비밀번호가 잘못되었습니다.",
-  },
-  "auth/user-not-found": {
-    field: "common",
-    message: "이메일 혹은 비밀번호가 잘못되었습니다.",
+  "auth/email-already-in-use": {
+    field: "email",
+    message: "사용할 수 없는 이메일입니다.",
   },
 };
-
-const Wrapper = styled.div`
-  display: flex;
-  width: 100vw;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--background-color);
-`;
-
-const LoginBox = styled.div`
-  height: 650px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 400px;
-  padding: 44px;
-  background-color: var(--white);
-  border-radius: 12px;
-  border: 1px solid var(--disabled);
-  box-shadow: 0px 4px 22.4px 0px rgba(0, 0, 0, 0.05);
-`;
-
-const Form = styled.form`
-  width: 100%;
-
-  .loginBtn {
-    width: 100%;
-  }
-`;
-
-const Error = styled.span`
-  font-size: var(--font-size-small);
-  font-weight: 500;
-  color: var(--red);
-  padding-left: 10px;
-  visibility: ${(props) => (props.$hasError ? "visible" : "hidden")};
-`;
-
-const Logo = styled.img`
-  width: 112px;
-  height: 38px;
-`;
-
-const InputWrapper = styled.div`
-  margin-bottom: 10px;
-  input {
-    margin-top: 14px;
-  }
-`;
-const Switcher = styled.div`
-  color: var(--text-disabled-2);
-  text-align: center;
-  width: 100%;
-  a {
-    margin-left: 5px;
-    color: var(--text-primary);
-  }
-`;
-const ErrorWrapper = styled.div`
-  padding-top: 5px;
-  height: 34px;
-`;
-const LoginBoxHeader = styled.div``;
 
 const CreateAccount = () => {
   const navigate = useNavigate();
@@ -99,18 +33,18 @@ const CreateAccount = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({
-    common: "",
     email: "",
     name: "",
   });
-  const [isEmailValid, setEmailValid] = useState(true);
 
   const isDisabled =
     isLoading ||
-    !isEmailValid ||
     email === "" ||
     password === "" ||
-    name === "";
+    name === "" ||
+    error.email ||
+    error.password ||
+    error.name;
 
   const onChange = (e) => {
     const {
@@ -123,29 +57,50 @@ const CreateAccount = () => {
       const valid =
         /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value) ||
         value === "";
-      setEmailValid(valid);
 
       if (!valid) {
         setError((prev) => ({
           ...prev,
           email: "올바른 이메일 형식을 입력하세요.",
-          common: "",
         }));
       } else {
         setError((prev) => ({
           ...prev,
           email: "",
-          common: "",
         }));
       }
     } else if (name === "password") {
       setPassword(value);
-      setError((prev) => ({
-        ...prev,
-        common: "",
-      }));
-    } else if (name === "name") {
+      const valid = value.length > 6 && /[!@#$%^&*(),.?":{}|<>]/.test(value);
+
+      if (!valid) {
+        setError((prev) => ({
+          ...prev,
+          password: "비밀번호는 특수기호를 포함해 6자 이상이어야 합니다.",
+        }));
+      } else {
+        setError((prev) => ({
+          ...prev,
+          password: "",
+        }));
+      }
+    }
+
+    if (name === "name") {
       setName(value);
+      const valid = /^[a-zA-Z가-힣]+$/.test(value) || value === "";
+
+      if (!valid) {
+        setError((prev) => ({
+          ...prev,
+          name: "이름에는 특수기호 또는 숫자를 사용할 수 없습니다.",
+        }));
+      } else {
+        setError((prev) => ({
+          ...prev,
+          name: "",
+        }));
+      }
     }
   };
 
@@ -159,6 +114,7 @@ const CreateAccount = () => {
         await updateProfile(auth.currentUser, { displayName: name });
       }
       navigate("/");
+      alert(`${name} 님 회원이 되신 것을 환영합니다. `);
     } catch (e) {
       if (e instanceof FirebaseError) {
         const errorInfo = errors[e.code];
@@ -167,8 +123,8 @@ const CreateAccount = () => {
           setError((prev) => {
             const updatedError = { ...prev };
 
-            if (errorInfo.field === "common") {
-              updatedError.common = errorInfo.message;
+            if (errorInfo.field === "email") {
+              updatedError.email = errorInfo.message;
             }
 
             return updatedError;
@@ -200,9 +156,7 @@ const CreateAccount = () => {
               error={error.name}
             />
             <ErrorWrapper>
-              <Error $hasError={!!(error.email || error.common)}>
-                {error.name || error.common || " "}
-              </Error>
+              <Error $hasError={!!error.name}>{error.name || " "}</Error>
             </ErrorWrapper>
             <LoginInput
               label={"이메일"}
@@ -210,12 +164,10 @@ const CreateAccount = () => {
               name="email"
               value={email}
               placeholder="이메일을 입력하세요"
-              error={error.email || error.common}
+              error={error.email}
             />
             <ErrorWrapper>
-              <Error $hasError={!!(error.email || error.common)}>
-                {error.email || error.common || " "}
-              </Error>
+              <Error $hasError={!!error.email}>{error.email || " "}</Error>
             </ErrorWrapper>
             <LoginInput
               label={"비밀번호"}
@@ -224,10 +176,12 @@ const CreateAccount = () => {
               value={password}
               placeholder="비밀번호를 입력하세요"
               type="password"
-              error={error.common}
+              error={error.password}
             />
             <ErrorWrapper>
-              <Error $hasError={!!error.common}>{error.common || " "}</Error>
+              <Error $hasError={!!error.password}>
+                {error.password || " "}
+              </Error>
             </ErrorWrapper>
           </InputWrapper>
           <Button

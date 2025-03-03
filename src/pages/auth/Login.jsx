@@ -8,6 +8,17 @@ import Button from "../../shared/components/button/Button";
 import PageTitle from "../../shared/components/titles/PageTitle";
 import LoginInput from "../../shared/components/input/LoginInput";
 import logo from "./../../assets/images/logo.svg";
+import {
+  Wrapper,
+  LoginBox,
+  LoginBoxHeader,
+  ErrorWrapper,
+  Switcher,
+  InputWrapper,
+  Logo,
+  Error,
+  Form,
+} from "./auth-component";
 
 const errors = {
   "auth/invalid-credential": {
@@ -28,67 +39,6 @@ const errors = {
   },
 };
 
-const Wrapper = styled.div`
-  display: flex;
-  width: 100vw;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--background-color);
-`;
-
-const LoginBox = styled.div`
-  height: 650px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 400px;
-  padding: 44px;
-  background-color: var(--white);
-  border-radius: 12px;
-  border: 1px solid var(--disabled);
-  box-shadow: 0px 4px 22.4px 0px rgba(0, 0, 0, 0.05);
-`;
-
-const Form = styled.form`
-  width: 100%;
-  .loginBtn {
-    width: 100%;
-  }
-  margin-bottom: 40px;
-`;
-
-const Error = styled.span`
-  font-size: var(--font-size-small);
-  font-weight: 500;
-  color: var(--red);
-  padding-left: 10px;
-  visibility: ${(props) => (props.$hasError ? "visible" : "hidden")};
-`;
-
-const Logo = styled.img`
-  width: 112px;
-  height: 38px;
-`;
-
-const InputWrapper = styled.div`
-  margin-bottom: 10px;
-`;
-const Switcher = styled.div`
-  color: var(--text-disabled-2);
-  text-align: center;
-  width: 100%;
-  a {
-    margin-left: 5px;
-    color: var(--text-primary);
-  }
-`;
-const ErrorWrapper = styled.div`
-  padding-top: 5px;
-  height: 34px;
-`;
-const LoginBoxHeader = styled.div``;
-
 const Login = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -98,10 +48,9 @@ const Login = () => {
     common: "",
     email: "",
   });
-  const [isEmailValid, setEmailValid] = useState(true);
 
   const isDisabled =
-    isLoading || !isEmailValid || email === "" || password === "";
+    isLoading || email === "" || password === "" || error.common || error.email;
 
   const onChange = (e) => {
     const {
@@ -114,7 +63,6 @@ const Login = () => {
       const valid =
         /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value) ||
         value === "";
-      setEmailValid(valid);
 
       if (!valid) {
         setError((prev) => ({
