@@ -26,7 +26,7 @@ const errors = {
   },
 };
 
-const CreateAccount = () => {
+const Signup = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
@@ -203,4 +203,4 @@ const CreateAccount = () => {
   );
 };
 
-export default CreateAccount;
+export default Signup;
