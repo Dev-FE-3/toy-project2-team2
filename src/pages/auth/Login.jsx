@@ -1,12 +1,11 @@
-import { auth } from "../../firebase";
+import { auth } from "../../shared/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { authErrors } from "./authErrors";
 import { FirebaseError } from "@firebase/util";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Button from "../../shared/components/button/Button";
-import PageTitle from "../../shared/components/titles/PageTitle";
-import LoginInput from "../../shared/components/input/LoginInput";
-import logo from "./../../assets/images/logo.svg";
+import { handleError } from "./handleError";
+import logo from "/images/logo.svg";
 import {
   Wrapper,
   LoginBox,
@@ -18,8 +17,9 @@ import {
   Error,
   Form,
 } from "./auth-component";
-import { authErrors } from "./authErrors";
-import { handleError } from "./handleError";
+import LoginInput from "./LoginInput";
+import Button from "../../shared/components/Button";
+import PageTitle from "../../shared/components/PageTitle";
 
 const Login = () => {
   const navigate = useNavigate();

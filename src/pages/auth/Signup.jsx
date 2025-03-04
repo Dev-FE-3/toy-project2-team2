@@ -1,12 +1,12 @@
-import { auth, db } from "../../firebase";
+import { auth, db } from "../../shared/firebase";
 import { FirebaseError } from "@firebase/util";
+import { setDoc, doc } from "firebase/firestore";
+import { authErrors } from "./authErrors";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Button from "../../shared/components/button/Button";
-import PageTitle from "../../shared/components/titles/PageTitle";
-import LoginInput from "../../shared/components/input/LoginInput";
-import logo from "./../../assets/images/logo.svg";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { handleError } from "./handleError";
+import logo from "/images/logo.svg";
 import {
   Wrapper,
   LoginBox,
@@ -18,9 +18,9 @@ import {
   Error,
   Form,
 } from "./auth-component";
-import { addDoc, collection } from "firebase/firestore";
-import { authErrors } from "./authErrors";
-import { handleError } from "./handleError";
+import LoginInput from "./LoginInput";
+import PageTitle from "../../shared/components/PageTitle";
+import Button from "../../shared/components/Button";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -86,16 +86,17 @@ const Signup = () => {
     try {
       setIsLoading(true);
       await createUserWithEmailAndPassword(auth, email, password);
-      await addDoc(collection(db, "users"), {
+      await setDoc(doc(db, "users", auth.currentUser.uid), {
         employeeId: "",
         hiredDate: null,
         location: "",
         name: name,
         position: "",
       });
-      navigate("/");
       alert(`${name} 님 회원이 되신 것을 환영합니다.`);
+      navigate("/");
     } catch (e) {
+      console.log(e);
       if (e instanceof FirebaseError) {
         const errorInfo = authErrors[e.code];
         if (errorInfo) {
