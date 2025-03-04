@@ -1,13 +1,13 @@
 import styled from "styled-components";
-import logo from "./../../assets/images/logo.svg";
-import DefaultProfile from "./../../assets/images/defaultImg.svg";
+import logo from "/images/logo.svg";
+import DefaultProfile from "/images/defaultImg.svg";
 import LogOutButton from "./LogOutButton";
 import Nav from "./Nav";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { updateProfile } from "firebase/auth";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { auth, storage, db } from "../../firebase";
+import { auth, storage, db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
 
 const HeaderWrap = styled.div`

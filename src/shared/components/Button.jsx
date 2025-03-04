@@ -27,11 +27,9 @@ const StyledButton = styled.button`
 
 const Button = ({ color, size, children, ...props }) => {
 	return (
-		<>
-			<StyledButton color={color} size={size} {...props}>
-				{children}
-			</StyledButton>
-		</>
+		<StyledButton color={color} size={size} {...props}>
+      {children}
+    </StyledButton>
 	)
 }
 
