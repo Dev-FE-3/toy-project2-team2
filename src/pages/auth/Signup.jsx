@@ -1,11 +1,11 @@
 import { auth, db } from "../../shared/firebase";
 import { FirebaseError } from "@firebase/util";
 import { setDoc, doc } from "firebase/firestore";
-import { authErrors } from "./authErrors";
+import { authErrors } from "./constant/authErrors";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { handleError } from "./handleError";
+import { handleError } from "./util/handleError";
 import logo from "/images/logo.svg";
 import {
   Wrapper,
@@ -17,8 +17,8 @@ import {
   Logo,
   Error,
   Form,
-} from "./auth-component";
-import LoginInput from "./LoginInput";
+} from "./components/auth-component";
+import LoginInput from "./components/LoginInput";
 import PageTitle from "../../shared/components/PageTitle";
 import Button from "../../shared/components/Button";
 

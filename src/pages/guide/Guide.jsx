@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "../../shared/components/Button";
 import TextArea from "../../shared/components/TextArea";
 import Input from "../../shared/components/Input";
-import LoginInput from "../auth/LoginInput";
+import LoginInput from "../auth/components/LoginInput";
 import PageTitle from "../../shared/components/PageTitle";
 import SelectBox from "../../shared/components/SelectBox";
 import DatePicker from "../../shared/components/DatePicker";
