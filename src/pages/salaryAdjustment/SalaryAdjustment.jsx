@@ -1,15 +1,15 @@
-import {
-  PageTitle,
-  StyledSubTitle,
-} from "../../shared/components/titles/PageTitle";
+import PageTitle from "../../shared/components/titles/PageTitle";
 import styled from "styled-components";
 import Button from "../../shared/components/button/Button";
 
-const Container = styled.div`
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  width: 100%;
+const TitleContainer = styled.div`
+  position: relative;
+
+  button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
 `;
 
 const TableContainer = styled.div`
@@ -127,14 +127,12 @@ const StatusCell = styled.span`
 
 // 라벨 색 사용법 참고를 위한 tbody 입니다. data 불러와서 띄우면서 수정 충분히 가능합니다
 const SalaryAdjustment = () => {
-  const subtitle = "정정 내역";
   return (
     <>
-      <PageTitle title="정정 신청 / 내역" />
-      <Container>
-        <StyledSubTitle>{subtitle}</StyledSubTitle>
+      <TitleContainer>
+        <PageTitle title="정정 신청 / 내역" subtitle="정정 내역" />
         <Button>정정 신청</Button>
-      </Container>
+      </TitleContainer>
       <TableContainer>
         <HeaderTable>
           <thead>

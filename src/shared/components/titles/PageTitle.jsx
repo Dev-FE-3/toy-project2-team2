@@ -33,4 +33,4 @@ const PageTitle = ({ title, subtitle, className }) => {
   );
 };
 
-export { PageTitle, StyledSubTitle };
+export default PageTitle

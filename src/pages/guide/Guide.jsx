@@ -3,7 +3,7 @@ import TextBox from "../../shared/components/TextBoxWrapper";
 import styled from "styled-components";
 import Input from "./../../shared/components/input/Input";
 import LoginInput from "./../../shared/components/input/LoginInput";
-import { PageTitle } from "../../shared/components/titles/PageTitle";
+import PageTitle from "../../shared/components/titles/PageTitle";
 
 const Wrapper = styled.div`
   width: 150px;
