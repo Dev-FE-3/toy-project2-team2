@@ -7,7 +7,7 @@ const InputWrapper = styled.div`
 const StyledInput = styled.input`
   padding: 0 5px 10px;
   width: 100%;
-  font-size: var(--font-size-title-small);
+  font-size: var(--font-size-primary);
   font-weight: 500;
   letter-spacing: -0.36px;
   color: var(--text-primary);
@@ -36,6 +36,7 @@ const LoginInput = ({
   type,
   error,
   label,
+  maxLength,
 }) => {
   return (
     <InputWrapper>
@@ -46,7 +47,8 @@ const LoginInput = ({
         value={value}
         placeholder={placeholder}
         type={type}
-        error={error}
+        $error={error}
+        maxLength={maxLength}
       />
     </InputWrapper>
   );

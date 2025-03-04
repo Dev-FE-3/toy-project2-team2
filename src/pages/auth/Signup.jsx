@@ -1,4 +1,4 @@
-import { auth } from "../../firebase";
+import { auth, db } from "../../firebase";
 import { FirebaseError } from "@firebase/util";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -6,7 +6,7 @@ import Button from "../../shared/components/button/Button";
 import PageTitle from "../../shared/components/titles/PageTitle";
 import LoginInput from "../../shared/components/input/LoginInput";
 import logo from "./../../assets/images/logo.svg";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import {
   Wrapper,
   LoginBox,
@@ -18,6 +18,7 @@ import {
   Error,
   Form,
 } from "./auth-component";
+import { addDoc, collection } from "firebase/firestore";
 
 const errors = {
   "auth/email-already-in-use": {
@@ -76,7 +77,7 @@ const Signup = () => {
       if (!valid) {
         setError((prev) => ({
           ...prev,
-          password: "비밀번호는 특수기호를 포함해 6자 이상이어야 합니다.",
+          password: "비밀번호는 특수기호를 포함하여 6자 이상이어야 합니다.",
         }));
       } else {
         setError((prev) => ({
@@ -93,7 +94,7 @@ const Signup = () => {
       if (!valid) {
         setError((prev) => ({
           ...prev,
-          name: "이름에는 특수기호 또는 숫자를 사용할 수 없습니다.",
+          name: "이름에는 특수기호와 숫자, 공백을 포함할 수 없습니다.",
         }));
       } else {
         setError((prev) => ({
@@ -110,11 +111,15 @@ const Signup = () => {
     try {
       setIsLoading(true);
       await createUserWithEmailAndPassword(auth, email, password);
-      if (auth.currentUser) {
-        await updateProfile(auth.currentUser, { displayName: name });
-      }
+      await addDoc(collection(db, "users"), {
+        employeeId: "",
+        hiredDate: "",
+        location: "",
+        name: name,
+        position: "",
+      });
       navigate("/");
-      alert(`${name} 님 회원이 되신 것을 환영합니다. `);
+      alert(`${name} 님 회원이 되신 것을 환영합니다.`);
     } catch (e) {
       if (e instanceof FirebaseError) {
         const errorInfo = errors[e.code];
@@ -152,8 +157,9 @@ const Signup = () => {
               onChange={onChange}
               name="name"
               value={name}
-              placeholder="이름을 입력하세요"
+              placeholder="김스텐"
               error={error.name}
+              maxLength="10"
             />
             <ErrorWrapper>
               <Error $hasError={!!error.name}>{error.name || " "}</Error>
@@ -163,7 +169,7 @@ const Signup = () => {
               onChange={onChange}
               name="email"
               value={email}
-              placeholder="이메일을 입력하세요"
+              placeholder="sweetTen@xxxx.xxx"
               error={error.email}
             />
             <ErrorWrapper>
@@ -174,9 +180,10 @@ const Signup = () => {
               onChange={onChange}
               name="password"
               value={password}
-              placeholder="비밀번호를 입력하세요"
+              placeholder="특수기호를 포함하여 6자 이상"
               type="password"
               error={error.password}
+              minLength="6"
             />
             <ErrorWrapper>
               <Error $hasError={!!error.password}>
