@@ -1,13 +1,13 @@
 import { styled } from "styled-components";
-import { auth } from "../../firebase";
+import { auth } from "../../shared/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "@firebase/util";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Button from "./../../shared/components/button/Button";
-import PageTitle from "../../shared/components/titles/PageTitle";
+import Button from "./../../shared/components/Button";
+import PageTitle from "../../shared/components/PageTitle";
 import LoginInput from "./LoginInput";
-import logo from "./../../assets/images/logo.svg";
+import logo from "/images/logo.svg";
 
 const errors = {
   "auth/invalid-credential": {

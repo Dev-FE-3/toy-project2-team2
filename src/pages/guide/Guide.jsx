@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import Button from "../../shared/components/button/Button";
+import Button from "../../shared/components/Button";
 import TextArea from "../../shared/components/TextArea";
-import styled from "styled-components";
 import Input from "../../shared/components/Input";
 import LoginInput from "../login/LoginInput";
-import PageTitle from "../../shared/components/titles/PageTitle";
+import PageTitle from "../../shared/components/PageTitle";
 import SelectBox from "../../shared/components/SelectBox";
 import DatePicker from "../../shared/components/DatePicker";
 import useModal from "../../shared/components/modal/useModal";
@@ -110,24 +109,20 @@ const Guide = () => {
 
   return (
     <>
-      <h1>page title</h1>
+      <h1>1. page title</h1>
       <PageTitle title="페이지명1" />
       <PageTitle title="페이지명2" subtitle="페이지 설명" />
-      <h1>button</h1>
+
+      <h1>2. button</h1>
       <Button size="sm">작은 버튼</Button>
-      <Button size="sm" color="gray">
-        작은 버튼
-      </Button>
+      <Button size="sm" color="gray">작은 버튼</Button>
       <Button>기본 버튼</Button>
       <Button color="gray">기본 버튼</Button>
       <Button size="lg">큰 버튼</Button>
-      <Button size="lg" color="gray">
-        큰 버튼
-      </Button>
+      <Button size="lg" color="gray">큰 버튼</Button>
 
-      <h1>input</h1>
+      <h1>3. input</h1>
       <p>코드상 위에 상태 관련 설명 있어요</p>
-      <br />
       <Input
         id="name1"
         label
@@ -142,17 +137,15 @@ const Guide = () => {
         placeholder="라벨 쓸 때"
         onChange={(e) => setInputValue(e.target.value)}
       />
-      <Button onClick={handleSubmit} disabled={isSubmitted}>
-        제출
-      </Button>
-      <Button onClick={handleEdit} color="gray">
-        수정하기
-      </Button>
+      <Button onClick={handleSubmit} disabled={isSubmitted}>제출</Button>
+      <Button onClick={handleEdit} color="gray">수정하기</Button>
+
+      <h1>4. LoginInput</h1>
       <LoginInput placeholder="login input 입니다" />
       <LoginInput type="email" placeholder="email" />
       <LoginInput type="password" placeholder="password" />
-      <h1>textarea</h1>
-      <br />
+
+      <h1>5. textarea</h1>
       <TextArea
         id="name"
         label="여기에 라벨 이름 다세용"
@@ -160,17 +153,10 @@ const Guide = () => {
         placeholder="내용을 입력하세요"
         onChange={(e) => setInputValue(e.target.value)}
       />
-      <Button onClick={handleSubmit} disabled={isSubmitted}>
-        제출
-      </Button>
-      <Button onClick={handleEdit} color="gray">
-        수정하기
-      </Button>
-      <br />
-      <br />
-      <br />
-      <br />
-      <h1>Select box</h1>
+      <Button onClick={handleSubmit} disabled={isSubmitted}>제출</Button>
+      <Button onClick={handleEdit} color="gray">수정하기</Button>
+      
+      <h1>6. Select box</h1>
       <SelectBox
         options={leaveOptions}
         defaultOption={selectedLeaveType}
@@ -184,11 +170,9 @@ const Guide = () => {
         size="small"
       />
 
-      <h1>Date</h1>
+      <h1>7. Date</h1>
       <DatePicker type="date" value={fullDate} onChange={setFullDate} />
-      <br></br>
       <DatePicker type="year-month" value={yearMonth} onChange={setYearMonth} />
-
       <h2>선택된 날짜</h2>
       <p>
         📆 년/월/일: {fullDate ? fullDate.toLocaleDateString() : "선택 안 됨"}
@@ -201,7 +185,8 @@ const Guide = () => {
             ).padStart(2, "0")}`
           : "선택 안 됨"}
       </p>
-      <h1>Modal</h1>
+      
+      <h1>8. Modal</h1>
       <ScheduleRegisterButton />
       <ScheduleCheckButton />
     </>

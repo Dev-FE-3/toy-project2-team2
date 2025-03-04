@@ -3,7 +3,7 @@ import ReactDatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import styled from "styled-components";
-import CalendarIconSrc from "../../assets/images/Group.svg";
+import CalendarIconSrc from "/images/Group.svg";
 
 registerLocale("ko", ko);
 

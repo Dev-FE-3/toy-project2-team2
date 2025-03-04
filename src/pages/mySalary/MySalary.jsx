@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import PageTitle from "../../shared/components/titles/PageTitle";
+import PageTitle from "../../shared/components/PageTitle";
 import CalcBox from "./CalcBox";
-import { auth } from "../../firebase";
-import { db } from "../../firebase";
+import { auth, db } from "../../shared/firebase";
 import { doc, getDoc, Timestamp } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import SelectBox from "../../shared/components/SelectBox";

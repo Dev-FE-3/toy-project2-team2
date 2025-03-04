@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import toggleIcon from "../../assets/images/Down.svg";
+import toggleIcon from "/images/Down.svg";
 
 const sizes = {
   large: {
