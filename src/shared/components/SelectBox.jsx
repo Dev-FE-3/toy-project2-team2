@@ -68,17 +68,15 @@ const Option = styled.li`
   }
 `;
 
-const GeneralSelect = ({
+const SelectBox = ({
   options = [],
   defaultOption = "선택",
   onSelect,
   size = "large",
 }) => {
-  const [selectedOption, setSelectedOption] = useState(defaultOption);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelect = (option) => {
-    setSelectedOption(option);
     setIsOpen(false);
     if (onSelect) {
       onSelect(option); // 부모 컴포넌트에서 선택값 받기
@@ -88,8 +86,7 @@ const GeneralSelect = ({
   return (
     <Container>
       <Button onClick={() => setIsOpen(!isOpen)} size={size}>
-        {/* <ButtonText size={size}>{selectedOption}</ButtonText> */}
-        {selectedOption}
+        {defaultOption}
         <Icon src={toggleIcon} alt="Toggle Dropdown" />
       </Button>
 
@@ -106,4 +103,4 @@ const GeneralSelect = ({
   );
 };
 
-export default GeneralSelect;
+export default SelectBox;
