@@ -55,7 +55,7 @@ const ProfileImg = styled.img`
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  object-fit: cover;
+  object-fit: cover; // 비율 맞춰 채우기!
 `;
 
 const ProfileInput = styled.input`
@@ -148,7 +148,6 @@ const Header = () => {
               ) : (
                 <DefaultImg src={DefaultProfile} alt="default profile" />
               )}
-              <ProfileImg />
             </ProfileUpload>
             <ProfileInput
               onChange={onProfileChange}
