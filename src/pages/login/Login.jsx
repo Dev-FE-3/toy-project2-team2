@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Button from "./../../shared/components/button/Button";
 import PageTitle from "../../shared/components/titles/PageTitle";
-import LoginInput from "./../../shared/components/input/LoginInput";
+import LoginInput from "./LoginInput";
 import logo from "./../../assets/images/logo.svg";
 
 const errors = {

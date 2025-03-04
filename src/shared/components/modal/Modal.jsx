@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import Button from "./button/Button";
-import CancelBtn from "../../assets/images/cancel.svg";
+import Button from "../../components/button/Button";
+import CancelBtn from "../../../assets/images/cancel.svg";
 
 const Overlay = styled.div`
   position: fixed;
