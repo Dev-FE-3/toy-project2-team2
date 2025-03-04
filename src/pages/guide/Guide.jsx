@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "../../shared/components/button/Button";
-import TextBox from "../../shared/components/TextBoxWrapper";
+import TextArea from "../../shared/components/TextArea";
 import styled from "styled-components";
 import Input from "./../../shared/components/input/Input";
 import LoginInput from "./../../shared/components/input/LoginInput";
@@ -8,11 +8,6 @@ import PageTitle from "../../shared/components/titles/PageTitle";
 import SelectBox from "../../shared/components/SelectBox";
 import StyledDatePicker from "../../shared/components/StyledDatePicker";
 import Modal from "../../shared/components/Modal";
-
-const Wrapper = styled.div`
-  width: 150px;
-  height: 150px;
-`;
 
 const ScheduleRegisterContent = () => (
   <div>
@@ -81,6 +76,18 @@ const Guide = () => {
 
   const [fullDate, setFullDate] = useState(null); // 년/월/일 선택
   const [yearMonth, setYearMonth] = useState(null); // 년/월 선택
+  // input 관련 상태 - 입력 필드와 버튼을 제출 후 비활성화 할거야? false 입력 가능, true 비활성화
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  // input 관련 상태 - 사용자가 입력한 값을 저장하는 상태 : setInputValue(e.target.value)로 업데이트
+  const [inputValue, setInputValue] = useState("");
+  // input 관련 상태 - 제출을 누르면 true - 비활성화
+  const handleSubmit = () => {
+    setIsSubmitted(true);
+  };
+  // input 관련 상태 - 수정하기 누르면 수정이 가능하게 false - 활성화
+  const handleEdit = () => {
+    setIsSubmitted(false);
+  };
 
   const handleFullDateChange = (date) => {
     setFullDate(date);
@@ -107,8 +114,7 @@ const Guide = () => {
       <Button size="lg" color="gray">
         큰 버튼
       </Button>
-      <h1>page title</h1>
-    
+
       <h1>input</h1>
       <Input />
       <Input disabled placeholder="disabled input 입니다" />
@@ -117,12 +123,23 @@ const Guide = () => {
       <LoginInput type="password" placeholder="password" />
 
       <h1>textarea</h1>
-      <Wrapper>
-        <TextBox
-          disabled={false}
-          placeholder="임의로 입력하면 됩니다 wrapper가 있는 이유는 사이즈가 100%여서.."
-        />
-      </Wrapper>
+      <br />
+      <TextArea
+        id="name"
+        label="여기에 라벨 이름 다세용"
+        isSubmitted={isSubmitted}
+        placeholder="내용을 입력하세요"
+        onChange={(e) => setInputValue(e.target.value)}
+      />
+      <Button onClick={handleSubmit} disabled={isSubmitted}>
+        제출
+      </Button>
+      <Button onClick={handleEdit} color="gray">
+        수정하기
+      </Button>
+      <br />
+      <br />
+      <br />
       <br />
       <h1>select box</h1>
       <SelectBox options={Options1} defaultOption="유형" size="large" />

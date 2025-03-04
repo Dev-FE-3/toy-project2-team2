@@ -73,7 +73,7 @@ const GlobalStyle = createGlobalStyle`
 
 	&::-webkit-scrollbar {
     width: 8px;
-  }
+  }	
   &::-webkit-scrollbar-thumb {
     background-color: var(--scrollbar-thumb, var(--text-disabled-2));
     border-radius: 8px;
@@ -84,4 +84,5 @@ const GlobalStyle = createGlobalStyle`
   }
 
 `;
+
 export default GlobalStyle;
