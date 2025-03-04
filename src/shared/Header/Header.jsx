@@ -7,7 +7,8 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { updateProfile } from "firebase/auth";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { auth, storage } from "../../firebase";
+import { auth, storage, db } from "../../firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 const HeaderWrap = styled.div`
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
@@ -52,6 +53,9 @@ const DefaultImg = styled.img``;
 
 const ProfileImg = styled.img`
   width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover; // 비율 맞춰 채우기!
 `;
 
 const ProfileInput = styled.input`
@@ -67,22 +71,47 @@ const UserWrap = styled.div`
 const Header = () => {
   const user = auth.currentUser;
   const [profile, setProfile] = useState(user?.photoURL);
+  const [userInfo, setUserInfo] = useState({
+    name: "anonymous",
+    position: "메이트",
+  });
 
   useEffect(() => {
     const fetchProfile = async () => {
       if (!user) return;
       try {
-        // Firebase Storage에서 사용자 UID에 해당하는 프로필 이미지를 가져옴
         const profileUrl = await getDownloadURL(
           ref(storage, `profiles/${user.uid}`)
         );
         setProfile(profileUrl);
       } catch (error) {
-        setProfile(null); // 파일이 없거나 오류가 발생하면 기본 아이콘을 표시
+        setProfile(null); // 기본 아이콘으로 설정
+      }
+    };
+
+    const fetchUserInfo = async () => {
+      if (!user) return;
+      try {
+        // Firestore에서 user.uid에 해당하는 사용자 정보 가져오기
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          setUserInfo({
+            name: docSnap.data().name || "anonymous", // 이름이 없다면 "anonymous"
+            position: docSnap.data().position || "메이트", // 직급이 없다면 "메이트"
+          });
+        } else {
+          setUserInfo({ name: "anonymous", position: "메이트" });
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+        setUserInfo({ name: "anonymous", position: "메이트" });
       }
     };
 
     fetchProfile();
+    fetchUserInfo();
   }, [user]); // user가 변경될 때마다 실행
 
   const onProfileChange = async (e) => {
@@ -112,14 +141,13 @@ const Header = () => {
         <Wrap>
           <Nav />
           <UserWrap>
-            <User>{user?.displayName ?? "anonymous"} ・ 메이트</User>
+            <User>{`${userInfo.name} ・ ${userInfo.position}`}</User>
             <ProfileUpload htmlFor="profile">
               {profile ? (
                 <ProfileImg src={profile} />
               ) : (
                 <DefaultImg src={DefaultProfile} alt="default profile" />
               )}
-              <ProfileImg />
             </ProfileUpload>
             <ProfileInput
               onChange={onProfileChange}
