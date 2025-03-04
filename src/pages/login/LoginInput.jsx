@@ -32,7 +32,7 @@ const LoginInput = ({ name, value, onChange, placeholder, type, error }) => {
         value={value}
         placeholder={placeholder}
         type={type}
-        error={error}
+        $error={error}
       />
     </InputWrapper>
   );
