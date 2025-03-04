@@ -19,25 +19,8 @@ import {
   Error,
   Form,
 } from "./auth-component";
-
-const errors = {
-  "auth/invalid-credential": {
-    field: "common",
-    message: "이메일 혹은 비밀번호가 잘못되었습니다.",
-  },
-  "auth/invalid-login-credentials": {
-    field: "common",
-    message: "이메일 혹은 비밀번호가 잘못되었습니다.",
-  },
-  "auth/wrong-password": {
-    field: "common",
-    message: "이메일 혹은 비밀번호가 잘못되었습니다.",
-  },
-  "auth/user-not-found": {
-    field: "common",
-    message: "이메일 혹은 비밀번호가 잘못되었습니다.",
-  },
-};
+import { authErrors } from "./authErrors";
+import { handleError } from "./handleError";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -59,30 +42,18 @@ const Login = () => {
 
     if (name === "email") {
       setEmail(value);
-
-      const valid =
-        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value) ||
-        value === "";
-
-      if (!valid) {
-        setError((prev) => ({
-          ...prev,
-          email: "올바른 이메일 형식을 입력하세요.",
-          common: "",
-        }));
-      } else {
-        setError((prev) => ({
-          ...prev,
-          email: "",
-          common: "",
-        }));
-      }
-    } else if (name === "password") {
-      setPassword(value);
-      setError((prev) => ({
-        ...prev,
+      const isValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+        value
+      );
+      handleError(setError, {
+        email: isValid ? "" : "올바른 이메일 형식을 입력하세요.",
         common: "",
-      }));
+      });
+    }
+
+    if (name === "password") {
+      setPassword(value);
+      handleError(setError, { common: "" });
     }
   };
 
@@ -95,18 +66,12 @@ const Login = () => {
       navigate("/");
     } catch (e) {
       if (e instanceof FirebaseError) {
-        const errorInfo = errors[e.code];
-
+        const errorInfo = authErrors[e.code];
         if (errorInfo) {
-          setError((prev) => {
-            const updatedError = { ...prev };
-
-            if (errorInfo.field === "common") {
-              updatedError.common = errorInfo.message;
-            }
-
-            return updatedError;
-          });
+          setError((prev) => ({
+            ...prev,
+            [errorInfo.field]: errorInfo.message,
+          }));
         } else {
           alert("예상치 못한 오류가 발생하였습니다.");
         }

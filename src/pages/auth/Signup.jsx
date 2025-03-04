@@ -19,13 +19,8 @@ import {
   Form,
 } from "./auth-component";
 import { addDoc, collection } from "firebase/firestore";
-
-const errors = {
-  "auth/email-already-in-use": {
-    field: "email",
-    message: "사용할 수 없는 이메일입니다.",
-  },
-};
+import { authErrors } from "./authErrors";
+import { handleError } from "./handleError";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -54,54 +49,34 @@ const Signup = () => {
 
     if (name === "email") {
       setEmail(value);
-
-      const valid =
+      const isValid =
         /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value) ||
         value === "";
+      handleError(setError, {
+        email: isValid ? "" : "올바른 이메일 형식을 입력하세요.",
+      });
+    }
 
-      if (!valid) {
-        setError((prev) => ({
-          ...prev,
-          email: "올바른 이메일 형식을 입력하세요.",
-        }));
-      } else {
-        setError((prev) => ({
-          ...prev,
-          email: "",
-        }));
-      }
-    } else if (name === "password") {
+    if (name === "password") {
       setPassword(value);
-      const valid = value.length > 6 && /[!@#$%^&*(),.?":{}|<>]/.test(value);
-
-      if (!valid) {
-        setError((prev) => ({
-          ...prev,
-          password: "비밀번호는 특수기호를 포함하여 6자 이상이어야 합니다.",
-        }));
-      } else {
-        setError((prev) => ({
-          ...prev,
-          password: "",
-        }));
-      }
+      const isValid =
+        (value.length > 6 && /[!@#$%^&*(),.?":{}|<>]/.test(value)) ||
+        value === "";
+      handleError(setError, {
+        password: isValid
+          ? ""
+          : "비밀번호는 특수기호를 포함하여 6자 이상이어야 합니다.",
+      });
     }
 
     if (name === "name") {
       setName(value);
-      const valid = /^[a-zA-Z가-힣]+$/.test(value) || value === "";
-
-      if (!valid) {
-        setError((prev) => ({
-          ...prev,
-          name: "이름에는 특수기호와 숫자, 공백을 포함할 수 없습니다.",
-        }));
-      } else {
-        setError((prev) => ({
-          ...prev,
-          name: "",
-        }));
-      }
+      const isValid = /^[a-zA-Z가-힣]+$/.test(value) || value === "";
+      handleError(setError, {
+        name: isValid
+          ? ""
+          : "이름에는 특수기호와 숫자, 공백을 포함할 수 없습니다.",
+      });
     }
   };
 
@@ -122,18 +97,12 @@ const Signup = () => {
       alert(`${name} 님 회원이 되신 것을 환영합니다.`);
     } catch (e) {
       if (e instanceof FirebaseError) {
-        const errorInfo = errors[e.code];
-
+        const errorInfo = authErrors[e.code];
         if (errorInfo) {
-          setError((prev) => {
-            const updatedError = { ...prev };
-
-            if (errorInfo.field === "email") {
-              updatedError.email = errorInfo.message;
-            }
-
-            return updatedError;
-          });
+          setError((prev) => ({
+            ...prev,
+            [errorInfo.field]: errorInfo.message,
+          }));
         } else {
           alert("예상치 못한 오류가 발생하였습니다.");
         }
