@@ -1,4 +1,3 @@
-import { styled } from "styled-components";
 import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "@firebase/util";
