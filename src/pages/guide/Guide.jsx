@@ -1,18 +1,13 @@
 import React, { useState } from "react";
 import Button from "../../shared/components/button/Button";
-import TextBox from "../../shared/components/TextBoxWrapper";
+import TextArea from "../../shared/components/TextArea";
 import styled from "styled-components";
-import Input from "./../../shared/components/input/Input";
-import LoginInput from "./../../shared/components/input/LoginInput";
+import Input from "../../shared/components/Input";
+import LoginInput from "../login/LoginInput";
 import PageTitle from "../../shared/components/titles/PageTitle";
 import SelectBox from "../../shared/components/SelectBox";
 import StyledDatePicker from "../../shared/components/StyledDatePicker";
 import Modal from "../../shared/components/Modal";
-
-const Wrapper = styled.div`
-  width: 150px;
-  height: 150px;
-`;
 
 const ScheduleRegisterContent = () => (
   <div>
@@ -123,14 +118,14 @@ const Guide = () => {
       <p>코드상 위에 상태 관련 설명 있어요</p>
       <br />
       <Input
-        id="name"
+        id="name1"
         label
         isSubmitted={isSubmitted}
         placeholder="라벨 안 줄 때"
       />
       <br />
       <Input
-        id="name"
+        id="name2"
         label="라벨 쓸 때 넣으세요"
         isSubmitted={isSubmitted}
         placeholder="라벨 쓸 때"
@@ -146,12 +141,23 @@ const Guide = () => {
       <LoginInput type="email" placeholder="email" />
       <LoginInput type="password" placeholder="password" />
       <h1>textarea</h1>
-      <Wrapper>
-        <TextBox
-          disabled={false}
-          placeholder="임의로 입력하면 됩니다 wrapper가 있는 이유는 사이즈가 100%여서.."
-        />
-      </Wrapper>
+      <br />
+      <TextArea
+        id="name"
+        label="여기에 라벨 이름 다세용"
+        isSubmitted={isSubmitted}
+        placeholder="내용을 입력하세요"
+        onChange={(e) => setInputValue(e.target.value)}
+      />
+      <Button onClick={handleSubmit} disabled={isSubmitted}>
+        제출
+      </Button>
+      <Button onClick={handleEdit} color="gray">
+        수정하기
+      </Button>
+      <br />
+      <br />
+      <br />
       <br />
 
       <h1>select box</h1>
