@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-const InputWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
+// const InputWrapper = styled.div`
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+// `;
 
 const Label = styled.label`
   font-size: var(--font-size-primary);
@@ -52,7 +52,7 @@ const Input = ({
   onChange,
 }) => {
   return (
-    <InputWrapper>
+    <>
       {label && <Label htmlFor={id}>{label}</Label>}
       <InputStyle
         id={id}
@@ -61,7 +61,7 @@ const Input = ({
         onChange={onChange}
         $issubmitted={isSubmitted} // 여기서 'issubmitted'로 전달!!!
       />
-    </InputWrapper>
+    </>
   );
 };
 

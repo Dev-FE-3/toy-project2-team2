@@ -124,9 +124,16 @@ const Guide = () => {
       <br />
       <Input
         id="name"
-        label="어짜피 모달 안에서 섹션 잡을 때 너비를 줄 거니까 space between 설정했어요"
+        label
         isSubmitted={isSubmitted}
-        placeholder="내용을 입력하세요"
+        placeholder="라벨 안 줄 때"
+      />
+      <br />
+      <Input
+        id="name"
+        label="라벨 쓸 때 넣으세요"
+        isSubmitted={isSubmitted}
+        placeholder="라벨 쓸 때"
         onChange={(e) => setInputValue(e.target.value)}
       />
       <Button onClick={handleSubmit} disabled={isSubmitted}>
@@ -135,7 +142,6 @@ const Guide = () => {
       <Button onClick={handleEdit} color="gray">
         수정하기
       </Button>
-      <Input disabled placeholder="disabled input 입니다" />
       <LoginInput placeholder="login input 입니다" />
       <LoginInput type="email" placeholder="email" />
       <LoginInput type="password" placeholder="password" />
