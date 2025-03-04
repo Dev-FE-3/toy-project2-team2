@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import Button from "./button/Button";
-import CancelBtn from "../../assets/images/cancel.svg";
+import Button from "../../components/button/Button";
+import CancelBtn from "../../../assets/images/cancel.svg";
 
 const Overlay = styled.div`
   position: fixed;
@@ -59,10 +59,12 @@ const CloseIcon = styled.img`
   height: 18px;
 `;
 
-const Modal = ({ title, content, hasSubmitButton, onClose }) => {
+const Modal = ({ title, content, hasSubmitButton, isOpen, onClose }) => {
+  if (!isOpen) return null;
+
   return (
-    <Overlay>
-      <ModalContainer>
+    <Overlay onClick={onClose}>
+      <ModalContainer onClick={(e) => e.stopPropagation()}>
         <ModalHeader>
           <h1>{title}</h1>
           <CloseButton onClick={onClose}>

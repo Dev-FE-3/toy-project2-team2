@@ -51,12 +51,12 @@ const GlobalStyle = createGlobalStyle`
     border: none;
     cursor: pointer;
 		font-family: inherit;
-    }
+  }
 
 	a {
     text-decoration: none;
 		color: var(--text-disabled);
-    }
+  }
 
 	body {
 		font-family: 'Noto Sans KR', sans-serif;
@@ -65,15 +65,15 @@ const GlobalStyle = createGlobalStyle`
 	input {
     all: unset; // 기본 스타일 제거
     box-sizing: border-box;
-    }
+  }
 	
-  textarea {
+ 	textarea {
 		all:unset;
 	}
 
 	&::-webkit-scrollbar {
     width: 8px;
-  }
+  }	
   &::-webkit-scrollbar-thumb {
     background-color: var(--scrollbar-thumb, var(--text-disabled-2));
     border-radius: 8px;

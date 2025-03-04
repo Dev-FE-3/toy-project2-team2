@@ -1,9 +1,9 @@
-import DatePicker, { registerLocale } from "react-datepicker";
+import React from "react";
+import ReactDatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import styled from "styled-components";
 import CalendarIconSrc from "../../assets/images/Group.svg";
-import React, { useState } from "react";
 
 registerLocale("ko", ko);
 
@@ -95,27 +95,20 @@ const CustomInput = React.forwardRef(({ value, onClick, ...rest }, ref) => {
   );
 });
 
-const StyledDatePicker = ({ type = "date", onChange }) => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-    if (onChange) onChange(date);
-  };
-
+const DatePicker = ({ type = "date", value = new Date(), onChange }) => {
   return (
     <DatePickerWrapper $type={type}>
-      <DatePicker
-        selected={selectedDate}
-        onChange={handleDateChange}
+      <ReactDatePicker
+        selected={value}
+        onChange={onChange}
         dateFormat={type === "year-month" ? "yyyy/MM" : "yyyy/MM/dd"}
         locale="ko"
         showMonthYearPicker={type === "year-month"}
-        customInput={<CustomInput value={formatDate(selectedDate, type)} />}
+        customInput={<CustomInput value={formatDate(value, type)} />}
         showPopperArrow={false}
       />
     </DatePickerWrapper>
   );
 };
 
-export default StyledDatePicker;
+export default DatePicker;
