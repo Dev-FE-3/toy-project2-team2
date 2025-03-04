@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "../../shared/components/button/Button";
-import TextArea from "../../shared/components/textArea";
+import TextArea from "../../shared/components/TextArea";
 import styled from "styled-components";
 import Input from "./../../shared/components/input/Input";
 import LoginInput from "./../../shared/components/input/LoginInput";
