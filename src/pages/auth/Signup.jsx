@@ -88,7 +88,7 @@ const Signup = () => {
       await createUserWithEmailAndPassword(auth, email, password);
       await addDoc(collection(db, "users"), {
         employeeId: "",
-        hiredDate: "",
+        hiredDate: null,
         location: "",
         name: name,
         position: "",
