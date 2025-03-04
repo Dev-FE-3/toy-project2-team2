@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "../../shared/components/button/Button";
-import TextBox from "../../shared/components/TextBox";
+import TextArea from "../../shared/components/textArea";
 import styled from "styled-components";
 import Input from "./../../shared/components/input/Input";
 import LoginInput from "./../../shared/components/input/LoginInput";
@@ -124,7 +124,7 @@ const Guide = () => {
 
       <h1>textarea</h1>
       <br />
-      <TextBox
+      <TextArea
         id="name"
         label="여기에 라벨 이름 다세용"
         isSubmitted={isSubmitted}

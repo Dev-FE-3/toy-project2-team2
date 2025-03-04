@@ -25,6 +25,7 @@ const TextBoxArea = styled.textarea`
   background-color: var(--background-color-3);
   border: 1px solid var(--disabled);
   transition: all 0.2s ease;
+  box-sizing: border-box;
 
   &:focus {
     border-color: var(--accent);
@@ -47,7 +48,7 @@ const TextBoxArea = styled.textarea`
   }
 `;
 
-const TextBox = ({
+const TextArea = ({
   id,
   label,
   isSubmitted,
@@ -70,4 +71,4 @@ const TextBox = ({
   );
 };
 
-export default TextBox;
+export default TextArea;
