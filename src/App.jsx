@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import Calendar from "./pages/calendar/Calendar";
-import Login from "./pages/login/Login";
+import Login from "./pages/auth/Login";
 import MySalary from "./pages/mySalary/MySalary";
 import SalaryAdjustment from "./pages/salaryAdjustment/SalaryAdjustment";
 import Guide from "./pages/guide/Guide";
@@ -11,6 +11,7 @@ import { auth } from "./shared/firebase";
 import LoadingScreen from "./shared/components/LoadingScreen";
 import ProtectedRoute from "./shared/components/ProtectedRoute";
 import GlobalStyle from "./shared/components/styles/GlobalStyle";
+import Signup from "./pages/auth/Signup";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
   },
 ]);
 

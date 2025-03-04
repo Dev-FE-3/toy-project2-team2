@@ -42,6 +42,7 @@ const GlobalStyle = createGlobalStyle`
 		--font-size-title-small: 18px;
 		--font-size-primary: 16px;
 		--font-size-small: 14px;
+		--font-size-caption: 12px;
 	}
 
 	// reset css
