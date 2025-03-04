@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Button from "./button/Button";
 import CancelBtn from "../../assets/images/cancel.svg";
-import useModal from "./hooks/useModal";
 
 const Overlay = styled.div`
   position: fixed;
