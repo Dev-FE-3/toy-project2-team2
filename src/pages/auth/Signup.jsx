@@ -1,6 +1,6 @@
 import { auth, db } from "../../shared/firebase";
 import { FirebaseError } from "@firebase/util";
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, Timestamp } from "firebase/firestore";
 import { authErrors } from "./constant/authErrors";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
@@ -42,7 +42,6 @@ const InputBox = styled.div`
   }
 `;
 
-
 const Signup = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -56,6 +55,7 @@ const Signup = () => {
     name: "",
     location: "",
   });
+  const RandomNum = Math.floor(Math.random() * 1000001);
   const handleSelectLocation = (option) => {
     setLocation(option);
     handleError(setError, {
@@ -120,8 +120,8 @@ const Signup = () => {
       setIsLoading(true);
       await createUserWithEmailAndPassword(auth, email, password);
       await setDoc(doc(db, "users", auth.currentUser.uid), {
-        employeeId: "20251111",
-        hiredDate: null,
+        employeeId: RandomNum,
+        hiredDate: Timestamp.now(),
         location: location,
         name: name,
         position: position,
