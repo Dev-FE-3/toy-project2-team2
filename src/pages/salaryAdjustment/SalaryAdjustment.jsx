@@ -27,75 +27,68 @@ const TitleContainer = styled.div`
   }
 `;
 
-const TableContainer = styled.div`
+const Table = styled.table`
+  table-layout: fixed;
   width: 100%;
   margin-top: 45px;
   margin-bottom: 138px;
-`;
-
-const Table = styled.table`
-  width: 100%;
   text-align: center;
-  color: var(--text-secondary);
   font-size: var(--font-size-title-small);
   font-weight: 500;
-  table-layout: fixed;
-  border-spacing: 0 20px; /* 테이블 셀 사이에 수직 간격을 추가 */
+  border-spacing: 10px;
+  border-top: 2px solid var(--background-color);
+  border-bottom: 2px solid var(--background-color);
 
   thead {
+    display: table;
+    table-layout: fixed;
     width: 100%;
+    border-bottom: 2px solid var(--background-color);
+
+    &::after {
+      content: "";
+      display: block;
+      height: 10px;
+    }
+
+    tr {
+      border-bottom: 2px solid var(--background-color);
+      
+      th {
+        color: var(--text-secondary);
+      }
+    }
   }
 
   tbody {
-    border-top: 2px solid var(--background-color);
-    border-bottom: 2px solid var(--background-color);
-    height: 620px;
+    display: block;
+    max-height: 480px;
     overflow-y: scroll;
-    /* tr {
+
+    tr {
       display: table;
       width: 100%;
-    } */
+      table-layout: fixed;
+
+      td {
+        color: var(--text-disabled);
+
+        &:nth-child(3) {
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+      }
+    }
   }
 
-  th {
-    color: var(--text-secondary);
-    font-size: var(--font-size-title-small);
-    font-weight: 500;
-    padding-bottom: 40px; /* 헤더와 바디 사이에 추가적인 여백 */
-    border-top: 2px solid var(--background-color);
-    border-bottom: 2px solid var(--background-color);
-    padding: 24px 0;
-  }
-
-  td {
-    color: var(--text-disabled);
-    font-size: var(--font-size-title-small);
-    font-weight: 500;
-    padding-top: 40px; /* 바디와 헤더 사이에 추가적인 여백 */
-    padding: 24px 0;
-  }
-
-  th:nth-child(1),
-  td:nth-child(1) {
+  th, td {
     width: 20%;
-  }
+    padding: 24px;
 
-  th:nth-child(2),
-  td:nth-child(2) {
-    width: 20%;
-  }
-
-  th:nth-child(3),
-  td:nth-child(3) {
-    width: 40%;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-
-  th:nth-child(4),
-  td:nth-child(4) {
-    width: 20%;
+    &:nth-child(3) {
+      width: 40%;
+    }
   }
 `;
 
@@ -258,47 +251,45 @@ const SalaryAdjustment = () => {
         <PageTitle title="정정 신청 / 내역" subtitle="정정 내역" />
         <ScheduleRegisterButton userId={userId} className="registerBtn" />
       </TitleContainer>
-      <TableContainer>
-        <Table>
-          <thead>
-            <tr>
-              <th>정정 대상</th>
-              <th>정정 유형</th>
-              <th>정정 사유</th>
-              <th>처리 상태</th>
-            </tr>
-          </thead>
-          <tbody>
-            {requests.length > 0 ? (
-              requests.map((request, index) => {
-                const date = new Date(request.date);
-                const formattedDate = `${date.getFullYear()} / ${(
-                  date.getMonth() + 1
-                )
-                  .toString()
-                  .padStart(2, "0")}`;
+      <Table>
+        <thead>
+          <tr>
+            <th>정정 대상</th>
+            <th>정정 유형</th>
+            <th>정정 사유</th>
+            <th>처리 상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          {requests.length > 0 ? (
+            requests.map((request, index) => {
+              const date = new Date(request.date);
+              const formattedDate = `${date.getFullYear()} / ${(
+                date.getMonth() + 1
+              )
+                .toString()
+                .padStart(2, "0")}`;
 
-                return (
-                  <tr key={index}>
-                    <td>{formattedDate}</td>
-                    <td>{request.type}</td>
-                    <td title={request.reason}>{request.reason}</td>
-                    <td>
-                      <StatusCell $status={request.status}>
-                        {request.status}
-                      </StatusCell>
-                    </td>
-                  </tr>
-                );
-              })
-            ) : (
-              <tr>
-                <td colSpan="4">신청된 정정 내역이 없습니다.</td>
-              </tr>
-            )}
-          </tbody>
-        </Table>
-      </TableContainer>
+              return (
+                <tr key={index}>
+                  <td>{formattedDate}</td>
+                  <td>{request.type}</td>
+                  <td title={request.reason}>{request.reason}</td>
+                  <td>
+                    <StatusCell $status={request.status}>
+                      {request.status}
+                    </StatusCell>
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td colSpan="4">신청된 정정 내역이 없습니다.</td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
     </>
   );
 };
