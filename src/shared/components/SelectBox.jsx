@@ -27,7 +27,8 @@ const Container = styled.div`
 `;
 
 const Button = styled.button`
-  border: 1px solid var(--disabled);
+  border: 1px solid
+    ${(props) => (props.$error ? "var(--red)" : "var(--disabled)")};
   border-radius: 10px;
   background-color: var(--white);
   display: flex;
@@ -84,6 +85,7 @@ const SelectBox = ({
   defaultOption = "선택",
   onSelect,
   size = "large",
+  error,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -98,7 +100,7 @@ const SelectBox = ({
     <>
       {label && <Label>{label}</Label>}
       <Container>
-        <Button onClick={() => setIsOpen(!isOpen)} size={size}>
+        <Button onClick={() => setIsOpen(!isOpen)} size={size} $error={error}>
           {defaultOption}
           <Icon src={toggleIcon} alt="Toggle Dropdown" />
         </Button>
