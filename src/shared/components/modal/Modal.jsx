@@ -59,7 +59,15 @@ const CloseIcon = styled.img`
   height: 18px;
 `;
 
-const Modal = ({ title, content, hasSubmitButton, isOpen, onClose }) => {
+const Modal = ({
+  title,
+  content,
+  hasSubmitButton,
+  deleteButton,
+  isOpen,
+  onClose,
+  onSubmit, // 추가된 prop
+}) => {
   if (!isOpen) return null;
 
   return (
@@ -76,7 +84,18 @@ const Modal = ({ title, content, hasSubmitButton, isOpen, onClose }) => {
           <Button size="sm" color="gray" onClick={onClose}>
             닫기
           </Button>
-          {hasSubmitButton && <Button size="sm">등록하기</Button>}
+          {deleteButton && (
+            <Button size="sm" color="red" onClick={onDelete}>
+              삭제
+            </Button>
+          )}
+          {hasSubmitButton && (
+            <Button type="submit" size="sm" onClick={onSubmit}>
+              {" "}
+              {/* 수정된 부분 */}
+              신청하기
+            </Button>
+          )}
         </ModalFooter>
       </ModalContainer>
     </Overlay>
