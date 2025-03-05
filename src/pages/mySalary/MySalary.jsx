@@ -1,4 +1,4 @@
-import PageTitle from '../../shared/components/titles/PageTitle'
+import PageTitle from '../../shared/components/PageTitle'
 
 const MySalary = () => {
   return (

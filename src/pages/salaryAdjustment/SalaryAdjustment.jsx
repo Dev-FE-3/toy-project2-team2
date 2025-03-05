@@ -7,10 +7,10 @@ import {
   orderBy,
   onSnapshot,
 } from "firebase/firestore";
-import { db, auth } from "../../firebase"; // Firebase 설정 파일
-import PageTitle from "../../shared/components/titles/PageTitle";
+import { db, auth } from "../../shared/firebase"; // Firebase 설정 파일
+import PageTitle from "../../shared/components/PageTitle";
 import styled from "styled-components";
-import Button from "../../shared/components/button/Button";
+import Button from "../../shared/components/Button";
 import SelectBox from "../../shared/components/SelectBox";
 import DatePicker from "../../shared/components/DatePicker";
 import useModal from "../../shared/components/modal/useModal";

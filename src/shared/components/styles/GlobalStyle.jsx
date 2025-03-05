@@ -42,6 +42,7 @@ const GlobalStyle = createGlobalStyle`
 		--font-size-title-small: 18px;
 		--font-size-primary: 16px;
 		--font-size-small: 14px;
+		--font-size-caption: 12px;
 	}
 
 	// reset css
@@ -67,21 +68,24 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 	
- 	textarea {
-		all:unset;
+  textarea {
+		all: unset;
 	}
 
 	&::-webkit-scrollbar {
     width: 8px;
-  }	
+    height: 8px;
+  }
+
   &::-webkit-scrollbar-thumb {
     background-color: var(--scrollbar-thumb, var(--text-disabled-2));
     border-radius: 8px;
   }
+
   &::-webkit-scrollbar-track {
     background-color: var(--scrollbar-track, var(--background-color));
 		border-radius: 8px;
   }
-`;
+`
 
-export default GlobalStyle;
+export default GlobalStyle
