@@ -4,6 +4,8 @@ import PageTitle from "../../shared/components/PageTitle";
 import useModal from "../../shared/components/modal/useModal";
 import CalendarHeader from "./components/CalendarHeader";
 import CalendarSchedule from "./components/CalendarSchedule";
+import { db, auth } from "../../shared/firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 const StyledCalendarWrapper = styled.div`
   margin-bottom: 82px;
@@ -45,7 +47,6 @@ const Calendar = () => {
   const [endDate, setEndDate] = useState(new Date());
   const [selectedColor, setSelectedColor] = useState("orange");
   const [textAreaValue, setTextAreaValue] = useState("");
-  const [schedules, setSchedules] = useState([]);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
 
   // 달력 생성
@@ -104,18 +105,25 @@ const Calendar = () => {
     setCurrentDate(new Date(year, month + 1, 1));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newSchedule = {
-      title: inputValue,
-      startDate: new Date(startDate),
-      endDate: new Date(endDate),
-      selectedColor,
-      contents: textAreaValue,
-    };
-  
-    setSchedules((prev) => [...prev, newSchedule]);
+    // firebase로 데이터 추가
+    const user = auth.currentUser;
+    if (!user) return;
+
+    try {
+      await addDoc(collection(db, "schedules"), {
+        title: inputValue,
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+        selectedColor,
+        contents: textAreaValue,
+        userId: user.uid,
+      })
+    } catch(error) {
+      console.error("내 일정 데이터 저장에 실패했습니다:", error);
+    }
 
     // 등록 후 초기화
     setInputValue("");
@@ -178,7 +186,6 @@ const Calendar = () => {
           </StyledCalendarWeek>
           <CalendarSchedule
             weeks={weeks}
-            schedules={schedules}
             handleScheduleClick={handleScheduleClick}
           />
         </StyledCalendar>

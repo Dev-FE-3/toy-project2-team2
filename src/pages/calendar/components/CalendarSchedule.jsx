@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
+import { db } from "../../../shared/firebase";
+import { collection, onSnapshot, query } from "firebase/firestore";
 
 const StyledCalendarDate = styled.tbody`
   tr {
@@ -126,29 +129,39 @@ const Schedule = styled.span`
 `
 
 const CalendarSchedule = ({
-  weeks, schedules, handleScheduleClick
+  weeks, handleScheduleClick,
 }) => {
+  const [schedules, setSchedules] = useState([]);
+
+  useEffect(() => {
+    const schedulesQuery = query(collection(db, "schedules"));
+    const unsubscribe = onSnapshot(schedulesQuery, (snapshot) => {
+      const schedules = snapshot.docs.map((doc) => {
+        const { userId, title, startDate, endDate, selectedColor, contents } = doc.data();
+        return {
+          userId,
+          title,
+          startDate: startDate.toDate(),
+          endDate: endDate.toDate(),
+          selectedColor,
+          contents,
+          id: doc.id,
+        };
+      });
+      setSchedules(schedules);
+    });
+    return () => unsubscribe();
+  }, [])
   return (
     <StyledCalendarDate>
       {weeks.map((week, weekIndex) => (
         <tr key={weekIndex}>
           {week.map(({ day, isDisabled, date }, dayIndex) => {
+            const getDateOnly = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
             const todaySchedules = schedules.filter((schedule) => {
-              const scheduleStart = new Date(
-                schedule.startDate.getFullYear(),
-                schedule.startDate.getMonth(),
-                schedule.startDate.getDate()
-              );
-              const scheduleEnd = new Date(
-                schedule.endDate.getFullYear(),
-                schedule.endDate.getMonth(),
-                schedule.endDate.getDate()
-              );
-              const currentDate = new Date(
-                date.getFullYear(),
-                date.getMonth(),
-                date.getDate()
-              );
+              const scheduleStart = getDateOnly(schedule.startDate);
+              const scheduleEnd = getDateOnly(schedule.endDate);
+              const currentDate = getDateOnly(date);
               return currentDate >= scheduleStart && currentDate <= scheduleEnd;
             });
             return (
@@ -156,9 +169,9 @@ const CalendarSchedule = ({
                 <span className="date" dateTime={`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`}>
                   {day}
                 </span>
-                {todaySchedules.map((schedule, index) => (
+                {todaySchedules.map((schedule) => (
                   <Schedule
-                    key={index}
+                    key={schedule.id}
                     color={schedule.selectedColor}
                     onClick={() => handleScheduleClick(schedule)}
                   >
