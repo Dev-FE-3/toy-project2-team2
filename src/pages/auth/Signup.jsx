@@ -21,6 +21,26 @@ import {
 import LoginInput from "./components/LoginInput";
 import PageTitle from "../../shared/components/PageTitle";
 import Button from "../../shared/components/Button";
+import styled from "styled-components";
+import SelectBox from "../../shared/components/SelectBox";
+
+const UserInfoWrapper = styled.div`
+  gap: 20px;
+  display: flex;
+  padding: 0 4px;
+`;
+const InputBox = styled.div`
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 4px;
+  div {
+    margin-top: 14px;
+  }
+  .locationError {
+    margin: 0;
+  }
+`;
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -28,11 +48,22 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [position, setPosition] = useState("메이트");
+  const [location, setLocation] = useState("지점");
   const [error, setError] = useState({
     email: "",
     name: "",
+    location: "",
   });
-
+  const handleSelectLocation = (option) => {
+    setLocation(option);
+    handleError(setError, {
+      location: option === "지점" ? "지점을 선택하세요." : "",
+    });
+  };
+  const handleSelectPosition = (option) => {
+    setPosition(option);
+  };
   const isDisabled =
     isLoading ||
     email === "" ||
@@ -40,7 +71,8 @@ const Signup = () => {
     name === "" ||
     error.email ||
     error.password ||
-    error.name;
+    error.name ||
+    error.location;
 
   const onChange = (e) => {
     const {
@@ -87,11 +119,11 @@ const Signup = () => {
       setIsLoading(true);
       await createUserWithEmailAndPassword(auth, email, password);
       await setDoc(doc(db, "users", auth.currentUser.uid), {
-        employeeId: "",
+        employeeId: "20251111",
         hiredDate: null,
-        location: "",
+        location: location,
         name: name,
-        position: "",
+        position: position,
       });
       alert(`${name} 님 회원이 되신 것을 환영합니다.`);
       navigate("/");
@@ -134,6 +166,33 @@ const Signup = () => {
             <ErrorWrapper>
               <Error $hasError={!!error.name}>{error.name || " "}</Error>
             </ErrorWrapper>
+            <UserInfoWrapper>
+              <InputBox className="selectBox">
+                <SelectBox
+                  value={position}
+                  name="position"
+                  onSelect={handleSelectPosition}
+                  label={"직급"}
+                  size="autoSmall"
+                  options={["메이트", "트레이너"]}
+                  defaultOption={position}
+                />
+              </InputBox>
+              <InputBox className="selectBox">
+                <SelectBox
+                  value={location}
+                  name="location"
+                  onSelect={handleSelectLocation}
+                  label={"지점"}
+                  size="autoSmall"
+                  options={["광복점", "서면점"]}
+                  defaultOption={location}
+                />
+                <ErrorWrapper className="locationError">
+                  <Error $hasError={!!error.location}>{error.location}</Error>
+                </ErrorWrapper>
+              </InputBox>
+            </UserInfoWrapper>
             <LoginInput
               label={"이메일"}
               onChange={onChange}

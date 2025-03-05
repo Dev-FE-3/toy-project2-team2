@@ -13,6 +13,11 @@ const sizes = {
     width: "154px",
     fontWeight: "500",
   },
+  autoSmall: {
+    fontSize: "var(--font-size-primary)",
+    width: "100%",
+    fontWeight: "400",
+  },
 };
 
 const Container = styled.div`
@@ -67,8 +72,14 @@ const Option = styled.li`
     color: var(--text-primary);
   }
 `;
+const Label = styled.label`
+  padding-left: 4px;
+  color: var(--text-disabled);
+  font-size: var(--text-size-primary);
+`;
 
 const SelectBox = ({
+  label,
   options = [],
   defaultOption = "선택",
   onSelect,
@@ -84,22 +95,25 @@ const SelectBox = ({
   };
 
   return (
-    <Container>
-      <Button onClick={() => setIsOpen(!isOpen)} size={size}>
-        {defaultOption}
-        <Icon src={toggleIcon} alt="Toggle Dropdown" />
-      </Button>
+    <>
+      {label && <Label>{label}</Label>}
+      <Container>
+        <Button onClick={() => setIsOpen(!isOpen)} size={size}>
+          {defaultOption}
+          <Icon src={toggleIcon} alt="Toggle Dropdown" />
+        </Button>
 
-      {isOpen && (
-        <Dropdown size={size}>
-          {options.map((option, index) => (
-            <Option key={index} onClick={() => handleSelect(option)}>
-              {option}
-            </Option>
-          ))}
-        </Dropdown>
-      )}
-    </Container>
+        {isOpen && (
+          <Dropdown size={size}>
+            {options.map((option, index) => (
+              <Option key={index} onClick={() => handleSelect(option)}>
+                {option}
+              </Option>
+            ))}
+          </Dropdown>
+        )}
+      </Container>
+    </>
   );
 };
 
