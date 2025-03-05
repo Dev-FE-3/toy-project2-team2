@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+// 스타일 컴포넌트 정의
 const Box = styled.div`
   display: flex;
   height: 562px;
@@ -62,6 +63,7 @@ const Line = styled.div`
   margin-top: 32px;
 `;
 
+// 급여 항목 매핑
 const salaryMapping = {
   baseSalary: "기본급",
   overtimePay: "초과근무수당",
@@ -73,7 +75,9 @@ const salaryMapping = {
   localIncomeTax: "지방소득세",
 };
 
+// 지급 내역과 공제 내역을 렌더링하는 컴포넌트
 const CalcBox = ({ type, data }) => {
+  // 각 급여 항목의 총합 계산
   const totalAmount = Object.values(data).reduce((acc, val) => acc + val, 0);
 
   return (
@@ -86,12 +90,19 @@ const CalcBox = ({ type, data }) => {
             <Right>0 원</Right>
           </Content>
         ) : (
-          Object.keys(data).map((key, index) => (
-            <Content key={index}>
-              <Left>{salaryMapping[key] || key}</Left>
-              <Right>{data[key].toLocaleString("ko-KR")} 원</Right>
-            </Content>
-          ))
+          Object.keys(data)
+            .sort((a, b) =>
+              (salaryMapping[a] || a).localeCompare(
+                salaryMapping[b] || b,
+                "ko-KR"
+              )
+            )
+            .map((key, index) => (
+              <Content key={index}>
+                <Left>{salaryMapping[key] || key}</Left>
+                <Right>{data[key].toLocaleString("ko-KR")} 원</Right>
+              </Content>
+            ))
         )}
       </Wrapper>
       <Calc>
