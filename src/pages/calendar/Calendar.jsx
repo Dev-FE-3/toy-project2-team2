@@ -5,7 +5,7 @@ import useModal from "../../shared/components/modal/useModal";
 import CalendarHeader from "./components/CalendarHeader";
 import CalendarSchedule from "./components/CalendarSchedule";
 import { db, auth } from "../../shared/firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, deleteDoc, doc } from "firebase/firestore";
 
 const StyledCalendarWrapper = styled.div`
   margin-bottom: 82px;
@@ -149,6 +149,19 @@ const Calendar = () => {
     onOpen();
   };
 
+  const handleDelete = async () => {
+    const ok = confirm("일정을 삭제하시겠습니까?");
+    if (!ok || !selectedSchedule?.id) return;
+
+    try {
+      await deleteDoc(doc(db, "schedules", selectedSchedule.id));
+
+      onClose();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <>
       <PageTitle title="내 일정" />
@@ -159,6 +172,7 @@ const Calendar = () => {
           handlePrevMonth={handlePrevMonth}
           handleNextMonth={handleNextMonth}
           handleSubmit={handleSubmit}
+          handleDelete={handleDelete}
           selectedSchedule={selectedSchedule}
           inputValue={inputValue}
           setInputValue={setInputValue}
@@ -174,7 +188,6 @@ const Calendar = () => {
           isOpen={isOpen}
           onOpen={onOpen}
           onClose={onClose}
-          onDelete={onDelete}
         />
         <StyledCalendar>
           <StyledCalendarWeek>

@@ -34,21 +34,17 @@ const StyledCalendarBtn = styled.div`
   }
 `
 
-const Form = styled.form`
-  position: absolute;
-`
-
 const CalendarHeader = ({
   year, month,
   handlePrevMonth, handleNextMonth,
-  handleSubmit,
+  handleSubmit, handleDelete,
   inputValue, setInputValue,
   startDate, setStartDate,
   endDate, setEndDate,
   selectedColor, setSelectedColor,
   textAreaValue, setTextAreaValue,
   selectedSchedule, setSelectedSchedule,
-  isOpen, onOpen, onClose
+  isOpen, onOpen, onClose,
 }) => {
 
   return (
@@ -64,39 +60,39 @@ const CalendarHeader = ({
       </StyledCalendarBtn>
       <Button onClick={onOpen}>일정 등록</Button>
       {isOpen && (
-        <Form onSubmit={handleSubmit}>
-          <Modal
-            title={selectedSchedule ? "일정 상세" : "일정 등록"}
-            content={
-              <ModalCalendar
-                inputValue={inputValue}
-                setInputValue={setInputValue}
-                startDate={startDate}
-                setStartDate={setStartDate}
-                endDate={endDate}
-                setEndDate={setEndDate}
-                selectedColor={selectedColor}
-                setSelectedColor={setSelectedColor}
-                textAreaValue={textAreaValue}
-                setTextAreaValue={setTextAreaValue}
-              />
-            }
-            deleteButton={selectedSchedule ? true : false}
-            hasSubmitButton={true}
-            SubmitButton={selectedSchedule ? "수정하기" : "등록하기"}
-            isOpen={isOpen}
-            onClose={() => {
-              // 모달 닫힐 때 초기화
-              setSelectedSchedule(null);
-              setInputValue("");
-              setStartDate(new Date());
-              setEndDate(new Date());
-              setSelectedColor("orange");
-              setTextAreaValue("");
-              onClose();
-            }}
-          />
-        </Form>
+        <Modal
+          title={selectedSchedule ? "일정 상세" : "일정 등록"}
+          content={
+            <ModalCalendar
+              inputValue={inputValue}
+              setInputValue={setInputValue}
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+              selectedColor={selectedColor}
+              setSelectedColor={setSelectedColor}
+              textAreaValue={textAreaValue}
+              setTextAreaValue={setTextAreaValue}
+            />
+          }
+          deleteButton={selectedSchedule ? true : false}
+          hasSubmitButton={true}
+          SubmitButton={selectedSchedule ? "수정하기" : "등록하기"}
+          isOpen={isOpen}
+          onClose={() => {
+            // 모달 닫힐 때 초기화
+            setSelectedSchedule(null);
+            setInputValue("");
+            setStartDate(new Date());
+            setEndDate(new Date());
+            setSelectedColor("orange");
+            setTextAreaValue("");
+            onClose();
+          }}
+          onSubmit={handleSubmit}
+          onDelete={handleDelete}
+        />
       )}
     </StyledCalendarTop>
   )
