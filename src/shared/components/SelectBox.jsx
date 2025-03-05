@@ -100,7 +100,7 @@ const SelectBox = ({
     <>
       {label && <Label>{label}</Label>}
       <Container>
-        <Button onClick={() => setIsOpen(!isOpen)} size={size} $error={error}>
+        <Button onClick={() => setIsOpen(!isOpen)} size={size} $error={error} type="button">
           {defaultOption}
           <Icon src={toggleIcon} alt="Toggle Dropdown" />
         </Button>

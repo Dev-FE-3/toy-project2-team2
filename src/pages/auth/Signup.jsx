@@ -29,6 +29,7 @@ const UserInfoWrapper = styled.div`
   display: flex;
   padding: 0 4px;
 `;
+
 const InputBox = styled.div`
   width: 50%;
   display: flex;
@@ -46,6 +47,9 @@ const Signup = () => {
   const placeholder = {
     location: "지점 선택",
     position: "직급 선택",
+    name: "김스텐",
+    password: "특수기호를 포함하여 6자 이상",
+    email: "sweetten@xxxx.xxx",
   };
 
   const navigate = useNavigate();
@@ -75,6 +79,7 @@ const Signup = () => {
       handleError(setError, { [name]: "" });
     }
   };
+
   const isDisabled =
     isLoading ||
     userData.email === "" ||
@@ -192,7 +197,7 @@ const Signup = () => {
               onChange={onChange}
               name="name"
               value={userData.name}
-              placeholder="김스텐"
+              placeholder={placeholder.name}
               error={error.name}
               maxLength="10"
             />
@@ -236,7 +241,7 @@ const Signup = () => {
               onChange={onChange}
               name="email"
               value={userData.email}
-              placeholder="sweetTen@xxxx.xxx"
+              placeholder={placeholder.email}
               error={error.email}
             />
             <ErrorWrapper>
@@ -247,7 +252,7 @@ const Signup = () => {
               onChange={onChange}
               name="password"
               value={userData.password}
-              placeholder="특수기호를 포함하여 6자 이상"
+              placeholder={placeholder.password}
               type="password"
               error={error.password}
               minLength="6"
