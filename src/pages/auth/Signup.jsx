@@ -42,6 +42,7 @@ const InputBox = styled.div`
   }
 `;
 
+
 const Signup = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
