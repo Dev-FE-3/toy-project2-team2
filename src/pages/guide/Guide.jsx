@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "../../shared/components/Button";
 import TextArea from "../../shared/components/TextArea";
 import Input from "../../shared/components/Input";
-import LoginInput from "../login/LoginInput";
+import LoginInput from "../auth/components/LoginInput";
 import PageTitle from "../../shared/components/PageTitle";
 import SelectBox from "../../shared/components/SelectBox";
 import DatePicker from "../../shared/components/DatePicker";
@@ -115,11 +115,15 @@ const Guide = () => {
 
       <h1>2. button</h1>
       <Button size="sm">작은 버튼</Button>
-      <Button size="sm" color="gray">작은 버튼</Button>
+      <Button size="sm" color="gray">
+        작은 버튼
+      </Button>
       <Button>기본 버튼</Button>
       <Button color="gray">기본 버튼</Button>
       <Button size="lg">큰 버튼</Button>
-      <Button size="lg" color="gray">큰 버튼</Button>
+      <Button size="lg" color="gray">
+        큰 버튼
+      </Button>
 
       <h1>3. input</h1>
       <p>코드상 위에 상태 관련 설명 있어요</p>
@@ -137,8 +141,12 @@ const Guide = () => {
         placeholder="라벨 쓸 때"
         onChange={(e) => setInputValue(e.target.value)}
       />
-      <Button onClick={handleSubmit} disabled={isSubmitted}>제출</Button>
-      <Button onClick={handleEdit} color="gray">수정하기</Button>
+      <Button onClick={handleSubmit} disabled={isSubmitted}>
+        제출
+      </Button>
+      <Button onClick={handleEdit} color="gray">
+        수정하기
+      </Button>
 
       <h1>4. LoginInput</h1>
       <LoginInput placeholder="login input 입니다" />
@@ -153,9 +161,13 @@ const Guide = () => {
         placeholder="내용을 입력하세요"
         onChange={(e) => setInputValue(e.target.value)}
       />
-      <Button onClick={handleSubmit} disabled={isSubmitted}>제출</Button>
-      <Button onClick={handleEdit} color="gray">수정하기</Button>
-      
+      <Button onClick={handleSubmit} disabled={isSubmitted}>
+        제출
+      </Button>
+      <Button onClick={handleEdit} color="gray">
+        수정하기
+      </Button>
+
       <h1>6. Select box</h1>
       <SelectBox
         options={leaveOptions}
@@ -185,7 +197,7 @@ const Guide = () => {
             ).padStart(2, "0")}`
           : "선택 안 됨"}
       </p>
-      
+
       <h1>8. Modal</h1>
       <ScheduleRegisterButton />
       <ScheduleCheckButton />

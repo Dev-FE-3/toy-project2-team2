@@ -6,7 +6,6 @@ import { doc, getDoc, Timestamp } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import SelectBox from "../../shared/components/SelectBox";
 //import useSalaryUpdate from "./useSalaryUpdate";
-//import useUserUpdate from "./useUserUpdate";
 
 const ContentBox = styled.div`
   margin-top: 30px;
@@ -29,8 +28,6 @@ const MyInfo = styled.div`
     display: inline-block;
   }
 `;
-
-const MonthSort = styled.div``;
 
 const SalaryCalcBox = styled.div`
   margin-top: 26px;
@@ -63,13 +60,13 @@ const Right = styled.span`
 
 const MySalary = () => {
   //useSalaryUpdate();
-  //useUserUpdate();
   const [salaryData, setSalaryData] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
-  const [selectedMonth, setSelectedMonth] = useState("2025년 2월"); // 기본 값 설정
+  const [selectedMonth, setSelectedMonth] = useState("2025년 2월");
 
   const user = auth.currentUser;
 
+  // 사용자 및 급여 데이터 가져오기
   useEffect(() => {
     if (!user) {
       console.log("사용자 정보 없음");
@@ -77,12 +74,16 @@ const MySalary = () => {
     }
 
     const fetchSalaryData = async () => {
-      const docRef = doc(db, "salaries", user.uid);
+      const docRef = doc(db, "salaries", user.uid, "months", selectedMonth);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setSalaryData(docSnap.data());
       } else {
-        console.log("급여 데이터가 없습니다.");
+        setSalaryData({
+          netSalary: 0, // 급여 데이터 없을 때 기본값
+          payments: [], // 급여 항목 없을 때 기본값
+          deductions: [], // 공제 항목 없을 때 기본값
+        });
       }
     };
 
@@ -99,19 +100,7 @@ const MySalary = () => {
 
     fetchSalaryData();
     fetchUserData();
-  }, [user]);
-
-  useEffect(() => {
-    // 선택된 달이 바뀌면 콘솔에 찍히게 처리
-    console.log("선택된 달:", selectedMonth);
-    // 여기서 해당 달에 맞는 데이터를 가져오는 로직 추가할 수 있음
-    fetchData(selectedMonth);
-  }, [selectedMonth]); // selectedMonth가 변경될 때마다 실행됨
-
-  const fetchData = (month) => {
-    console.log(`${month}에 맞는 데이터를 불러옴`);
-    // 예시로, 이곳에 해당 월에 맞는 데이터를 불러오는 로직 추가
-  };
+  }, [user, selectedMonth]); // selectedMonth가 변경될 때마다 급여 데이터도 새로 불러옴
 
   if (!salaryData || !userInfo) return <div>로딩 중...</div>;
 
@@ -123,17 +112,12 @@ const MySalary = () => {
       : "입사일 없음";
 
   const Options2 = [
-    { year: 2025, month: 2 },
-    { year: 2025, month: 1 },
-    { year: 2024, month: 12 },
-    { year: 2024, month: 11 },
-    { year: 2024, month: 10 },
+    "2025년 2월",
+    "2025년 1월",
+    "2024년 12월",
+    "2024년 11월",
+    "2024년 10월",
   ];
-  const handleSelectOption = (selectedValue) => {
-    const [year, month] = selectedValue.split("년 "); // "년"을 기준으로 분리
-    const monthValue = month.split("월")[0]; // "월"을 기준으로 다시 분리
-    console.log(`선택된 년: ${year}, 월: ${monthValue}`);
-  };
 
   return (
     <>
@@ -149,23 +133,31 @@ const MySalary = () => {
             <span>입사일 : {formattedhiredDate}</span>
           </MyInfo>
           <SelectBox
-            options={Options2.map(
-              (option) => `${option.year}년 ${option.month}월`
-            )} // 텍스트로 변환
-            defaultOption="2025년 2월"
+            options={Options2}
+            defaultOption={selectedMonth} // 선택된 달
             size="small"
-            onSelect={handleSelectOption}
+            onSelect={(selectedValue) => {
+              setSelectedMonth(selectedValue); // 선택된 달에 따라 상태 변경
+            }}
           />
         </InfoWrap>
         {salaryData && (
           <SalaryCalcBox>
             <Left>실 지급액</Left>
-            <Right>{salaryData.netSalary.toLocaleString()} 원</Right>
+            <Right>
+              {salaryData ? salaryData.netSalary.toLocaleString() : 0} 원
+            </Right>
           </SalaryCalcBox>
         )}
         <CalcWrapper>
-          <CalcBox type="payments" data={salaryData.payments} />
-          <CalcBox type="deductions" data={salaryData.deductions} />
+          <CalcBox
+            type="payments"
+            data={salaryData ? salaryData.payments : []}
+          />
+          <CalcBox
+            type="deductions"
+            data={salaryData ? salaryData.deductions : []}
+          />
         </CalcWrapper>
       </ContentBox>
     </>

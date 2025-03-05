@@ -9,19 +9,19 @@ const Box = styled.div`
   flex: 1 0 0;
   border-radius: 12px;
   border: 1px solid var(--background-color);
-  justify-content: space-between; /* 상단과 하단을 분리 */
+  justify-content: space-between;
 `;
 
 const Title = styled.span`
   color: var(--text-secondary);
-  font-size: 20px; // 20? 어디에....
+  font-size: 20px;
   font-weight: 700;
   line-height: normal;
   margin-bottom: 44px;
 `;
 
 const Wrapper = styled.div`
-  flex-grow: 1; /* Wrapper가 가능한 공간을 모두 차지하도록 설정 */
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -42,7 +42,7 @@ const Content = styled.div`
 const Left = styled.span``;
 
 const Right = styled.span`
-  text-align: right; /* 오른쪽 항목을 오른쪽 끝에 정렬 */
+  text-align: right;
 `;
 
 const Calc = styled.span`
@@ -51,7 +51,7 @@ const Calc = styled.span`
   font-weight: 700;
   line-height: normal;
   display: flex;
-  justify-content: space-between; /* 좌측과 우측으로 배치 */
+  justify-content: space-between;
   width: 100%;
 `;
 
@@ -82,7 +82,7 @@ const CalcBox = ({ type, data }) => {
       <Wrapper>
         {Object.keys(data).length === 0 ? (
           <Content>
-            <Left>데이터 없음</Left>
+            <Left>미입력</Left>
             <Right>0 원</Right>
           </Content>
         ) : (
