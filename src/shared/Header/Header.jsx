@@ -9,8 +9,9 @@ import { updateProfile } from "firebase/auth";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { auth, storage, db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectUserInfo, setUserInfo } from "../../store/userSlice";
+import { useDispatch } from "react-redux";
 
 const HeaderWrap = styled.div`
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
