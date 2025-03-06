@@ -99,14 +99,6 @@ const Guide = () => {
     setIsSubmitted(false);
   };
 
-  const handleFullDateChange = (date) => {
-    setFullDate(date);
-  };
-
-  const handleYearMonthChange = (date) => {
-    setYearMonth(date);
-  };
-
   return (
     <>
       <h1>1. page title</h1>
