@@ -54,6 +54,7 @@ const TextArea = ({
   isSubmitted,
   disabled,
   placeholder = "내용을 입력하세요",
+  value,
   onChange,
 }) => {
   return (
@@ -65,6 +66,7 @@ const TextArea = ({
         disabled={disabled}
         placeholder={placeholder}
         $issubmitted={isSubmitted} // 'isSubmitted' 값을 전달
+        value={value}
         onChange={onChange} // 입력값 처리
       />
     </TextBoxWrapper>

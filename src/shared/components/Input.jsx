@@ -50,6 +50,7 @@ const Input = ({
   isSubmitted,
   placeholder = "필요에 의한 내용을 바꿔주세요",
   onChange,
+  value,
 }) => {
   return (
     <>
@@ -58,6 +59,7 @@ const Input = ({
         id={id}
         type="text"
         placeholder={placeholder}
+        value={value}
         onChange={onChange}
         $issubmitted={isSubmitted} // 여기서 'issubmitted'로 전달!!!
       />
