@@ -162,11 +162,13 @@ const MySalary = () => {
             <span>입사일 : {formattedhiredDate}</span>
           </MyInfo>
           <SelectBox
-            options={availableMonths}
-            defaultOption={selectedMonth} // 선택된 달
+            options={availableMonths.length > 0 ? availableMonths : ["없음"]}
+            defaultOption={availableMonths.length > 0 ? selectedMonth : "없음"}
             size="small"
             onSelect={(selectedValue) => {
-              setSelectedMonth(selectedValue); // 달 선택 시 상태 업데이트
+              if (selectedValue !== "없음") {
+                setSelectedMonth(selectedValue); // 유효한 값만 업데이트
+              }
             }}
           />
         </InfoWrap>
