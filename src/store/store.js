@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./userSlice"; // userSlice.js에서 reducer를 가져옴
+import userReducer from "./userSlice"; // reducer를 가져옴
 
 const store = configureStore({
   reducer: {

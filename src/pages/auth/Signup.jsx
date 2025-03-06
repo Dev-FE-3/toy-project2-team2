@@ -178,8 +178,8 @@ const Signup = () => {
           name: userData.name,
           location: userData.location,
           position: userData.position,
-          hiredDate: Timestamp.now(), // 현재 시간을 hiredDate로 추가
-          employeeId: randomNum, // 상태로 관리되는 randomNum 추가
+          hiredDate: Timestamp.now(),
+          employeeId: randomNum,
         })
       );
 
