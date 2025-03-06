@@ -133,6 +133,22 @@ const Signup = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (isLoading || isDisabled) return;
+    if (
+      userData.location === placeholder.location ||
+      userData.position === placeholder.position
+    ) {
+      if (userData.location === placeholder.location) {
+        handleError(setError, {
+          location: "지점을 선택하세요",
+        });
+      }
+      if (userData.position === placeholder.position) {
+        handleError(setError, {
+          position: "직급을 선택하세요",
+        });
+      }
+      return;
+    }
     try {
       setIsLoading(true);
       await createUserWithEmailAndPassword(
@@ -153,20 +169,12 @@ const Signup = () => {
       console.log(e);
       if (e instanceof FirebaseError) {
         const errorInfo = authErrors[e.code];
-        setError((prev) => ({
-          ...prev,
-          location:
-            userData.location === placeholder.location
-              ? "지점을 선택하세요"
-              : prev.location,
-          position:
-            userData.position === placeholder.position
-              ? "직급을 선택하세요"
-              : prev.position,
-          ...(errorInfo ? { [errorInfo.field]: errorInfo.message } : {}),
-        }));
-
-        if (!errorInfo) {
+        if (errorInfo) {
+          setError((prev) => ({
+            ...prev,
+            [errorInfo.field]: errorInfo.message,
+          }));
+        } else {
           alert("예상치 못한 오류가 발생하였습니다.");
         }
       }
