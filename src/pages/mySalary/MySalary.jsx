@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import PageTitle from "../../shared/components/PageTitle";
-import CalcBox from "./CalcBox";
+import CalcBox from "./components/CalcBox";
 import { auth, db } from "../../shared/firebase";
 import {
   doc,
