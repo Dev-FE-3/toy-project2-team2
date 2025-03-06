@@ -120,7 +120,7 @@ const Schedule = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  animation: ${slideIn} 1.5s ease-out;
+  /* animation: ${slideIn} 1.5s ease-out; */
   cursor: pointer;
 
   & + span {
