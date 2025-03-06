@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import PageTitle from "../../shared/components/PageTitle";
-import CalcBox from "./CalcBox";
+import CalcBox from "./components/CalcBox";
 import { auth, db } from "../../shared/firebase";
 import {
   doc,
@@ -82,6 +82,7 @@ const MySalary = () => {
       return;
     }
 
+    // 사용자가 선택할 수 있는 월 목록 가져오기
     const fetchAvailableMonths = async () => {
       const monthsRef = collection(db, "salaries", user.uid, "months");
       const monthsSnap = await getDocs(monthsRef);
@@ -112,7 +113,6 @@ const MySalary = () => {
         console.log("사용자 데이터가 없습니다.");
       }
     };
-
     fetchAvailableMonths();
     fetchUserData();
   }, [user, dispatch]); //[user, selectedMonth] selectedMonth가 변경될 때마다 급여 데이터도 새로 불러옴
@@ -163,12 +163,15 @@ const MySalary = () => {
             </span>
             <span>입사일 : {formattedHiredDate}</span>
           </MyInfo>
+
           <SelectBox
-            options={availableMonths}
-            defaultOption={selectedMonth} // 선택된 달
+            options={availableMonths.length > 0 ? availableMonths : ["없음"]}
+            defaultOption={availableMonths.length > 0 ? selectedMonth : "없음"}
             size="small"
             onSelect={(selectedValue) => {
-              setSelectedMonth(selectedValue); // 선택된 달에 따라 상태 변경
+              if (selectedValue !== "없음") {
+                setSelectedMonth(selectedValue); // 유효한 값만 업데이트
+              }
             }}
           />
         </InfoWrap>
@@ -183,11 +186,11 @@ const MySalary = () => {
         <CalcWrapper>
           <CalcBox
             type="payments"
-            data={salaryData ? salaryData.payments : []}
+            data={salaryData ? salaryData.payments : []} // 지급 내역
           />
           <CalcBox
             type="deductions"
-            data={salaryData ? salaryData.deductions : []}
+            data={salaryData ? salaryData.deductions : []} // 공제 내역
           />
         </CalcWrapper>
       </ContentBox>

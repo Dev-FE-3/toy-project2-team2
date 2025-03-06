@@ -40,6 +40,7 @@ const ScheduleRegisterButton = () => {
           hasSubmitButton={true}
           isOpen={isOpen}
           onClose={onClose}
+          SubmitButton="등록하기"
         />
       )}
     </>
@@ -97,14 +98,6 @@ const Guide = () => {
   // input 관련 상태 - 수정하기 누르면 수정이 가능하게 false - 활성화
   const handleEdit = () => {
     setIsSubmitted(false);
-  };
-
-  const handleFullDateChange = (date) => {
-    setFullDate(date);
-  };
-
-  const handleYearMonthChange = (date) => {
-    setYearMonth(date);
   };
 
   return (
