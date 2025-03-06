@@ -12,11 +12,11 @@ const StyledInput = styled.input`
   letter-spacing: -0.36px;
   color: var(--text-primary);
   border-bottom: 2px solid
-    ${(props) => (props.error ? "var(--red)" : "var(--text-disabled-2)")};
+    ${(props) => (props.$error ? "var(--red)" : "var(--text-disabled-2)")};
   transition: border-bottom 0.3s;
   &:focus {
     border-bottom: 2px solid
-      ${(props) => (props.error ? "var(--red)" : "var(--primary)")};
+      ${(props) => (props.$error ? "var(--red)" : "var(--primary)")};
   }
   &::placeholder {
     color: var(--text-disabled-2);

@@ -10,7 +10,7 @@ const Wrapper = styled.div`
 `;
 
 const LoginBox = styled.div`
-  height: 650px;
+  height: 700px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
