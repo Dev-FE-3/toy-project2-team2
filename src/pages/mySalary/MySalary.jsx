@@ -11,8 +11,9 @@ import {
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import SelectBox from "../../shared/components/SelectBox";
+import { useSelector, useDispatch } from "react-redux";
+import { setUserInfo } from "../../store/userSlice"; // 액션 임포트
 
-// 스타일 컴포넌트 정의
 const ContentBox = styled.div`
   margin-top: 30px;
 `;
@@ -65,12 +66,14 @@ const Right = styled.span`
 `;
 
 const MySalary = () => {
-  const [salaryData, setSalaryData] = useState(null); // 급여 데이터
-  const [userInfo, setUserInfo] = useState(null); // 사용자 정보
-  const [selectedMonth, setSelectedMonth] = useState("2025년 2월"); // 선택된 월
-  const [availableMonths, setAvailableMonths] = useState([]); // 선택 가능한 월들
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.user); // Redux에서 userInfo 가져오기
+  const [salaryData, setSalaryData] = useState(null);
+  //const [userInfo, setUserInfo] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState("2025년 2월");
+  const [availableMonths, setAvailableMonths] = useState([]); // 추가
 
-  const user = auth.currentUser; // 현재 로그인된 사용자 정보
+  const user = auth.currentUser;
 
   // 사용자 및 급여 데이터 가져오기
   useEffect(() => {
@@ -79,7 +82,6 @@ const MySalary = () => {
       return;
     }
 
-    // 사용자가 선택할 수 있는 월 목록 가져오기
     const fetchAvailableMonths = async () => {
       const monthsRef = collection(db, "salaries", user.uid, "months");
       const monthsSnap = await getDocs(monthsRef);
@@ -97,7 +99,7 @@ const MySalary = () => {
 
       setAvailableMonths(sortedMonths);
       setSelectedMonth(sortedMonths[0] || ""); // 최신 월을 기본 선택
-    };
+    }; // 전체 추가
 
     // 사용자 데이터 가져오기
     const fetchUserData = async () => {
@@ -105,17 +107,16 @@ const MySalary = () => {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        setUserInfo(docSnap.data());
+        dispatch(setUserInfo(docSnap.data())); // Redux에서 userInfo 업데이트
       } else {
         console.log("사용자 데이터가 없습니다.");
       }
     };
 
-    fetchAvailableMonths(); // 월 목록 가져오기
-    fetchUserData(); // 사용자 데이터 가져오기
-  }, [user]); // 사용자가 변경되었을 때만 실행
+    fetchAvailableMonths();
+    fetchUserData();
+  }, [user, dispatch]); //[user, selectedMonth] selectedMonth가 변경될 때마다 급여 데이터도 새로 불러옴
 
-  // 선택된 월에 맞는 급여 데이터 가져오기
   const fetchSalaryData = async (month) => {
     if (!month) return;
 
@@ -134,19 +135,20 @@ const MySalary = () => {
 
   useEffect(() => {
     if (selectedMonth) {
-      fetchSalaryData(selectedMonth); // 월이 선택되었을 때 급여 데이터 업데이트
+      fetchSalaryData(selectedMonth);
     }
   }, [selectedMonth]);
 
-  if (!salaryData || !userInfo) return <div>로딩 중...</div>; // 로딩 상태 처리
+  if (!salaryData || !userInfo) return <div>로딩 중...</div>;
 
   const { employeeId, name, location, position, hiredDate } = userInfo || {};
 
   // 입사일 포맷팅
-  const formattedhiredDate =
-    hiredDate instanceof Timestamp
-      ? new Date(hiredDate.seconds * 1000).toISOString().split("T")[0]
-      : "입사일 없음";
+  const formattedHiredDate = hiredDate
+    ? hiredDate instanceof Timestamp
+      ? new Date(hiredDate.seconds * 1000).toISOString().split("T")[0] // Timestamp 객체 처리
+      : new Date(hiredDate).toISOString().split("T")[0] // 문자열로 된 날짜 처리
+    : "입사일 없음"; // hiredDate가 없는 경우 처리
 
   return (
     <>
@@ -155,18 +157,18 @@ const MySalary = () => {
         <InfoWrap>
           <MyInfo>
             <span>사번 : {employeeId || "사번 없음"}</span>
-            <span>{name || "이름 없음"} </span>
+            <span>이름 : {name || "이름 없음"}</span>
             <span>
-              {location || "위치 없음"} / {position || "직책 없음"}{" "}
+              {location || "위치 없음"} / {position || "직책 없음"}
             </span>
-            <span>입사일 : {formattedhiredDate}</span>
+            <span>입사일 : {formattedHiredDate}</span>
           </MyInfo>
           <SelectBox
             options={availableMonths}
             defaultOption={selectedMonth} // 선택된 달
             size="small"
             onSelect={(selectedValue) => {
-              setSelectedMonth(selectedValue); // 달 선택 시 상태 업데이트
+              setSelectedMonth(selectedValue); // 선택된 달에 따라 상태 변경
             }}
           />
         </InfoWrap>
@@ -181,11 +183,11 @@ const MySalary = () => {
         <CalcWrapper>
           <CalcBox
             type="payments"
-            data={salaryData ? salaryData.payments : []} // 지급 내역
+            data={salaryData ? salaryData.payments : []}
           />
           <CalcBox
             type="deductions"
-            data={salaryData ? salaryData.deductions : []} // 공제 내역
+            data={salaryData ? salaryData.deductions : []}
           />
         </CalcWrapper>
       </ContentBox>

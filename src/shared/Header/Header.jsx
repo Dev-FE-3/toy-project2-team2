@@ -9,6 +9,8 @@ import { updateProfile } from "firebase/auth";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { auth, storage, db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { useSelector, useDispatch } from "react-redux";
+import { selectUserInfo, setUserInfo } from "../../store/userSlice";
 
 const HeaderWrap = styled.div`
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
@@ -55,7 +57,7 @@ const ProfileImg = styled.img`
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  object-fit: cover; // 비율 맞춰 채우기!
+  object-fit: cover;
 `;
 
 const ProfileInput = styled.input`
@@ -70,12 +72,37 @@ const UserWrap = styled.div`
 
 const Header = () => {
   const user = auth.currentUser;
+  const dispatch = useDispatch();
   const [profile, setProfile] = useState(user?.photoURL);
-  const [userInfo, setUserInfo] = useState({
-    name: "anonymous",
-    position: "메이트",
-  });
+  const { name, position } = useSelector(selectUserInfo);
 
+  // 🔥 Firestore에서 사용자 정보 가져와 Redux 업데이트
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (!user) return;
+      try {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const { name, position } = docSnap.data();
+          dispatch(
+            setUserInfo({
+              name: name || "anonymous",
+              position: position || "메이트",
+            })
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+        dispatch(setUserInfo({ name: "anonymous", position: "메이트" }));
+      }
+    };
+
+    fetchUserInfo();
+  }, [user, dispatch]);
+
+  // 🔥 프로필 이미지 가져오기
   useEffect(() => {
     const fetchProfile = async () => {
       if (!user) return;
@@ -85,38 +112,17 @@ const Header = () => {
         );
         setProfile(profileUrl);
       } catch (error) {
-        setProfile(null); // 기본 아이콘으로 설정
-      }
-    };
-
-    const fetchUserInfo = async () => {
-      if (!user) return;
-      try {
-        // Firestore에서 user.uid에 해당하는 사용자 정보 가져오기
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          setUserInfo({
-            name: docSnap.data().name || "anonymous", // 이름이 없다면 "anonymous"
-            position: docSnap.data().position || "메이트", // 직급이 없다면 "메이트"
-          });
-        } else {
-          setUserInfo({ name: "anonymous", position: "메이트" });
-        }
-      } catch (error) {
-        console.error("Error fetching user info:", error);
-        setUserInfo({ name: "anonymous", position: "메이트" });
+        setProfile(null);
       }
     };
 
     fetchProfile();
-    fetchUserInfo();
-  }, [user]); // user가 변경될 때마다 실행
+  }, [user]);
 
+  // 🔥 프로필 사진 변경 처리
   const onProfileChange = async (e) => {
     const { files } = e.target;
-    if (!user || !files?.length) return; // 로그인된 사용자도 없고, 선택한 파일도 없으면 함수 종료
+    if (!user || !files?.length) return;
 
     const file = files[0];
     const locationRef = ref(storage, `profiles/${user.uid}`);
@@ -126,9 +132,8 @@ const Header = () => {
       setProfile(profileUrl);
       await updateProfile(user, { photoURL: profileUrl });
     } catch (error) {
-      setProfile(null); // 기본 아이콘으로 변경
-      // 사용자에게 에러 메시지 표시
-      setError("프로필 사진 업로드에 실패했습니다. 다시 시도해 주세요.");
+      setProfile(null);
+      console.error("프로필 사진 업로드 실패:", error);
     }
   };
 
@@ -141,7 +146,9 @@ const Header = () => {
         <Wrap>
           <Nav />
           <UserWrap>
-            <User>{`${userInfo.name} ・ ${userInfo.position}`}</User>
+            <User>
+              {name} ・ {position}
+            </User>
             <ProfileUpload htmlFor="profile">
               {profile ? (
                 <ProfileImg src={profile} />
