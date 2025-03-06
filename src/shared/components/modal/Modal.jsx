@@ -17,11 +17,8 @@ const Overlay = styled.div`
 const ModalContainer = styled.div`
   background-color: var(--white);
   width: 400px;
-  height: 598px;
   border-radius: 10px;
   border: 1px solid var(--disabled);
-  display: flex;
-  flex-direction: column;
   padding: 30px 28px;
   box-sizing: border-box;
 `;
@@ -38,10 +35,6 @@ const ModalHeader = styled.div`
     font-weight: 700;
     letter-spacing: -0.36px;
   }
-`;
-
-const ModalContent = styled.div`
-  flex-grow: 1;
 `;
 
 const ModalFooter = styled.div`
@@ -64,9 +57,11 @@ const Modal = ({
   content,
   hasSubmitButton,
   deleteButton,
+  SubmitButton,
   isOpen,
   onClose,
-  onSubmit, // 추가된 prop
+  onDelete,
+  onSubmit,
 }) => {
   if (!isOpen) return null;
 
@@ -79,21 +74,18 @@ const Modal = ({
             <CloseIcon src={CancelBtn} alt="닫기" />
           </CloseButton>
         </ModalHeader>
-        <ModalContent>{content}</ModalContent>
+        <div>{content}</div>
         <ModalFooter>
-          <Button size="sm" color="gray" onClick={onClose}>
-            닫기
+          <Button
+            size="sm"
+            color="gray"
+            onClick={deleteButton ? onDelete : onClose}
+          >
+            {deleteButton ? "삭제" : "닫기"}
           </Button>
-          {deleteButton && (
-            <Button size="sm" color="red" onClick={onDelete}>
-              삭제
-            </Button>
-          )}
           {hasSubmitButton && (
             <Button type="submit" size="sm" onClick={onSubmit}>
-              {" "}
-              {/* 수정된 부분 */}
-              신청하기
+              {SubmitButton}
             </Button>
           )}
         </ModalFooter>

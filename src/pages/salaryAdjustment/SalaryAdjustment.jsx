@@ -70,6 +70,14 @@ const Table = styled.table`
       width: 100%;
       table-layout: fixed;
 
+      //내역 확인 hover 속성
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: var(--background-color-3);
+      }
+
       td {
         color: var(--text-disabled);
 
@@ -205,6 +213,7 @@ const ScheduleRegisterButton = ({ userId }) => {
           onSubmit={handleSubmit}
           isOpen={isOpen}
           onClose={onClose}
+          SubmitButton={"등록하기"}
         />
       )}
     </>
@@ -214,6 +223,8 @@ const ScheduleRegisterButton = ({ userId }) => {
 const SalaryAdjustment = () => {
   const [requests, setRequests] = useState([]);
   const [userId, setUserId] = useState(null);
+  const { isOpen, onOpen, onClose } = useModal();
+  const [selectedRequest, setSelectedRequest] = useState(null);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -246,6 +257,12 @@ const SalaryAdjustment = () => {
     return () => unsubscribe();
   }, [userId]);
 
+  const handleRowClick = (request) => {
+    //정정 내역 모달
+    setSelectedRequest(request);
+    onOpen();
+  };
+
   return (
     <>
       <TitleContainer>
@@ -272,7 +289,7 @@ const SalaryAdjustment = () => {
                 .padStart(2, "0")}`;
 
               return (
-                <tr key={index}>
+                <tr key={index} onClick={() => handleRowClick(request)}>
                   <td>{formattedDate}</td>
                   <td>{request.type}</td>
                   <td title={request.reason}>{request.reason}</td>
@@ -291,6 +308,31 @@ const SalaryAdjustment = () => {
           )}
         </tbody>
       </Table>
+
+      {isOpen && selectedRequest && (
+        <Modal
+          title="정정 내역 확인"
+          content={
+            <div>
+              <p>
+                <strong>정정 대상:</strong> {selectedRequest.date}
+              </p>
+              <p>
+                <strong>정정 유형:</strong> {selectedRequest.type}
+              </p>
+              <p>
+                <strong>정정 사유:</strong> {selectedRequest.reason}
+              </p>
+              <p>
+                <strong>처리 상태:</strong> {selectedRequest.status}
+              </p>
+            </div>
+          }
+          hasSubmitButton={false}
+          isOpen={isOpen}
+          onClose={onClose}
+        />
+      )}
     </>
   );
 };
