@@ -40,7 +40,7 @@ const ScheduleRegisterButton = () => {
           hasSubmitButton={true}
           isOpen={isOpen}
           onClose={onClose}
-          SubmitButton="등록하기"
+          submitButton="등록하기"
         />
       )}
     </>
