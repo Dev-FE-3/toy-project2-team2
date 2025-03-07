@@ -56,12 +56,14 @@ const TextArea = ({
   placeholder = "내용을 입력하세요",
   value,
   onChange,
+  rows,
 }) => {
   return (
     <TextBoxWrapper>
       {label && <Label htmlFor={id}>{label}</Label>}
       <TextBoxArea
         id={id}
+        rows={rows}
         maxLength={100} // 우선 100 설정
         disabled={disabled}
         placeholder={placeholder}

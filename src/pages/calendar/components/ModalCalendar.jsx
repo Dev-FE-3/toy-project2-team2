@@ -4,43 +4,28 @@ import TextArea from "../../../shared/components/TextArea";
 import DatePicker from "../../../shared/components/DatePicker";
 import LabelColor from "./LabelColor";
 
-const List = styled.dl`
+const List = styled.ul`
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  gap: 20px;
 
-  dt {
-    width: 20%;
-    margin-top: 20px;
+  & > li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    align-items: center;
 
-    &:first-of-type {
-      margin-top: 0;
-    }
-
-    &:last-of-type {
+    &.textarea {
       width: 100%;
+
+      & > div {
+        width: 100%;
+      }
     }
 
-    label {
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 24px;
+    & > label {
+      min-width: 45px;
       color: var(--text-disabled);
-    }
-  }
-
-  dd {
-    width: 80%;
-    margin-top: 20px;
-
-    &:first-of-type {
-      margin-top: 0;
-    }
-
-    &:last-of-type {
-      width: 100%;
-      height: 118px;
-      margin-top: 16px;
     }
   }
 `
@@ -59,43 +44,35 @@ const ModalCalendar = ({
 }) => {
   return (
     <List>
-      <dt>
-        <label htmlFor="title">제목</label>
-      </dt>
-      <dd>
+      <li>
         <Input
           id="title"
+          label="제목"
           placeholder="제목을 입력해 주세요."
           value={inputValue}
           onChange={(e) => {setInputValue(e.target.value)}}
         />
-      </dd>
-      <dt>
+      </li>
+      <li>
         <label htmlFor="start-date">시작일</label>
-      </dt>
-      <dd>
         <DatePicker
           id="start-date"
           type="date"
           value={startDate}
           onChange={setStartDate}
         />
-      </dd>
-      <dt>
+      </li>
+      <li>
         <label htmlFor="end-date">종료일</label>
-      </dt>
-      <dd>
         <DatePicker
           id="end-date"
           type="date"
           value={endDate}
           onChange={setEndDate}
         />
-      </dd>
-      <dt>
+      </li>
+      <li>
         <label>라벨</label>
-      </dt>
-      <dd>
         <LabelList>
           {["orange", "regular", "red", "green", "blue"].map((color) => (
             <li key={color}>
@@ -107,19 +84,18 @@ const ModalCalendar = ({
             </li>
           ))}
         </LabelList>
-      </dd>
-      <dt>
-        <label htmlFor="contents">내용</label>
-      </dt>
-      <dd>
+      </li>
+      <li className="textarea">
         <TextArea
           id="contents"
+          label="내용"
+          rows="4"
           disabled={false}
           placeholder="내용을 입력해 주세요."
           value={textAreaValue}
           onChange={(e) => {setTextAreaValue(e.target.value)}}
         />
-      </dd>
+      </li>
     </List>
   )
 }
