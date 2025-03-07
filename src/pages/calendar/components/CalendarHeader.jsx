@@ -37,7 +37,7 @@ const StyledCalendarBtn = styled.div`
 const CalendarHeader = ({
   year, month,
   handlePrevMonth, handleNextMonth,
-  handleSubmit, handleDelete,
+  handleSubmit, handleEdit, handleDelete,
   inputValue, setInputValue,
   startDate, setStartDate,
   endDate, setEndDate,
@@ -90,7 +90,7 @@ const CalendarHeader = ({
             setTextAreaValue("");
             onClose();
           }}
-          onSubmit={handleSubmit}
+          onSubmit={selectedSchedule ? () => handleEdit(selectedSchedule) : handleSubmit}
           onDelete={handleDelete}
         />
       )}

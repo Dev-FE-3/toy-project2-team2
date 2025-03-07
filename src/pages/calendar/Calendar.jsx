@@ -5,7 +5,7 @@ import useModal from "../../shared/components/modal/useModal";
 import CalendarHeader from "./components/CalendarHeader";
 import CalendarSchedule from "./components/CalendarSchedule";
 import { db, auth } from "../../shared/firebase";
-import { collection, addDoc, deleteDoc, doc } from "firebase/firestore";
+import { collection, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 
 const StyledCalendarWrapper = styled.div`
   margin-bottom: 82px;
@@ -36,8 +36,8 @@ const StyledCalendarWeek = styled.thead`
 const Calendar = () => {
   // 달력
   const [currentDate, setCurrentDate] = useState(new Date());
-  const year = currentDate.getFullYear(); // 2025
-  const month = currentDate.getMonth(); // 1: 0부터 시작하는 index라서 +1 해줘야 해당 월 나옴
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
   const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
 
   // 모달
@@ -75,7 +75,7 @@ const Calendar = () => {
     }
   
     // 마지막 주 빈칸에 다음 달 날짜 추가
-    let nextMonthDay = 1; // 1일부터 시작하기 위해
+    let nextMonthDay = 1; // 1일부터 시작
     while (calendarDays.length % 7 !== 0) {
       calendarDays.push({
         day: nextMonthDay++,
@@ -105,10 +105,10 @@ const Calendar = () => {
     setCurrentDate(new Date(year, month + 1, 1));
   };
 
+  // 일정 추가
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // firebase로 데이터 추가
     const user = auth.currentUser;
     if (!user) return;
 
@@ -122,7 +122,7 @@ const Calendar = () => {
         userId: user.uid,
       })
     } catch(error) {
-      console.error("내 일정 데이터 저장에 실패했습니다:", error);
+      console.error("일정 추가 실패: ", error);
     }
 
     // 등록 후 초기화
@@ -133,6 +133,29 @@ const Calendar = () => {
     setTextAreaValue("");
 
     // 등록 후 모달 닫기
+    onClose();
+  }
+
+  // 일정 수정
+  const handleEdit = async (schedule) => {
+    const scheduleRef = doc(db, "schedules", schedule.id);
+
+    const user = auth.currentUser;
+    if (!user) return;
+
+    try {
+      await updateDoc(scheduleRef, {
+        title: inputValue,
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+        selectedColor,
+        contents: textAreaValue,
+      });
+    } catch (error) {
+      console.error("일정 수정 실패: ", error);
+    }
+
+    // 수정 후 모달 닫기
     onClose();
   }
 
@@ -149,6 +172,7 @@ const Calendar = () => {
     onOpen();
   };
 
+  // 일정 삭제
   const handleDelete = async () => {
     const ok = confirm("일정을 삭제하시겠습니까?");
     if (!ok || !selectedSchedule?.id) return;
@@ -172,6 +196,7 @@ const Calendar = () => {
           handlePrevMonth={handlePrevMonth}
           handleNextMonth={handleNextMonth}
           handleSubmit={handleSubmit}
+          handleEdit={handleEdit}
           handleDelete={handleDelete}
           selectedSchedule={selectedSchedule}
           inputValue={inputValue}
