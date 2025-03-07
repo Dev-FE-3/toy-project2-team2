@@ -100,6 +100,7 @@ const ScheduleBar = styled.span`
   display: block;
   position: relative;
   width: ${({ colSpan }) => `calc(${colSpan * 100}% + ${(colSpan - 1) * 1}px)`};
+  height: 28px;
   padding: 3px 12px;
   font-size: var(--font-size-title-small);
   font-weight: 700;
@@ -160,32 +161,54 @@ const CalendarSchedule = ({
     d1.getMonth() === d2.getMonth() &&
     d1.getDate() === d2.getDate();
 
+  const getDateOnly = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
   return (
     <StyledCalendarDate>
       {weeks.map((week, weekIndex) => (
         <tr key={weekIndex}>
           {week.map(({ day, isDisabled, date }, dayIndex) => {
-            const daySchedules = schedules.filter((schedule) => {
-              const scheduleStart = schedule.startDate;
-              return isSameDate(scheduleStart, date);
-            });
+            const today = getDateOnly(date);
+
             return (
               <td key={dayIndex} className={isDisabled ? "disabled" : ""}>
                 <span className="date" dateTime={`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`}>
                   {day}
                 </span>
-                {daySchedules.map((schedule) => {
+
+                {schedules.map((schedule) => {
+                  const start = getDateOnly(schedule.startDate);
+                  const end = getDateOnly(schedule.endDate);
+
+                  const isInThisWeek = week.some(({ date: d }) => {
+                    const current = getDateOnly(d);
+                    return current >= start && current <= end;
+                  });
+
+                  if (!isInThisWeek) return null;
+
+                  const firstDayInWeek = week.find(({ date: d }) => {
+                    const current = getDateOnly(d);
+                    return current >= start && current <= end;
+                  });
+
+                  const isFirstWeek = week.some(({ date: d }) => isSameDate(d, start));
+
+                  if (!isSameDate(today, getDateOnly(firstDayInWeek.date))) return null;
+
                   const colSpan = week.reduce((count, { date: d }) => {
-                    return d >= schedule.startDate && d <= schedule.endDate ? count + 1 : count;
-                  }, 1);
+                    const current = getDateOnly(d);
+                    return current >= start && current <= end ? count + 1 : count;
+                  }, 0);
+
                   return (
                     <ScheduleBar
-                      key={schedule.id}
+                      key={schedule.id + (isFirstWeek ? '-title' : '-empty')}
                       colSpan={colSpan}
                       color={schedule.selectedColor}
                       onClick={() => handleScheduleClick(schedule)}
                     >
-                      {schedule.title}
+                      {isFirstWeek ? schedule.title : ''}
                     </ScheduleBar>
                   );
                 })}
