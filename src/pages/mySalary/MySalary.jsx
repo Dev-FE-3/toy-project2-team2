@@ -12,7 +12,7 @@ import {
 import { useState, useEffect } from "react";
 import SelectBox from "../../shared/components/SelectBox";
 import { useSelector, useDispatch } from "react-redux";
-import { setUserInfo } from "../../store/userSlice"; // 액션 임포트
+import { selectUserInfo, setUserInfo } from "../../store/userSlice";
 
 const ContentBox = styled.div`
   margin-top: 30px;
@@ -67,7 +67,7 @@ const Right = styled.span`
 
 const MySalary = () => {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.user); // Redux에서 userInfo 가져오기
+  const userInfo = useSelector(selectUserInfo); // Redux 상태에서 바로 가져오기
   const [salaryData, setSalaryData] = useState(null);
   //const [userInfo, setUserInfo] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState("2025년 2월");
@@ -102,20 +102,24 @@ const MySalary = () => {
       setSelectedMonth(sortedMonths[0] || ""); // 최신 월을 기본 선택
     }; // 전체 추가
 
-    // 사용자 데이터 가져오기
+    // 사용자 데이터 가져오기 (단, Redux에 데이터가 없을 때만 Firebase 요청)
     const fetchUserData = async () => {
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
+      if (!userInfo) {
+        // Redux에 userInfo가 없을 때만 Firebase 요청
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
-        dispatch(setUserInfo(docSnap.data())); // Redux에서 userInfo 업데이트
-      } else {
-        console.log("사용자 데이터가 없습니다.");
+        if (docSnap.exists()) {
+          dispatch(setUserInfo(docSnap.data())); // Redux에서 userInfo 업데이트
+          console.log("사용자 데이터를 다시 받아왔습니다.");
+        } else {
+          console.log("사용자 데이터가 없습니다.");
+        }
       }
     };
     fetchAvailableMonths();
     fetchUserData();
-  }, [user, dispatch]); //[user, selectedMonth] selectedMonth가 변경될 때마다 급여 데이터도 새로 불러옴
+  }, [user, userInfo, dispatch]); // userInfo가 변경될 때만 Redux 요청
 
   const fetchSalaryData = async (month) => {
     if (!month) return;
@@ -141,7 +145,7 @@ const MySalary = () => {
 
   if (!salaryData || !userInfo) return <div>로딩 중...</div>;
 
-  const { employeeId, name, location, position, hiredDate } = userInfo || {};
+  const { employeeId, name, location, position, hiredDate } = userInfo;
 
   // 입사일 포맷팅
   const formattedHiredDate = hiredDate

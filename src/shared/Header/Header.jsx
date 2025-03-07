@@ -9,9 +9,8 @@ import { updateProfile } from "firebase/auth";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { auth, storage, db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
-import { useSelector } from "react-redux";
 import { selectUserInfo, setUserInfo } from "../../store/userSlice";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const HeaderWrap = styled.div`
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
@@ -77,33 +76,37 @@ const Header = () => {
   const [profile, setProfile] = useState(user?.photoURL);
   const { name, position } = useSelector(selectUserInfo);
 
-  // 🔥 Firestore에서 사용자 정보 가져와 Redux 업데이트
+  // Firestore에서 사용자 정보 가져와 Redux 업데이트 (단, Redux에 데이터가 없을 때만 Firebase 요청)
   useEffect(() => {
     const fetchUserInfo = async () => {
       if (!user) return;
-      try {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
+      // Redux 상태에 사용자 정보가 없다면 Firebase에서 가져오기
+      if (!name || !position) {
+        try {
+          const docRef = doc(db, "users", user.uid);
+          const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-          const { name, position } = docSnap.data();
-          dispatch(
-            setUserInfo({
-              name: name || "anonymous",
-              position: position || "메이트",
-            })
-          );
+          if (docSnap.exists()) {
+            const { name, position } = docSnap.data();
+            dispatch(
+              setUserInfo({
+                name: name || "anonymous",
+                position: position || "메이트",
+              })
+            );
+            console.log("사용자 데이터를 다시 받아왔습니다.");
+          }
+        } catch (error) {
+          console.error("Error fetching user info:", error);
+          dispatch(setUserInfo({ name: "anonymous", position: "메이트" }));
         }
-      } catch (error) {
-        console.error("Error fetching user info:", error);
-        dispatch(setUserInfo({ name: "anonymous", position: "메이트" }));
       }
     };
 
     fetchUserInfo();
-  }, [user, dispatch]);
+  }, [user, dispatch, name, position]); // name, position 값이 없을 때만 Firebase에서 불러오기
 
-  // 🔥 프로필 이미지 가져오기
+  // 프로필 이미지 가져오기
   useEffect(() => {
     const fetchProfile = async () => {
       if (!user) return;
@@ -120,7 +123,7 @@ const Header = () => {
     fetchProfile();
   }, [user]);
 
-  // 🔥 프로필 사진 변경 처리
+  // 프로필 사진 변경 처리
   const onProfileChange = async (e) => {
     const { files } = e.target;
     if (!user || !files?.length) return;
