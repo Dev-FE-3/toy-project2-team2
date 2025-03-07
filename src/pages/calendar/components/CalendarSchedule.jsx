@@ -96,8 +96,10 @@ const slideIn = keyframes`
   }
 `
 
-const Schedule = styled.span`
+const ScheduleBar = styled.span`
   display: block;
+  position: relative;
+  width: ${({ colSpan }) => `calc(${colSpan * 100}% + ${(colSpan - 1) * 1}px)`};
   padding: 3px 12px;
   font-size: var(--font-size-title-small);
   font-weight: 700;
@@ -152,32 +154,41 @@ const CalendarSchedule = ({
     });
     return () => unsubscribe();
   }, [])
+
+  const isSameDate = (d1, d2) =>
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate();
+
   return (
     <StyledCalendarDate>
       {weeks.map((week, weekIndex) => (
         <tr key={weekIndex}>
           {week.map(({ day, isDisabled, date }, dayIndex) => {
-            const getDateOnly = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
-            const todaySchedules = schedules.filter((schedule) => {
-              const scheduleStart = getDateOnly(schedule.startDate);
-              const scheduleEnd = getDateOnly(schedule.endDate);
-              const currentDate = getDateOnly(date);
-              return currentDate >= scheduleStart && currentDate <= scheduleEnd;
+            const daySchedules = schedules.filter((schedule) => {
+              const scheduleStart = schedule.startDate;
+              return isSameDate(scheduleStart, date);
             });
             return (
               <td key={dayIndex} className={isDisabled ? "disabled" : ""}>
                 <span className="date" dateTime={`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`}>
                   {day}
                 </span>
-                {todaySchedules.map((schedule) => (
-                  <Schedule
-                    key={schedule.id}
-                    color={schedule.selectedColor}
-                    onClick={() => handleScheduleClick(schedule)}
-                  >
-                    {schedule.title}
-                  </Schedule>
-                ))}
+                {daySchedules.map((schedule) => {
+                  const colSpan = week.reduce((count, { date: d }) => {
+                    return d >= schedule.startDate && d <= schedule.endDate ? count + 1 : count;
+                  }, 1);
+                  return (
+                    <ScheduleBar
+                      key={schedule.id}
+                      colSpan={colSpan}
+                      color={schedule.selectedColor}
+                      onClick={() => handleScheduleClick(schedule)}
+                    >
+                      {schedule.title}
+                    </ScheduleBar>
+                  );
+                })}
               </td>
             );
           })}
