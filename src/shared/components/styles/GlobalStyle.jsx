@@ -42,6 +42,7 @@ const GlobalStyle = createGlobalStyle`
 		--font-size-title-small: 18px;
 		--font-size-primary: 16px;
 		--font-size-small: 14px;
+		--font-size-caption: 12px;
 	}
 
 	// reset css
@@ -60,8 +61,8 @@ const GlobalStyle = createGlobalStyle`
 
 	body {
 		font-family: 'Noto Sans KR', sans-serif;
-	}
-  
+  }
+
 	input {
     all: unset; // 기본 스타일 제거
     box-sizing: border-box;

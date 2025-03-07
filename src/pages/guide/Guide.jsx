@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "../../shared/components/Button";
 import TextArea from "../../shared/components/TextArea";
 import Input from "../../shared/components/Input";
-import LoginInput from "../login/LoginInput";
+import LoginInput from "../auth/components/LoginInput";
 import PageTitle from "../../shared/components/PageTitle";
 import SelectBox from "../../shared/components/SelectBox";
 import DatePicker from "../../shared/components/DatePicker";
@@ -40,6 +40,7 @@ const ScheduleRegisterButton = () => {
           hasSubmitButton={true}
           isOpen={isOpen}
           onClose={onClose}
+          SubmitButton="등록하기"
         />
       )}
     </>
@@ -99,14 +100,6 @@ const Guide = () => {
     setIsSubmitted(false);
   };
 
-  const handleFullDateChange = (date) => {
-    setFullDate(date);
-  };
-
-  const handleYearMonthChange = (date) => {
-    setYearMonth(date);
-  };
-
   return (
     <>
       <h1>1. page title</h1>
@@ -137,8 +130,12 @@ const Guide = () => {
         placeholder="라벨 쓸 때"
         onChange={(e) => setInputValue(e.target.value)}
       />
-      <Button onClick={handleSubmit} disabled={isSubmitted}>제출</Button>
-      <Button onClick={handleEdit} color="gray">수정하기</Button>
+      <Button onClick={handleSubmit} disabled={isSubmitted}>
+        제출
+      </Button>
+      <Button onClick={handleEdit} color="gray">
+        수정하기
+      </Button>
 
       <h1>4. LoginInput</h1>
       <LoginInput placeholder="login input 입니다" />
@@ -153,9 +150,13 @@ const Guide = () => {
         placeholder="내용을 입력하세요"
         onChange={(e) => setInputValue(e.target.value)}
       />
-      <Button onClick={handleSubmit} disabled={isSubmitted}>제출</Button>
-      <Button onClick={handleEdit} color="gray">수정하기</Button>
-      
+      <Button onClick={handleSubmit} disabled={isSubmitted}>
+        제출
+      </Button>
+      <Button onClick={handleEdit} color="gray">
+        수정하기
+      </Button>
+
       <h1>6. Select box</h1>
       <SelectBox
         options={leaveOptions}
