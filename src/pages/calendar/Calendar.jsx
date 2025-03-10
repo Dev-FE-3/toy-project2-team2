@@ -1,9 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
 import PageTitle from "../../shared/components/PageTitle";
-import useModal from "../../shared/components/modal/useModal";
 import CalendarHeader from "./components/CalendarHeader";
 import CalendarSchedule from "./components/CalendarSchedule";
+import useModal from "../../shared/components/modal/useModal";
+import Modal from "./../../shared/components/modal/Modal";
+import ModalCalendar from "./components/ModalCalendar";
 import { db, auth } from "../../shared/firebase";
 import { collection, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 
@@ -41,7 +43,7 @@ const Calendar = () => {
   const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
 
   // 모달
-  const { isOpen, onOpen, onClose, onDelete, onEdit } = useModal();
+  const { isOpen, onOpen, onClose } = useModal();
   const [inputValue, setInputValue] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -205,29 +207,47 @@ const Calendar = () => {
           month={month}
           handlePrevMonth={handlePrevMonth}
           handleNextMonth={handleNextMonth}
-          handleSubmit={handleSubmit}
-          handleSave={handleSave}
-          handleDelete={handleDelete}
-          selectedSchedule={selectedSchedule}
-          inputValue={inputValue}
-          setInputValue={setInputValue}
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
-          selectedColor={selectedColor}
-          setSelectedColor={setSelectedColor}
-          textAreaValue={textAreaValue}
-          setTextAreaValue={setTextAreaValue}
-          setSelectedSchedule={setSelectedSchedule}
-          isOpen={isOpen}
           onOpen={onOpen}
-          onClose={onClose}
-          isSubmitted={isSubmitted}
-          setIsSubmitted={setIsSubmitted}
-          handleEdit={handleEdit}
-          onEdit={onEdit}
         />
+        {isOpen && (
+          <Modal
+            title={selectedSchedule ? "일정 상세" : "일정 등록"}
+            content={
+              <ModalCalendar
+                inputValue={inputValue}
+                setInputValue={setInputValue}
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
+                selectedColor={selectedColor}
+                setSelectedColor={setSelectedColor}
+                textAreaValue={textAreaValue}
+                setTextAreaValue={setTextAreaValue}
+                isSubmitted={isSubmitted}
+              />
+            }
+            isDeleteButton={selectedSchedule ? true : false}
+            hasSubmitButton={true}
+            submitButton={selectedSchedule ? (isSubmitted ? "수정하기" : "저장하기") : "등록하기"}
+            onSubmit={selectedSchedule ? () => handleSave(selectedSchedule) : handleSubmit}
+            onDelete={handleDelete}
+            isEdit={isSubmitted ? true : false}
+            onEdit={handleEdit}
+            isOpen={isOpen}
+            onClose={() => {
+              // 모달 닫힐 때 초기화
+              setSelectedSchedule(null);
+              setInputValue("");
+              setStartDate(new Date());
+              setEndDate(new Date());
+              setSelectedColor("orange");
+              setTextAreaValue("");
+              setIsSubmitted(false);
+              onClose();
+            }}
+          />
+        )}
         <StyledCalendar>
           <StyledCalendarWeek>
             <tr>
