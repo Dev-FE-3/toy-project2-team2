@@ -108,6 +108,20 @@ const Calendar = () => {
     setCurrentDate(new Date(year, month + 1, 1));
   };
 
+  const handleModalClose = () => {
+    // 상태 초기화
+    setSelectedSchedule(null);
+    setInputValue("");
+    setStartDate(new Date());
+    setEndDate(new Date());
+    setSelectedColor("orange");
+    setTextAreaValue("");
+    setIsSubmitted(false);
+
+    // 모달 닫기
+    onClose();
+  };
+
   // 일정 추가
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -128,16 +142,7 @@ const Calendar = () => {
       console.error("일정 추가 실패: ", error);
     }
 
-    // 등록 후 초기화
-    setIsSubmitted(false);
-    setInputValue("");
-    setStartDate(new Date());
-    setEndDate(new Date());
-    setSelectedColor("orange");
-    setTextAreaValue("");
-
-    // 등록 후 모달 닫기
-    onClose();
+    handleModalClose();
   }
 
   // 일정 수정 가능 상태
@@ -165,7 +170,7 @@ const Calendar = () => {
     }
 
     // 수정 후 모달 닫기
-    onClose();
+    handleModalClose();
   }
 
   const handleScheduleClick = (schedule) => {
@@ -192,7 +197,7 @@ const Calendar = () => {
     try {
       await deleteDoc(doc(db, "schedules", selectedSchedule.id));
 
-      onClose();
+      handleModalClose();
     } catch (e) {
       console.log(e);
     }
@@ -232,17 +237,7 @@ const Calendar = () => {
             onEdit={isSubmitted ? handleEdit : null}
             onDelete={selectedSchedule ? handleDelete : null}
             isOpen={isOpen}
-            onClose={() => {
-              // 모달 닫힐 때 초기화
-              setSelectedSchedule(null);
-              setInputValue("");
-              setStartDate(new Date());
-              setEndDate(new Date());
-              setSelectedColor("orange");
-              setTextAreaValue("");
-              setIsSubmitted(false);
-              onClose();
-            }}
+            onClose={handleModalClose}
           />
         )}
         <StyledCalendar>
