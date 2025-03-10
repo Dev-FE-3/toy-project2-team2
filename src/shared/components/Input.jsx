@@ -50,6 +50,8 @@ const Input = ({
   isSubmitted,
   placeholder = "필요에 의한 내용을 바꿔주세요",
   onChange,
+  value,
+  onKeyDown,
 }) => {
   return (
     <>
@@ -60,6 +62,8 @@ const Input = ({
         placeholder={placeholder}
         onChange={onChange}
         $issubmitted={isSubmitted} // 여기서 'issubmitted'로 전달!!!
+        value={value}
+        onKeyDown={onKeyDown} // 여기서 onKeyDown 전달
       />
     </>
   );
