@@ -23,6 +23,8 @@ import PageTitle from "../../shared/components/PageTitle";
 import Button from "../../shared/components/Button";
 import styled from "styled-components";
 import SelectBox from "../../shared/components/SelectBox";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "../../store/userSlice";
 
 const UserInfoWrapper = styled.div`
   gap: 20px;
@@ -44,6 +46,8 @@ const InputBox = styled.div`
 `;
 
 const Signup = () => {
+  const dispatch = useDispatch();
+
   const placeholder = {
     location: "지점 선택",
     position: "직급 선택",
@@ -156,6 +160,8 @@ const Signup = () => {
         userData.email,
         userData.password
       );
+      const user = auth.currentUser; // 회원가입 후 로그인된 상태에서 auth.currentUser가 존재
+
       await setDoc(doc(db, "users", auth.currentUser.uid), {
         employeeId: randomNum,
         hiredDate: Timestamp.now(),
@@ -163,6 +169,20 @@ const Signup = () => {
         name: userData.name,
         position: userData.position,
       });
+
+      // Firebase에서 로그인된 유저 정보를 Redux 상태에 저장
+      dispatch(
+        setUserInfo({
+          uid: user.uid,
+          email: user.email,
+          name: userData.name,
+          location: userData.location,
+          position: userData.position,
+          hiredDate: Timestamp.now(),
+          employeeId: randomNum,
+        })
+      );
+
       alert(`${userData.name} 님 회원이 되신 것을 환영합니다.`);
       navigate("/");
     } catch (e) {
