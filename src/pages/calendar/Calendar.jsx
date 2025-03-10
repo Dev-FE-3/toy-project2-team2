@@ -9,14 +9,14 @@ import { collection, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestor
 
 const StyledCalendarWrapper = styled.div`
   margin-bottom: 82px;
-`
+`;
 
 const StyledCalendar = styled.table`
   table-layout: fixed;
   width: 100%;
   border-radius: 8px;
   background-color: var(--white);
-`
+`;
 
 const StyledCalendarWeek = styled.thead`
   tr {
@@ -31,7 +31,7 @@ const StyledCalendarWeek = styled.thead`
       border: 1px solid var(--regular-bg);
     }
   }
-`
+`;
 
 const Calendar = () => {
   // 달력
@@ -55,7 +55,7 @@ const Calendar = () => {
     const daysInMonth = new Date(year, month + 1, 0).getDate(); // 이번 달의 총 일 수
     const prevMonthDays = new Date(year, month, 0).getDate(); // 이전 달의 총 일 수
     const calendarDays = [];
-  
+
     // 첫 주 빈칸에 이전 달 날짜 추가
     for (let i = firstDayOfMonth - 1; i >= 0; i--) {
       calendarDays.push({
@@ -64,7 +64,7 @@ const Calendar = () => {
         date: new Date(year, month - 1, prevMonthDays - i),
       });
     }
-  
+
     // 이번 달 날짜 추가
     for (let i = 1; i <= daysInMonth; i++) {
       calendarDays.push({
@@ -73,7 +73,7 @@ const Calendar = () => {
         date: new Date(year, month, i),
       });
     }
-  
+
     // 마지막 주 빈칸에 다음 달 날짜 추가
     let nextMonthDay = 1; // 1일부터 시작
     while (calendarDays.length % 7 !== 0) {
@@ -83,13 +83,13 @@ const Calendar = () => {
         date: new Date(year, month + 1, nextMonthDay - 1),
       });
     }
-  
+
     // 7일씩 나누어 배열 생성
     const weeks = [];
     for (let i = 0; i < calendarDays.length; i += 7) {
       weeks.push(calendarDays.slice(i, i + 7));
     }
-  
+
     return weeks;
   };
 
@@ -167,7 +167,7 @@ const Calendar = () => {
     setEndDate(new Date(schedule.endDate));
     setSelectedColor(schedule.selectedColor);
     setTextAreaValue(schedule.contents);
-    
+
     // 모달 열기
     onOpen();
   };
@@ -184,7 +184,7 @@ const Calendar = () => {
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   return (
     <>
@@ -232,4 +232,4 @@ const Calendar = () => {
   );
 };
 
-export default Calendar
+export default Calendar;

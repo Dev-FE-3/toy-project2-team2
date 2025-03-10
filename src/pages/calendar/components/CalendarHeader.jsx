@@ -76,9 +76,9 @@ const CalendarHeader = ({
               setTextAreaValue={setTextAreaValue}
             />
           }
-          deleteButton={selectedSchedule ? true : false}
+          isDeleteButton={selectedSchedule ? true : false}
           hasSubmitButton={true}
-          SubmitButton={selectedSchedule ? "수정하기" : "등록하기"}
+          submitButton={selectedSchedule ? "수정하기" : "등록하기"}
           isOpen={isOpen}
           onClose={() => {
             // 모달 닫힐 때 초기화

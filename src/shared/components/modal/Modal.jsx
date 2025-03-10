@@ -53,7 +53,7 @@ const CloseIcon = styled.img`
   height: 18px;
 `;
 
-const Modal = ({ title, content, hasSubmitButton, deleteButton, SubmitButton, isOpen, onClose, onDelete, onSubmit }) => {
+const Modal = ({ title, content, hasSubmitButton, isDeleteButton, submitButton, isOpen, onClose, onDelete, onSubmit }) => {
   if (!isOpen) return null;
 
   return (
@@ -67,10 +67,10 @@ const Modal = ({ title, content, hasSubmitButton, deleteButton, SubmitButton, is
         </ModalHeader>
         <div>{content}</div>
         <ModalFooter>
-          <Button size="sm" color="gray" onClick={deleteButton ? onDelete : onClose}>
-            {deleteButton ? "삭제" : "닫기"}
+          <Button size="sm" color="gray" onClick={isDeleteButton ? onDelete : onClose}>
+            {isDeleteButton ? "삭제" : "닫기"}
           </Button>
-          {hasSubmitButton && <Button type="submit" size="sm" onClick={onSubmit}>{SubmitButton}</Button>}
+          {hasSubmitButton && <Button type="submit" size="sm" onClick={onSubmit}>{submitButton}</Button>}
         </ModalFooter>
       </ModalContainer>
     </Overlay>

@@ -45,6 +45,7 @@ const TextBoxArea = styled.textarea`
   &:disabled {
     background-color: var(--white);
     pointer-events: none;
+    color: var(--disabled);
   }
 `;
 

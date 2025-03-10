@@ -20,8 +20,15 @@ import {
 import LoginInput from "./components/LoginInput";
 import Button from "../../shared/components/Button";
 import PageTitle from "../../shared/components/PageTitle";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "../../store/userSlice";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../shared/firebase";
+import { Timestamp } from "firebase/firestore";
 
 const Login = () => {
+  const dispatch = useDispatch(); // 추가
+
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -61,9 +68,36 @@ const Login = () => {
     if (isLoading || !email || !password) return;
     try {
       setIsLoading(true);
-      await signInWithEmailAndPassword(auth, email, password);
+      //await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      ); // userCredential 변수 할당
+      const user = userCredential.user; // user 추출
+
+      // Firestore에서 해당 유저의 정보 가져오기
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        let userData = docSnap.data();
+
+        if (userData.hiredDate instanceof Timestamp) {
+          userData.hiredDate = new Date(
+            userData.hiredDate.seconds * 1000
+          ).toISOString();
+        }
+
+        // Redux에 전체 정보 저장
+        dispatch(setUserInfo({ uid: user.uid, ...userData }));
+      } else {
+        console.warn("사용자 정보가 Firestore에 없음.");
+      }
+
       navigate("/");
     } catch (e) {
+      console.error("로그인 실패:", e); // 🔥 에러 로그 확인
       if (e instanceof FirebaseError) {
         const errorInfo = authErrors[e.code];
         if (errorInfo) {
