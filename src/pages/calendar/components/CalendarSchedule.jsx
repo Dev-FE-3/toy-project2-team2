@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { db } from "../../../shared/firebase";
-import { collection, onSnapshot, query } from "firebase/firestore";
+import { db, auth } from "../../../shared/firebase";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 
 const StyledCalendarDate = styled.tbody`
   tr {
@@ -137,7 +137,14 @@ const CalendarSchedule = ({
   const [schedules, setSchedules] = useState([]);
 
   useEffect(() => {
-    const schedulesQuery = query(collection(db, "schedules"));
+    const user = auth.currentUser;
+    if (!user) return;
+  
+    // 현재 로그인한 유저의 일정만 가져옴
+    const schedulesQuery = query(collection(db, "schedules"),
+      where("userId", "==", user.uid)
+    );
+  
     const unsubscribe = onSnapshot(schedulesQuery, (snapshot) => {
       const schedules = snapshot.docs.map((doc) => {
         const { userId, title, startDate, endDate, selectedColor, contents } = doc.data();
