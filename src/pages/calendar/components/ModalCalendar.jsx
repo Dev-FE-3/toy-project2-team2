@@ -41,6 +41,7 @@ const ModalCalendar = ({
   endDate, setEndDate,
   selectedColor, setSelectedColor,
   textAreaValue, setTextAreaValue,
+  isSubmitted
 }) => {
   return (
     <List>
@@ -51,6 +52,7 @@ const ModalCalendar = ({
           placeholder="제목을 입력해 주세요."
           value={inputValue}
           onChange={(e) => {setInputValue(e.target.value)}}
+          isSubmitted={isSubmitted}
         />
       </li>
       <li>
@@ -60,6 +62,7 @@ const ModalCalendar = ({
           type="date"
           value={startDate}
           onChange={setStartDate}
+          isSubmitted={isSubmitted}
         />
       </li>
       <li>
@@ -69,6 +72,7 @@ const ModalCalendar = ({
           type="date"
           value={endDate}
           onChange={setEndDate}
+          isSubmitted={isSubmitted}
         />
       </li>
       <li>
@@ -80,6 +84,7 @@ const ModalCalendar = ({
                 color={color}
                 selectedColor={selectedColor}
                 onSelect={setSelectedColor}
+                isSubmitted={isSubmitted}
               />
             </li>
           ))}
@@ -94,6 +99,7 @@ const ModalCalendar = ({
           placeholder="내용을 입력해 주세요."
           value={textAreaValue}
           onChange={(e) => {setTextAreaValue(e.target.value)}}
+          isSubmitted={isSubmitted}
         />
       </li>
     </List>

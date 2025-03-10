@@ -21,6 +21,12 @@ const DatePickerWrapper = styled.div`
   line-height: 24px;
   letter-spacing: 0%;
   cursor: pointer;
+
+  ${(props) =>
+    props.$issubmitted &&
+    `
+      pointer-events: none;
+    `}
 `;
 
 const CustomInputWrapper = styled.div`
@@ -95,9 +101,9 @@ const CustomInput = React.forwardRef(({ value, onClick, ...rest }, ref) => {
   );
 });
 
-const DatePicker = ({ type = "date", value = new Date(), onChange }) => {
+const DatePicker = ({ type = "date", value = new Date(), onChange, isSubmitted }) => {
   return (
-    <DatePickerWrapper $type={type}>
+    <DatePickerWrapper $type={type} $issubmitted={isSubmitted}>
       <ReactDatePicker
         selected={value}
         onChange={onChange}

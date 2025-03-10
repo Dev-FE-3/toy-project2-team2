@@ -41,13 +41,14 @@ const Calendar = () => {
   const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
 
   // 모달
-  const { isOpen, onOpen, onClose, onDelete } = useModal();
+  const { isOpen, onOpen, onClose, onDelete, onEdit } = useModal();
   const [inputValue, setInputValue] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [selectedColor, setSelectedColor] = useState("orange");
   const [textAreaValue, setTextAreaValue] = useState("");
   const [selectedSchedule, setSelectedSchedule] = useState(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   // 달력 생성
   const generateCalendarDays = (year, month) => {
@@ -126,6 +127,7 @@ const Calendar = () => {
     }
 
     // 등록 후 초기화
+    setIsSubmitted(false);
     setInputValue("");
     setStartDate(new Date());
     setEndDate(new Date());
@@ -136,8 +138,13 @@ const Calendar = () => {
     onClose();
   }
 
-  // 일정 수정
-  const handleEdit = async (schedule) => {
+  // 일정 수정 가능 상태
+  const handleEdit = () => {
+    setIsSubmitted(false);
+  }
+
+  // 일정 수정 후 저장
+  const handleSave = async (schedule) => {
     const scheduleRef = doc(db, "schedules", schedule.id);
 
     const user = auth.currentUser;
@@ -168,6 +175,9 @@ const Calendar = () => {
     setSelectedColor(schedule.selectedColor);
     setTextAreaValue(schedule.contents);
 
+    // 수정 비활성화
+    setIsSubmitted(true);
+
     // 모달 열기
     onOpen();
   };
@@ -196,7 +206,7 @@ const Calendar = () => {
           handlePrevMonth={handlePrevMonth}
           handleNextMonth={handleNextMonth}
           handleSubmit={handleSubmit}
-          handleEdit={handleEdit}
+          handleSave={handleSave}
           handleDelete={handleDelete}
           selectedSchedule={selectedSchedule}
           inputValue={inputValue}
@@ -213,6 +223,10 @@ const Calendar = () => {
           isOpen={isOpen}
           onOpen={onOpen}
           onClose={onClose}
+          isSubmitted={isSubmitted}
+          setIsSubmitted={setIsSubmitted}
+          handleEdit={handleEdit}
+          onEdit={onEdit}
         />
         <StyledCalendar>
           <StyledCalendarWeek>

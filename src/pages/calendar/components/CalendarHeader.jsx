@@ -37,14 +37,15 @@ const StyledCalendarBtn = styled.div`
 const CalendarHeader = ({
   year, month,
   handlePrevMonth, handleNextMonth,
-  handleSubmit, handleEdit, handleDelete,
+  handleSubmit, handleSave, handleDelete, handleEdit,
   inputValue, setInputValue,
   startDate, setStartDate,
   endDate, setEndDate,
   selectedColor, setSelectedColor,
   textAreaValue, setTextAreaValue,
   selectedSchedule, setSelectedSchedule,
-  isOpen, onOpen, onClose,
+  isOpen, onOpen, onClose, onEdit,
+  isSubmitted, setIsSubmitted,
 }) => {
 
   return (
@@ -74,11 +75,12 @@ const CalendarHeader = ({
               setSelectedColor={setSelectedColor}
               textAreaValue={textAreaValue}
               setTextAreaValue={setTextAreaValue}
+              isSubmitted={isSubmitted}
             />
           }
           isDeleteButton={selectedSchedule ? true : false}
           hasSubmitButton={true}
-          submitButton={selectedSchedule ? "수정하기" : "등록하기"}
+          submitButton={selectedSchedule ? (isSubmitted ? "수정하기" : "저장하기") : "등록하기"}
           isOpen={isOpen}
           onClose={() => {
             // 모달 닫힐 때 초기화
@@ -88,10 +90,13 @@ const CalendarHeader = ({
             setEndDate(new Date());
             setSelectedColor("orange");
             setTextAreaValue("");
+            setIsSubmitted(false);
             onClose();
           }}
-          onSubmit={selectedSchedule ? () => handleEdit(selectedSchedule) : handleSubmit}
+          onSubmit={selectedSchedule ? () => handleSave(selectedSchedule) : handleSubmit}
           onDelete={handleDelete}
+          isEdit={isSubmitted ? true : false}
+          onEdit={handleEdit}
         />
       )}
     </StyledCalendarTop>
