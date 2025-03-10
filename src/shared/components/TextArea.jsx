@@ -11,6 +11,12 @@ const Label = styled.label`
   color: var(--text-disabled);
   display: block;
   margin-bottom: 16px;
+
+  ${(props) =>
+    props.$issubmitted &&
+    `
+      pointer-events: none;
+    `}
 `;
 
 const TextBoxArea = styled.textarea`
@@ -61,7 +67,7 @@ const TextArea = ({
 }) => {
   return (
     <TextBoxWrapper>
-      {label && <Label htmlFor={id}>{label}</Label>}
+      {label && <Label htmlFor={id} $issubmitted={isSubmitted}>{label}</Label>}
       <TextBoxArea
         id={id}
         rows={rows}
