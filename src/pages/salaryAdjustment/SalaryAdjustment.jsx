@@ -205,7 +205,7 @@ const ScheduleRegisterButton = ({ userId }) => {
           onSubmit={handleSubmit}
           isOpen={isOpen}
           onClose={onClose}
-          SubmitButton={"등록하기"}
+          submitButton={"등록하기"}
         />
       )}
     </>
