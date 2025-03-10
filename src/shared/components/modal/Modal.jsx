@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import Button from "./button/Button";
-import CancelBtn from "../../assets/images/cancel.svg";
+import Button from "../Button";
+import CancelBtn from "/images/cancel.svg";
 
 const Overlay = styled.div`
   position: fixed;
@@ -17,11 +17,8 @@ const Overlay = styled.div`
 const ModalContainer = styled.div`
   background-color: var(--white);
   width: 400px;
-  height: 598px;
   border-radius: 10px;
   border: 1px solid var(--disabled);
-  display: flex;
-  flex-direction: column;
   padding: 30px 28px;
   box-sizing: border-box;
 `;
@@ -40,10 +37,6 @@ const ModalHeader = styled.div`
   }
 `;
 
-const ModalContent = styled.div`
-  flex-grow: 1;
-`;
-
 const ModalFooter = styled.div`
   display: flex;
   margin-top: 40px;
@@ -59,22 +52,24 @@ const CloseIcon = styled.img`
   height: 18px;
 `;
 
-const Modal = ({ title, content, hasSubmitButton, onClose }) => {
+const Modal = ({ title, content, hasSubmitButton, isDeleteButton, submitButton, isOpen, onClose, onDelete, onSubmit }) => {
+  if (!isOpen) return null;
+
   return (
-    <Overlay>
-      <ModalContainer>
+    <Overlay onClick={onClose}>
+      <ModalContainer onClick={(e) => e.stopPropagation()}>
         <ModalHeader>
           <h1>{title}</h1>
           <CloseButton onClick={onClose}>
             <CloseIcon src={CancelBtn} alt="닫기" />
           </CloseButton>
         </ModalHeader>
-        <ModalContent>{content}</ModalContent>
+        <div>{content}</div>
         <ModalFooter>
-          <Button size="sm" color="gray" onClick={onClose}>
-            닫기
+          <Button size="sm" color="gray" onClick={isDeleteButton ? onDelete : onClose}>
+            {isDeleteButton ? "삭제" : "닫기"}
           </Button>
-          {hasSubmitButton && <Button size="sm">등록하기</Button>}
+          {hasSubmitButton && <Button type="submit" size="sm" onClick={onSubmit}>{submitButton}</Button>}
         </ModalFooter>
       </ModalContainer>
     </Overlay>

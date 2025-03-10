@@ -25,14 +25,12 @@ const StyledButton = styled.button`
   }
 `
 
-const Button = ({ color, size, children, ...props }) => {
-	return (
-		<>
-			<StyledButton color={color} size={size} {...props}>
-				{children}
-			</StyledButton>
-		</>
-	)
+const Button = ({ color, size, type="button", children, ...props }) => {
+  return (
+    <StyledButton color={color} size={size} type={type} {...props}>
+      {children}
+    </StyledButton>
+  )
 }
 
 export default Button
