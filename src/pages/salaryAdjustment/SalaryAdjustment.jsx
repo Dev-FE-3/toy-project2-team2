@@ -16,6 +16,9 @@ import DatePicker from "../../shared/components/DatePicker";
 import useModal from "../../shared/components/modal/useModal";
 import Modal from "../../shared/components/modal/Modal";
 import TextArea from "../../shared/components/TextArea";
+import { rolesPermissions } from "../../shared/config/rolesPermissions";
+import { useSelector } from "react-redux";
+import { selectUserInfo } from "../../store/userSlice";
 
 const TitleContainer = styled.div`
   position: relative;
@@ -213,21 +216,43 @@ const ScheduleRegisterButton = ({ userId }) => {
 };
 
 const SalaryAdjustment = () => {
+  const [allRequests, setAllRequests] = useState([]);
   const [requests, setRequests] = useState([]);
+  const userInfo = useSelector(selectUserInfo);
   const [userId, setUserId] = useState(null);
+  const [userPosition, setUserPosition] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUserId(user.uid);
-      }
-    });
+    const savedUserId = localStorage.getItem("userId");
+    const savedUserPosition = localStorage.getItem("userPosition");
 
-    return () => unsubscribe();
-  }, []);
+    if (savedUserId && savedUserId !== userId) {
+      setUserId(savedUserId);
+    } else if (userInfo.uid && savedUserId !== userInfo.uid) {
+      setUserId(userInfo.uid);
+    }
+
+    if (savedUserPosition && savedUserPosition !== userPosition) {
+      setUserPosition(savedUserPosition);
+    } else if (userInfo.position && savedUserPosition !== userInfo.position) {
+      setUserPosition(userInfo.position);
+    }
+  }, [userInfo, userId, userPosition]);
 
   useEffect(() => {
-    if (!userId) return;
+    if (userId) {
+      localStorage.setItem("userId", userId);
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (userPosition) {
+      localStorage.setItem("userPosition", userPosition);
+    }
+  }, [userPosition]);
+
+  useEffect(() => {
+    if (!userId || userPosition === "매니저") return;
 
     const collectionRef = collection(db, "salary_requests");
     const q = query(
@@ -247,6 +272,31 @@ const SalaryAdjustment = () => {
     return () => unsubscribe();
   }, [userId]);
 
+  // 모든 사용자의 정정 내역 불러오기
+  useEffect(() => {
+    const collectionRef = collection(db, "salary_requests");
+    const q = query(collectionRef, orderBy("createdAt", "desc")); // 필터 없이 전체 문서 가져오기
+
+    // 실시간으로 데이터 구독
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const fetchedRequests = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setAllRequests(fetchedRequests); // 데이터를 처리하는 로직
+    });
+
+    // 구독을 해제하려면 unsubscribe() 호출
+    return unsubscribe;
+  }, []);
+
+  if (!userPosition) {
+    // userPosition이 비어있을 때 로딩 상태 표시
+    return <div>Loading...</div>;
+  }
+
+  console.log(userPosition);
+
   return (
     <>
       <TitleContainer>
@@ -256,14 +306,58 @@ const SalaryAdjustment = () => {
       <Table>
         <thead>
           <tr>
-            <th>정정 대상</th>
-            <th>정정 유형</th>
-            <th>정정 사유</th>
-            <th>처리 상태</th>
+            {rolesPermissions[userPosition].canConfirm ? (
+              <>
+                <th>신청자</th>
+                <th>신청 날짜</th>
+                <th>정정 대상</th>
+                <th>정정 사유</th>
+                <th>처리 상태</th>
+              </>
+            ) : (
+              <>
+                <th>정정 대상</th>
+                <th>정정 유형</th>
+                <th>정정 사유</th>
+                <th>처리 상태</th>
+              </>
+            )}
           </tr>
         </thead>
         <tbody>
-          {requests.length > 0 ? (
+          {rolesPermissions[userPosition].canConfirm ? (
+            allRequests.length === 0 ? (
+              <tr>
+                <td colSpan="4">신청된 정정 내역이 없습니다.</td>
+              </tr>
+            ) : (
+              allRequests.map((request, index) => {
+                const date = new Date(request.date);
+                const formattedDate = `${date.getFullYear()} / ${(
+                  date.getMonth() + 1
+                )
+                  .toString()
+                  .padStart(2, "0")}`;
+
+                return (
+                  <tr key={index}>
+                    <td>{formattedDate}</td>
+                    <td>{request.type}</td>
+                    <td title={request.reason}>{request.reason}</td>
+                    <td>
+                      <StatusCell $status={request.status}>
+                        {request.status}
+                      </StatusCell>
+                    </td>
+                  </tr>
+                );
+              })
+            )
+          ) : requests.length === 0 ? (
+            <tr>
+              <td colSpan="4">신청된 정정 내역이 없습니다.</td>
+            </tr>
+          ) : (
             requests.map((request, index) => {
               const date = new Date(request.date);
               const formattedDate = `${date.getFullYear()} / ${(
@@ -285,10 +379,6 @@ const SalaryAdjustment = () => {
                 </tr>
               );
             })
-          ) : (
-            <tr>
-              <td colSpan="4">신청된 정정 내역이 없습니다.</td>
-            </tr>
           )}
         </tbody>
       </Table>
