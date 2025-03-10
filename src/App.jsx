@@ -13,6 +13,7 @@ import ProtectedRoute from "./shared/components/ProtectedRoute";
 import GlobalStyle from "./shared/components/styles/GlobalStyle";
 import Signup from "./pages/auth/Signup";
 import { rolesPermissions } from "./shared/config/rolesPermissions";
+import EmployeeList from "./pages/employeeList/EmployeeList";
 
 const App = () => {
   const [isLoading, setLoading] = useState(true);
@@ -57,7 +58,7 @@ const App = () => {
           {
             path: "MySalary",
             element: rolesPermissions[userPosition]?.canConfirm ? (
-              <Guide />
+              <EmployeeList />
             ) : (
               <MySalary />
             ),
