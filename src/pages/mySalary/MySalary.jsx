@@ -11,8 +11,9 @@ import {
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import SelectBox from "../../shared/components/SelectBox";
+import { useSelector, useDispatch } from "react-redux";
+import { selectUserInfo, setUserInfo } from "../../store/userSlice";
 
-// 스타일 컴포넌트 정의
 const ContentBox = styled.div`
   margin-top: 30px;
 `;
@@ -65,12 +66,14 @@ const Right = styled.span`
 `;
 
 const MySalary = () => {
-  const [salaryData, setSalaryData] = useState(null); // 급여 데이터
-  const [userInfo, setUserInfo] = useState(null); // 사용자 정보
-  const [selectedMonth, setSelectedMonth] = useState("2025년 2월"); // 선택된 월
-  const [availableMonths, setAvailableMonths] = useState([]); // 선택 가능한 월들
+  const dispatch = useDispatch();
+  const userInfo = useSelector(selectUserInfo); // Redux 상태에서 바로 가져오기
+  const [salaryData, setSalaryData] = useState(null);
+  //const [userInfo, setUserInfo] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState("2025년 2월");
+  const [availableMonths, setAvailableMonths] = useState([]); // 추가
 
-  const user = auth.currentUser; // 현재 로그인된 사용자 정보
+  const user = auth.currentUser;
 
   // 사용자 및 급여 데이터 가져오기
   useEffect(() => {
@@ -97,25 +100,27 @@ const MySalary = () => {
 
       setAvailableMonths(sortedMonths);
       setSelectedMonth(sortedMonths[0] || ""); // 최신 월을 기본 선택
-    };
+    }; // 전체 추가
 
-    // 사용자 데이터 가져오기
+    // 사용자 데이터 가져오기 (단, Redux에 데이터가 없을 때만 Firebase 요청)
     const fetchUserData = async () => {
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
+      if (!userInfo) {
+        // Redux에 userInfo가 없을 때만 Firebase 요청
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
-        setUserInfo(docSnap.data());
-      } else {
-        console.log("사용자 데이터가 없습니다.");
+        if (docSnap.exists()) {
+          dispatch(setUserInfo(docSnap.data())); // Redux에서 userInfo 업데이트
+          console.log("사용자 데이터를 다시 받아왔습니다.");
+        } else {
+          console.log("사용자 데이터가 없습니다.");
+        }
       }
     };
+    fetchAvailableMonths();
+    fetchUserData();
+  }, [user, userInfo, dispatch]); // userInfo가 변경될 때만 Redux 요청
 
-    fetchAvailableMonths(); // 월 목록 가져오기
-    fetchUserData(); // 사용자 데이터 가져오기
-  }, [user]); // 사용자가 변경되었을 때만 실행
-
-  // 선택된 월에 맞는 급여 데이터 가져오기
   const fetchSalaryData = async (month) => {
     if (!month) return;
 
@@ -134,19 +139,20 @@ const MySalary = () => {
 
   useEffect(() => {
     if (selectedMonth) {
-      fetchSalaryData(selectedMonth); // 월이 선택되었을 때 급여 데이터 업데이트
+      fetchSalaryData(selectedMonth);
     }
   }, [selectedMonth]);
 
-  if (!salaryData || !userInfo) return <div>로딩 중...</div>; // 로딩 상태 처리
+  if (!salaryData || !userInfo) return <div>로딩 중...</div>;
 
-  const { employeeId, name, location, position, hiredDate } = userInfo || {};
+  const { employeeId, name, location, position, hiredDate } = userInfo;
 
   // 입사일 포맷팅
-  const formattedhiredDate =
-    hiredDate instanceof Timestamp
-      ? new Date(hiredDate.seconds * 1000).toISOString().split("T")[0]
-      : "입사일 없음";
+  const formattedHiredDate = hiredDate
+    ? hiredDate instanceof Timestamp
+      ? new Date(hiredDate.seconds * 1000).toISOString().split("T")[0] // Timestamp 객체 처리
+      : new Date(hiredDate).toISOString().split("T")[0] // 문자열로 된 날짜 처리
+    : "입사일 없음"; // hiredDate가 없는 경우 처리
 
   return (
     <>
@@ -155,12 +161,13 @@ const MySalary = () => {
         <InfoWrap>
           <MyInfo>
             <span>사번 : {employeeId || "사번 없음"}</span>
-            <span>{name || "이름 없음"} </span>
+            <span>이름 : {name || "이름 없음"}</span>
             <span>
-              {location || "위치 없음"} / {position || "직책 없음"}{" "}
+              {location || "위치 없음"} / {position || "직책 없음"}
             </span>
-            <span>입사일 : {formattedhiredDate}</span>
+            <span>입사일 : {formattedHiredDate}</span>
           </MyInfo>
+
           <SelectBox
             options={availableMonths.length > 0 ? availableMonths : ["없음"]}
             defaultOption={availableMonths.length > 0 ? selectedMonth : "없음"}
