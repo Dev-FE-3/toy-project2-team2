@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { auth, db } from "./shared/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import Calendar from "./pages/calendar/Calendar";
@@ -17,10 +17,9 @@ import { rolesPermissions } from "./shared/config/rolesPermissions";
 const App = () => {
   const [isLoading, setLoading] = useState(true);
   const [userPosition, setUserPosition] = useState(null);
-  const [router, setRouter] = useState(null);
 
   useEffect(() => {
-    // Firebase 로그인 상태 변화 감지
+    // Firebase 로그인 상태 감지
     const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
       if (currentUser) {
         const docRef = doc(db, "users", currentUser.uid);
@@ -36,12 +35,14 @@ const App = () => {
       setLoading(false);
     });
 
-    return () => unsubscribe(); // cleanup 함수
+    return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    // userPosition이 변경될 때마다 라우터를 다시 설정
-    const updatedRouter = createBrowserRouter([
+  // userPosition이 null이면 라우터 생성 지연
+  const router = useMemo(() => {
+    if (userPosition === null) return null;
+
+    return createBrowserRouter([
       {
         path: "/",
         element: (
@@ -81,18 +82,12 @@ const App = () => {
         element: <Signup />,
       },
     ]);
-
-    setRouter(updatedRouter);
-  }, [userPosition]); // userPosition 변경 시 라우터 업데이트
+  }, [userPosition]); // userPosition이 업데이트될 때만 다시 생성
 
   return (
     <>
       <GlobalStyle />
-      {isLoading || !router ? (
-        <LoadingScreen />
-      ) : (
-        <RouterProvider router={router} />
-      )}
+      {isLoading || !router ? <LoadingScreen /> : <RouterProvider router={router} />}
     </>
   );
 };
