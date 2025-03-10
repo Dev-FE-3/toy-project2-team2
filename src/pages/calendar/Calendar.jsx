@@ -227,13 +227,10 @@ const Calendar = () => {
                 isSubmitted={isSubmitted}
               />
             }
-            isDeleteButton={selectedSchedule ? true : false}
-            hasSubmitButton={true}
-            submitButton={selectedSchedule ? (isSubmitted ? "수정하기" : "저장하기") : "등록하기"}
+            buttonName={selectedSchedule ? "저장하기" : "등록하기"}
             onSubmit={selectedSchedule ? () => handleSave(selectedSchedule) : handleSubmit}
-            onDelete={handleDelete}
-            isEdit={isSubmitted ? true : false}
-            onEdit={handleEdit}
+            onEdit={isSubmitted ? handleEdit : null}
+            onDelete={selectedSchedule ? handleDelete : null}
             isOpen={isOpen}
             onClose={() => {
               // 모달 닫힐 때 초기화
