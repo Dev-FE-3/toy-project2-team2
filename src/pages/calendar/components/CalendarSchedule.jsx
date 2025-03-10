@@ -22,6 +22,12 @@ const StyledCalendarDate = styled.tbody`
         display: block;
         padding: 12px 12px 16px;
       }
+
+      span {
+        & + span {
+          margin-top: 6px;
+        }
+      }
     }
   }
 `
@@ -125,10 +131,11 @@ const ScheduleBar = styled.span`
   white-space: nowrap;
   /* animation: ${slideIn} 1.5s ease-out; */
   cursor: pointer;
+`
 
-  & + span {
-    margin-top: 6px;
-  }
+const ScheduleEmptyBar = styled.span`
+  display: block;
+  height: 28px;
 `
 
 const CalendarSchedule = ({
@@ -200,15 +207,14 @@ const CalendarSchedule = ({
                   });
 
                   const isFirstWeek = week.some(({ date: d }) => isSameDate(d, start));
-
-                  if (!isSameDate(today, getDateOnly(firstDayInWeek.date))) return null;
+                  const isFirstDate = isSameDate(today, getDateOnly(firstDayInWeek.date));
 
                   const colSpan = week.reduce((count, { date: d }) => {
                     const current = getDateOnly(d);
                     return current >= start && current <= end ? count + 1 : count;
                   }, 0);
 
-                  return (
+                  return isFirstDate ? (
                     <ScheduleBar
                       key={schedule.id + (isFirstWeek ? '-title' : '-empty')}
                       colSpan={colSpan}
@@ -217,6 +223,8 @@ const CalendarSchedule = ({
                     >
                       {isFirstWeek ? schedule.title : ''}
                     </ScheduleBar>
+                  ) : (
+                    <ScheduleEmptyBar key={schedule.id + '-empty'} />
                   );
                 })}
               </td>
