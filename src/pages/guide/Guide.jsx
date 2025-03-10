@@ -40,7 +40,7 @@ const ScheduleRegisterButton = () => {
           hasSubmitButton={true}
           isOpen={isOpen}
           onClose={onClose}
-          SubmitButton="등록하기"
+          submitButton="등록하기"
         />
       )}
     </>
@@ -108,15 +108,11 @@ const Guide = () => {
 
       <h1>2. button</h1>
       <Button size="sm">작은 버튼</Button>
-      <Button size="sm" color="gray">
-        작은 버튼
-      </Button>
+      <Button size="sm" color="gray">작은 버튼</Button>
       <Button>기본 버튼</Button>
       <Button color="gray">기본 버튼</Button>
       <Button size="lg">큰 버튼</Button>
-      <Button size="lg" color="gray">
-        큰 버튼
-      </Button>
+      <Button size="lg" color="gray">큰 버튼</Button>
 
       <h1>3. input</h1>
       <p>코드상 위에 상태 관련 설명 있어요</p>
@@ -190,7 +186,7 @@ const Guide = () => {
             ).padStart(2, "0")}`
           : "선택 안 됨"}
       </p>
-
+      
       <h1>8. Modal</h1>
       <ScheduleRegisterButton />
       <ScheduleCheckButton />
