@@ -138,12 +138,15 @@ const SalaryManagementModal = ({
               employeeId={employeeId}
             />
           }
-          onSubmit={handleSubmit}
+          onSubmit={() => {
+            setSelectedRequest(null);
+            handleSubmit();
+          }}
           buttonName="저장하기"
           isOpen={isOpen}
           onClose={() => {
             setSelectedRequest(null);
-            onClose();
+            onClose;
           }}
         />
       )}

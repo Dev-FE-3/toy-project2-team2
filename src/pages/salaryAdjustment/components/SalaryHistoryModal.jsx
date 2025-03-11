@@ -88,7 +88,7 @@ const SalaryHistoryModal = ({ selectedRequest, setSelectedRequest }) => {
           isOpen={isOpen}
           onClose={() => {
             setSelectedRequest(null);
-            onClose();
+            onClose;
           }}
         />
       )}

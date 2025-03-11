@@ -18,6 +18,7 @@ import LoadingScreen from "../../shared/components/LoadingScreen";
 import RegisterModalButton from "./components/SalaryRegisterModal";
 import SalaryHistoryModal from "./components/SalaryHistoryModal";
 import SalaryManagementModal from "./components/SalaryManagementModal";
+import SelectBox from "../../shared/components/SelectBox";
 
 const TitleContainer = styled.div`
   position: relative;
@@ -95,6 +96,14 @@ const Table = styled.table`
     }
   }
 
+  th > div {
+    width: 116px;
+  }
+
+  th > div > button {
+    justify-content: space-around;
+  }
+
   th,
   td {
     width: 20%;
@@ -139,6 +148,7 @@ const SalaryAdjustment = () => {
   const [usersName, setUsersName] = useState({});
   const [usersEmployeeId, setUsersEmployeeId] = useState({});
   const [selectedRequest, setSelectedRequest] = useState(null);
+  const [statusFilter, setStatusFilter] = useState("처리 상태");
 
   useEffect(() => {
     const savedUserId = localStorage.getItem("userId");
@@ -244,12 +254,19 @@ const SalaryAdjustment = () => {
   const handleRowClick = (request) => {
     setSelectedRequest(request);
   };
-
+  const filteredRequests =
+    statusFilter === "처리 상태" || statusFilter === "전체"
+      ? allRequests
+      : allRequests.filter((request) => request.status === statusFilter);
   return (
     <>
       <TitleContainer>
         <PageTitle title="정정 신청 / 내역" subtitle="정정 내역" />
-        <RegisterModalButton userId={userId} className="registerBtn" />
+        {rolesPermissions[userPosition].canConfirm ? (
+          ""
+        ) : (
+          <RegisterModalButton userId={userId} className="registerBtn" />
+        )}
       </TitleContainer>
       <Table>
         <thead>
@@ -260,7 +277,17 @@ const SalaryAdjustment = () => {
                 <th>신청 날짜</th>
                 <th>정정 대상</th>
                 <th>정정 사유</th>
-                <th>처리 상태</th>
+                <th>
+                  <SelectBox
+                    id="salary-type"
+                    options={["전체", "대기 중", "정정 완료", "정정 불가"]}
+                    defaultOption={
+                      statusFilter === "전체" ? "처리 상태" : statusFilter
+                    }
+                    onSelect={setStatusFilter}
+                    size="autoSmall"
+                  />
+                </th>
               </>
             ) : (
               <>
@@ -274,12 +301,12 @@ const SalaryAdjustment = () => {
         </thead>
         <tbody>
           {rolesPermissions[userPosition].canConfirm ? (
-            allRequests.length === 0 ? (
+            filteredRequests.length === 0 ? (
               <tr>
                 <td colSpan="4">신청된 정정 내역이 없습니다.</td>
               </tr>
             ) : (
-              allRequests.map((request, index) => {
+              filteredRequests.map((request, index) => {
                 const date = new Date(request.date);
                 const formattedDate = `${date.getFullYear()} / ${(
                   date.getMonth() + 1
