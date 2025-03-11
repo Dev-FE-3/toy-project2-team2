@@ -15,6 +15,7 @@ import Signup from "./pages/auth/Signup";
 import { rolesPermissions } from "./shared/config/rolesPermissions";
 import EmployeeList from "./pages/employeeList/EmployeeList";
 import ProtectedRouteForManager from "./shared/components/ProtectedRouteForManager";
+import SalaryAdmin from "./pages/mySalary/SalaryAdmin";
 
 const App = () => {
   const [isLoading, setLoading] = useState(true);
@@ -66,12 +67,14 @@ const App = () => {
             ),
           },
           {
-            path: "MySalary/:employeeId", // 동적 라우트 추가 (매니저가 직원 선택 시)
-            element: (
-              <ProtectedRouteForManager>
-                <MySalary />
-              </ProtectedRouteForManager>
-            ),
+            path: "/MySalary",
+            element: <ProtectedRouteForManager />,
+            children: [
+              {
+                path: ":employeeId",
+                element: <SalaryAdmin />,
+              },
+            ],
           },
           {
             path: "SalaryAdjustment",

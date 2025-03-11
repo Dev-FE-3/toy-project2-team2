@@ -2,6 +2,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { auth, db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import LoadingScreen from "./LoadingScreen";
 
 const ProtectedRouteForManager = () => {
   const [isLoading, setLoading] = useState(true);
@@ -23,9 +24,11 @@ const ProtectedRouteForManager = () => {
     checkUserRole();
   }, []);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
-  return isManager ? <Outlet /> : <Navigate to="/MySalary" replace />; // 매니저가 아니면 본인 페이지로 이동 (url 이동 방지)
+  return isManager ? <Outlet /> : <Navigate to="/MySalary" replace />;
 };
 
 export default ProtectedRouteForManager;
