@@ -28,7 +28,7 @@ const TextBoxArea = styled.textarea`
   font-size: var(--font-size-primary);
   font-weight: 400;
   line-height: 24px; /* 150% */
-  background-color: var(--background-color-3);
+  background-color: var(--white);
   border: 1px solid var(--disabled);
   transition: all 0.2s ease;
   box-sizing: border-box;
@@ -43,7 +43,7 @@ const TextBoxArea = styled.textarea`
     props.$issubmitted &&
     `
       border: 1px solid var(--disabled);
-      background-color: var(--white);
+      background-color: var(--background-color-3);
       color: var(--text-primary);
       pointer-events: none;
     `}
