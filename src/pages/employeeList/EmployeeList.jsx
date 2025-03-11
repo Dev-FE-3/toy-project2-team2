@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { db } from "../../shared/firebase";
 import { collection, getDocs, Timestamp, doc } from "firebase/firestore";
 import ResetImg from "/images/reset.svg";
+import { useNavigate } from "react-router-dom";
 
 const TitleContainer = styled.div`
   display: flex;
@@ -89,6 +90,7 @@ const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태 추가
   const [filteredEmployees, setFilteredEmployees] = useState([]); // 필터링된 직원 목록
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -135,6 +137,10 @@ const EmployeeList = () => {
     setFilteredEmployees(employees); // 필터 초기화 (전체 직원 리스트로 복구)
   };
 
+  const handleRowClick = (employeeId) => {
+    navigate(`/MySalary/${employeeId}`);
+  };
+
   return (
     <>
       <TitleContainer>
@@ -171,7 +177,10 @@ const EmployeeList = () => {
         <tbody>
           {filteredEmployees.length > 0 ? (
             filteredEmployees.map((employee) => (
-              <tr key={employee.id}>
+              <tr
+                key={employee.id}
+                onClick={() => handleRowClick(employee.employeeId)}
+              >
                 <td>{employee.name}</td>
                 <td>{employee.employeeId}</td>
                 <td>{employee.location}</td>
