@@ -5,8 +5,9 @@ import Input from "../../../shared/components/Input";
 
 const Box = styled.div`
   display: flex;
-  height: 562px;
-  padding: 40px 52px 0 52px;
+  height: auto; // 하단 여백에 따라 자동으로 크기가 조정되도록 수정
+  min-height: 562px; // 최소 높이는 유지
+  padding: 40px 52px 22px 52px;
   flex-direction: column;
   align-items: flex-start;
   flex: 1 0 0;
@@ -73,12 +74,16 @@ const Line = styled.div`
   width: 100%;
   height: 1.5px;
   background-color: var(--disabled);
-  margin-top: 32px;
+  margin-top: 24px; // 32px -> 24px로 줄여서 여백 조정
 `;
 
 const BottomSection = styled.div`
   width: 100%;
-  margin-top: auto; // 🚀 항상 하단에 고정!
+  height: auto; // 버튼이 추가될 때 자동으로 크기 조정
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-bottom: 10px; // 버튼이 생길 때 공간 확보
 `;
 
 const ButtonWrapper = styled.div`
@@ -86,21 +91,16 @@ const ButtonWrapper = styled.div`
   justify-content: flex-end;
   gap: 10px;
   min-height: 44px; // 버튼이 없을 때도 여백 유지!
-  margin-top: 10px;
+  margin-top: 10px; // 수정하기 버튼이 없을 때 여백 유지
 `;
 
 const salaryMapping = {
   baseSalary: "기본급",
   overtimePay: "초과근무수당",
   mealAllowance: "식대",
-  pension: "국민연금",
-  healthInsurance: "건강보험",
-  employmentInsurance: "고용보험",
-  incomeTax: "소득세",
-  localIncomeTax: "지방소득세",
 };
 
-const EditableCalcBox = ({ type, data = {}, onSave }) => {
+const EditableCalcBox = ({ data = {}, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState(data || {});
 
@@ -130,7 +130,7 @@ const EditableCalcBox = ({ type, data = {}, onSave }) => {
   return (
     <Box>
       <TitleWrapper>
-        <Title>{type === "payments" ? "지급 내역" : "공제 내역"}</Title>
+        <Title>지급 내역</Title>
         {!isEditing && (
           <Button size="sm" onClick={() => setIsEditing(true)}>
             수정하기
@@ -160,7 +160,7 @@ const EditableCalcBox = ({ type, data = {}, onSave }) => {
                     value={editData[key]}
                     onChange={(e) => handleChange(key, e.target.value)}
                     isSubmitted={false} // 수정 중이므로 false
-                    style={{ textAlign: "right" }}
+                    style={{ textAlign: "right" }} // 우선적으로 오른쪽 정렬 적용
                   />
                 ) : (
                   <Right>{editData[key].toLocaleString()} 원</Right>
@@ -171,7 +171,7 @@ const EditableCalcBox = ({ type, data = {}, onSave }) => {
       </Wrapper>
       <BottomSection>
         <Calc>
-          <Left>{type === "payments" ? "총 지급액" : "총 공제액"}</Left>
+          <Left>총 지급액</Left>
           <Right>{totalAmount.toLocaleString()} 원</Right>
         </Calc>
         <Line />

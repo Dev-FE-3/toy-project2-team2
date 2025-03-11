@@ -58,6 +58,7 @@ const Input = ({
   onChange,
   value,
   onKeyDown,
+  style,
 }) => {
   return (
     <>
@@ -74,6 +75,7 @@ const Input = ({
         onChange={onChange}
         $issubmitted={isSubmitted} // 여기서 'issubmitted'로 전달!!!
         onKeyDown={onKeyDown} // 여기서 onKeyDown 전달
+        style={style}
       />
     </>
   );

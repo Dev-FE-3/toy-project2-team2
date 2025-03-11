@@ -265,7 +265,6 @@ const SalaryAdmin = () => {
         {salaryData && (
           <CalcWrapper>
             <EditableCalcBox
-              type="payments"
               data={salaryData?.payments || []}
               onSave={handleSavePayments}
             />
