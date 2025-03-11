@@ -4,7 +4,7 @@ import useModal from "../../../shared/components/modal/useModal"; // useModal í›
 import styled from "styled-components";
 import TextArea from "../../../shared/components/TextArea";
 import SelectBox from "../../../shared/components/SelectBox";
-import { collection, doc, documentId, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../shared/firebase";
 
 const List = styled.ul`

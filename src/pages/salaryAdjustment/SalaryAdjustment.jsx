@@ -8,15 +8,9 @@ import {
   getDoc,
   doc,
 } from "firebase/firestore";
-import { db, auth } from "../../shared/firebase"; // Firebase 설정 파일
+import { db } from "../../shared/firebase"; // Firebase 설정 파일
 import PageTitle from "../../shared/components/PageTitle";
 import styled from "styled-components";
-import Button from "../../shared/components/Button";
-import SelectBox from "../../shared/components/SelectBox";
-import DatePicker from "../../shared/components/DatePicker";
-import useModal from "../../shared/components/modal/useModal";
-import Modal from "../../shared/components/modal/Modal";
-import TextArea from "../../shared/components/TextArea";
 import { rolesPermissions } from "../../shared/config/rolesPermissions";
 import { useSelector } from "react-redux";
 import { selectUserInfo } from "../../store/userSlice";
@@ -250,7 +244,7 @@ const SalaryAdjustment = () => {
   const handleRowClick = (request) => {
     setSelectedRequest(request);
   };
-  selectedRequest && console.log(selectedRequest)
+  
   return (
     <>
       <TitleContainer>
