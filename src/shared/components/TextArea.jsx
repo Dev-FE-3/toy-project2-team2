@@ -47,19 +47,12 @@ const TextBoxArea = styled.textarea`
       color: var(--text-primary);
       pointer-events: none;
     `}
-
-  &:disabled {
-    background-color: var(--white);
-    pointer-events: none;
-    color: var(--disabled);
-  }
 `;
 
 const TextArea = ({
   id,
   label,
   isSubmitted,
-  disabled,
   placeholder = "내용을 입력하세요",
   value,
   onChange,
@@ -72,7 +65,6 @@ const TextArea = ({
         id={id}
         rows={rows}
         maxLength={100} // 우선 100 설정
-        disabled={disabled}
         placeholder={placeholder}
         $issubmitted={isSubmitted} // 'isSubmitted' 값을 전달
         value={value}

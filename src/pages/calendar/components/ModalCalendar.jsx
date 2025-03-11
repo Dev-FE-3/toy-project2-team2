@@ -95,7 +95,6 @@ const ModalCalendar = ({
           id="contents"
           label="내용"
           rows="4"
-          disabled={false}
           placeholder="내용을 입력해 주세요."
           value={textAreaValue}
           onChange={(e) => {setTextAreaValue(e.target.value)}}
