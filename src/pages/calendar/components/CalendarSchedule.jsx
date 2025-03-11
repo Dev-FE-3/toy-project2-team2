@@ -106,6 +106,7 @@ const ScheduleBar = styled.span`
   display: block;
   position: relative;
   width: ${({ colSpan }) => `calc(${colSpan * 100}% + ${(colSpan - 1) * 1}px)`};
+  z-index: ${({ colSpan }) => (colSpan === 1 ? 0 : 1)};
   height: 28px;
   padding: 3px 12px;
   font-size: var(--font-size-title-small);
@@ -131,11 +132,6 @@ const ScheduleBar = styled.span`
   white-space: nowrap;
   /* animation: ${slideIn} 1.5s ease-out; */
   cursor: pointer;
-`
-
-const ScheduleEmptyBar = styled.span`
-  display: block;
-  height: 28px;
 `
 
 const CalendarSchedule = ({
@@ -165,24 +161,26 @@ const CalendarSchedule = ({
           id: doc.id,
         };
       });
+      schedules.sort((a, b) => a.startDate - b.startDate);
+
       setSchedules(schedules);
     });
     return () => unsubscribe();
   }, [])
-
-  const isSameDate = (d1, d2) =>
-    d1.getFullYear() === d2.getFullYear() &&
-    d1.getMonth() === d2.getMonth() &&
-    d1.getDate() === d2.getDate();
-
-  const getDateOnly = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
   return (
     <StyledCalendarDate>
       {weeks.map((week, weekIndex) => (
         <tr key={weekIndex}>
           {week.map(({ day, isDisabled, date }, dayIndex) => {
-            const today = getDateOnly(date);
+            const getDateOnly = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            const todaySchedules = schedules.filter((schedule) => {
+              const scheduleStart = getDateOnly(schedule.startDate);
+              const scheduleEnd = getDateOnly(schedule.endDate);
+              const currentDate = getDateOnly(date);
+              
+              return currentDate >= scheduleStart && currentDate <= scheduleEnd;
+            });
 
             return (
               <td key={dayIndex} className={isDisabled ? "disabled" : ""}>
@@ -190,41 +188,35 @@ const CalendarSchedule = ({
                   {day}
                 </span>
 
-                {schedules.map((schedule) => {
-                  const start = getDateOnly(schedule.startDate);
-                  const end = getDateOnly(schedule.endDate);
+                {todaySchedules.map((schedule) => {
+                  const currentDate = getDateOnly(date);
+                  const scheduleStart = getDateOnly(schedule.startDate);
+                  const scheduleEnd = getDateOnly(schedule.endDate);
+                  const isFirstDay = currentDate.getTime() === scheduleStart.getTime();
 
-                  const isInThisWeek = week.some(({ date: d }) => {
-                    const current = getDateOnly(d);
-                    return current >= start && current <= end;
+                  // 현재 주에서 해당 일정이 처음 등장하는 날짜 찾기
+                  const firstContinuedDate = week.find(({ date }) => {
+                    const d = getDateOnly(date);
+                    return d >= scheduleStart && d <= getDateOnly(week[6].date);
                   });
-
-                  if (!isInThisWeek) return null;
-
-                  const firstDayInWeek = week.find(({ date: d }) => {
-                    const current = getDateOnly(d);
-                    return current >= start && current <= end;
-                  });
-
-                  const isFirstWeek = week.some(({ date: d }) => isSameDate(d, start));
-                  const isFirstDate = isSameDate(today, getDateOnly(firstDayInWeek.date));
+                
+                  // 현재 date가 그 첫 날짜인지 확인
+                  const isFirstContinuedDate = firstContinuedDate && firstContinuedDate.date.getTime() === currentDate.getTime();
 
                   const colSpan = week.reduce((count, { date: d }) => {
                     const current = getDateOnly(d);
-                    return current >= start && current <= end ? count + 1 : count;
+                    return current >= scheduleStart && current <= scheduleEnd ? count + 1 : count;
                   }, 0);
 
-                  return isFirstDate ? (
+                  return (
                     <ScheduleBar
-                      key={schedule.id + (isFirstWeek ? '-title' : '-empty')}
-                      colSpan={colSpan}
+                      key={schedule.id}
+                      colSpan={isFirstDay || isFirstContinuedDate ? colSpan : 1}
                       color={schedule.selectedColor}
                       onClick={() => handleScheduleClick(schedule)}
                     >
-                      {isFirstWeek ? schedule.title : ''}
+                      {isFirstDay ? schedule.title : ""}
                     </ScheduleBar>
-                  ) : (
-                    <ScheduleEmptyBar key={schedule.id + '-empty'} />
                   );
                 })}
               </td>
