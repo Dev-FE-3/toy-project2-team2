@@ -4,44 +4,28 @@ import useModal from "../../../shared/components/modal/useModal"; // useModal �
 import styled from "styled-components";
 import TextArea from "../../../shared/components/TextArea";
 
-const List = styled.dl`
+const List = styled.ul`
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  gap: 20px;
 
-  dt {
-    width: 20%;
-    margin-top: 20px;
+  & > li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    align-items: center;
 
-    &:first-of-type {
-      margin-top: 0;
-    }
-
-    &:last-of-type {
+    &.textarea {
       width: 100%;
+
+      & > div {
+        width: 100%;
+      }
     }
 
-    label {
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 24px;
+    & > label {
+      min-width: 45px;
       color: var(--text-disabled);
-    }
-  }
-
-  dd {
-    width: 80%;
-    margin-top: 20px;
-
-    &:first-of-type {
-      margin-top: 0;
-    }
-
-    &:last-of-type {
-      width: 100%;
-      height: 118px;
-      margin-top: 16px;
-      margin-bottom: 100px;
     }
   }
 `;
@@ -51,11 +35,34 @@ const StyledBox = styled.div`
   padding: 12px 16px; // 내부 여백 추가
   border: 1px solid var(--disabled); // 테두리 추가
   border-radius: 8px; // 둥근 모서리 적용
-  background-color: var(--white); // 연한 배경색 추가
+  background-color: var(--background-color-3);
   font-weight: 400;
   box-sizing: border-box;
   color: var(--text-primary);
 `;
+const SalaryHistoryModalContent = ({ selectedRequest }) => {
+  return (
+    <List>
+      <li>
+        <label htmlFor="salary-date">정정 대상</label>
+        <StyledBox id="salary-date">{selectedRequest.date}</StyledBox>
+      </li>
+      <li>
+        <label htmlFor="salary-type">정정 유형</label>
+        <StyledBox id="salary-type">{selectedRequest.type}</StyledBox>
+      </li>
+      <li className="textarea">
+        <TextArea
+          rows={5}
+          label="정정 사유"
+          id="reason"
+          isSubmitted={true}
+          placeholder={selectedRequest.reason}
+        />
+      </li>
+    </List>
+  );
+};
 
 const SalaryHistoryModal = ({ selectedRequest }) => {
   const { isOpen, onOpen, onClose } = useModal();
@@ -73,31 +80,10 @@ const SalaryHistoryModal = ({ selectedRequest }) => {
         <Modal
           title="정정 내역"
           content={
-            <List>
-              <dt>
-                <label htmlFor="salary-date">정정 대상</label>
-              </dt>
-              <StyledBox id="salary-date">{selectedRequest.date}</StyledBox>
-
-              <dt>
-                <label htmlFor="salary-type">정정 유형</label>
-              </dt>
-              <StyledBox id="salary-type">{selectedRequest.type}</StyledBox>
-
-              <dd>
-                <TextArea
-                  rows={5}
-                  label="정정 사유"
-                  id="reason"
-                  isSubmitted={true} // 제출된 상태를 의미하는 프로퍼티
-                  placeholder={selectedRequest.reason}
-                />
-              </dd>
-            </List>
+            <SalaryHistoryModalContent selectedRequest={selectedRequest} />
           }
-          // hasSubmitButton={false}
-          isOpen={isOpen} // 모달이 열리도록 상태 전달
-          onClose={onClose} // 모달 닫기 기능
+          isOpen={isOpen}
+          onClose={onClose}
         />
       )}
     </>

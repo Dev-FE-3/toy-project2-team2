@@ -35,11 +35,6 @@ const List = styled.ul`
   }
 `;
 
-const LabelList = styled.ul`
-  display: flex;
-  gap: 12px;
-`;
-
 const leaveOptions = [
   "유급 휴가",
   "무급 휴가",
@@ -81,11 +76,11 @@ const SalaryRegisterModalContent = ({
           isSubmitted={isSubmitted}
         />
       </li>
-      <li>
-        <label htmlFor="reason">정정 사유</label>
+      <li className="textarea">
         <TextArea
           rows={5}
           id="reason"
+          label="정정 사유"
           placeholder="정정 사유를 입력하세요."
           onChange={(e) => setInputValue(e.target.value)}
           value={inputValue}
