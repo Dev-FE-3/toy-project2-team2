@@ -121,7 +121,7 @@ const MySalary = () => {
             !userInfo.location
           ) {
             dispatch(setUserInfo({ ...userInfo, ...newUserInfo }));
-            console.log("Redux에 부족한 데이터만 보완");
+            //console.log("Redux에 부족한 데이터만 보완");
           }
         }
       }
@@ -152,8 +152,6 @@ const MySalary = () => {
       fetchSalaryData(selectedMonth);
     }
   }, [selectedMonth]);
-
-  if (!salaryData || !userInfo) return <div>로딩 중...</div>;
 
   const { employeeId, name, location, position, hiredDate } = userInfo;
 
