@@ -88,7 +88,12 @@ const SalaryManagementModalContent = ({
   );
 };
 
-const SalaryManagementModal = ({ selectedRequest, name, employeeId }) => {
+const SalaryManagementModal = ({
+  setSelectedRequest,
+  selectedRequest,
+  name,
+  employeeId,
+}) => {
   const { isOpen, onOpen, onClose } = useModal();
   const [updatedStatus, setUpdatedStatus] = useState(selectedRequest.status);
 
@@ -125,6 +130,7 @@ const SalaryManagementModal = ({ selectedRequest, name, employeeId }) => {
           title="정정 내역"
           content={
             <SalaryManagementModalContent
+              setSelectedRequest={setSelectedRequest}
               selectedRequest={selectedRequest}
               updatedStatus={updatedStatus}
               setUpdatedStatus={setUpdatedStatus}
@@ -135,7 +141,10 @@ const SalaryManagementModal = ({ selectedRequest, name, employeeId }) => {
           onSubmit={handleSubmit}
           buttonName="저장하기"
           isOpen={isOpen}
-          onClose={onClose}
+          onClose={() => {
+            setSelectedRequest(null);
+            onClose();
+          }}
         />
       )}
     </>

@@ -244,7 +244,7 @@ const SalaryAdjustment = () => {
   const handleRowClick = (request) => {
     setSelectedRequest(request);
   };
-  
+
   return (
     <>
       <TitleContainer>
@@ -335,12 +335,16 @@ const SalaryAdjustment = () => {
       {selectedRequest &&
         (rolesPermissions[userPosition].canConfirm ? (
           <SalaryManagementModal
+            setSelectedRequest={setSelectedRequest}
             selectedRequest={selectedRequest}
             name={usersName[selectedRequest.userId]}
             employeeId={usersEmployeeId[selectedRequest.userId]}
           />
         ) : (
-          <SalaryHistoryModal selectedRequest={selectedRequest} />
+          <SalaryHistoryModal
+            selectedRequest={selectedRequest}
+            setSelectedRequest={setSelectedRequest}
+          />
         ))}
     </>
   );

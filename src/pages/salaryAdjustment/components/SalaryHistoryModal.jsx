@@ -64,7 +64,7 @@ const SalaryHistoryModalContent = ({ selectedRequest }) => {
   );
 };
 
-const SalaryHistoryModal = ({ selectedRequest }) => {
+const SalaryHistoryModal = ({ selectedRequest, setSelectedRequest }) => {
   const { isOpen, onOpen, onClose } = useModal();
 
   useEffect(() => {
@@ -80,10 +80,16 @@ const SalaryHistoryModal = ({ selectedRequest }) => {
         <Modal
           title="정정 내역"
           content={
-            <SalaryHistoryModalContent selectedRequest={selectedRequest} />
+            <SalaryHistoryModalContent
+              setSelectedRequest={setSelectedRequest}
+              selectedRequest={selectedRequest}
+            />
           }
           isOpen={isOpen}
-          onClose={onClose}
+          onClose={() => {
+            setSelectedRequest(null);
+            onClose();
+          }}
         />
       )}
     </>
