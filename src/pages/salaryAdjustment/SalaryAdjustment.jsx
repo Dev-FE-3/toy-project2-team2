@@ -23,6 +23,7 @@ import { selectUserInfo } from "../../store/userSlice";
 import LoadingScreen from "../../shared/components/LoadingScreen";
 import RegisterModalButton from "./components/SalaryRegisterModal";
 import SalaryHistoryModal from "./components/SalaryHistoryModal";
+import SalaryManagementModal from "./components/SalaryManagementModal";
 
 const TitleContainer = styled.div`
   position: relative;
@@ -142,6 +143,7 @@ const SalaryAdjustment = () => {
   const [userId, setUserId] = useState(null);
   const [userPosition, setUserPosition] = useState(null);
   const [usersName, setUsersName] = useState({});
+  const [usersEmployeeId, setUsersEmployeeId] = useState({});
   const [selectedRequest, setSelectedRequest] = useState(null);
 
   useEffect(() => {
@@ -213,16 +215,26 @@ const SalaryAdjustment = () => {
         if (userIds.length === 0) return;
 
         // 3. Firestore에서 userId에 맞는 사용자 문서 가져오기
-        const usersData = {};
+        const usersNameData = {};
         for (const userId of userIds) {
           const userDocRef = doc(db, "users", userId);
           const userDoc = await getDoc(userDocRef);
           if (userDoc.exists()) {
-            usersData[userId] = userDoc.data().name;
+            usersNameData[userId] = userDoc.data().name;
           }
         }
 
-        setUsersName(usersData);
+        const usersEmployeeIdData = {};
+        for (const userId of userIds) {
+          const userDocRef = doc(db, "users", userId);
+          const userDoc = await getDoc(userDocRef);
+          if (userDoc.exists()) {
+            usersEmployeeIdData[userId] = userDoc.data().employeeId;
+          }
+        }
+
+        setUsersEmployeeId(usersEmployeeIdData);
+        setUsersName(usersNameData);
       });
 
       return () => unsubscribe();
@@ -231,14 +243,14 @@ const SalaryAdjustment = () => {
     fetchRequests();
   }, []);
 
-  if (!userPosition) {
+  if (!userPosition || !usersName) {
     return <LoadingScreen />;
   }
   //정정 내역 모달 열기
   const handleRowClick = (request) => {
     setSelectedRequest(request);
   };
-
+  selectedRequest && console.log(selectedRequest)
   return (
     <>
       <TitleContainer>
@@ -282,7 +294,7 @@ const SalaryAdjustment = () => {
                   .padStart(2, "0")}`;
 
                 return (
-                  <tr key={index}>
+                  <tr key={index} onClick={() => handleRowClick(request)}>
                     <td>{usersName[request.userId] || "없는 사용자"}</td>
                     <td>{formattedDate}</td>
                     <td>{request.type}</td>
@@ -326,9 +338,16 @@ const SalaryAdjustment = () => {
         </tbody>
       </Table>
 
-      {selectedRequest && (
-        <SalaryHistoryModal selectedRequest={selectedRequest} />
-      )}
+      {selectedRequest &&
+        (rolesPermissions[userPosition].canConfirm ? (
+          <SalaryManagementModal
+            selectedRequest={selectedRequest}
+            name={usersName[selectedRequest.userId]}
+            employeeId={usersEmployeeId[selectedRequest.userId]}
+          />
+        ) : (
+          <SalaryHistoryModal selectedRequest={selectedRequest} />
+        ))}
     </>
   );
 };
