@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { db } from "../../../shared/firebase";
-import { collection, onSnapshot, query } from "firebase/firestore";
+import { db, auth } from "../../../shared/firebase";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 
 const StyledCalendarDate = styled.tbody`
   tr {
@@ -21,6 +21,12 @@ const StyledCalendarDate = styled.tbody`
       .date {
         display: block;
         padding: 12px 12px 16px;
+      }
+
+      span {
+        & + span {
+          margin-top: 6px;
+        }
       }
     }
   }
@@ -96,8 +102,11 @@ const slideIn = keyframes`
   }
 `
 
-const Schedule = styled.span`
+const ScheduleBar = styled.span`
   display: block;
+  position: relative;
+  width: ${({ colSpan }) => `calc(${colSpan * 100}% + ${(colSpan - 1) * 1}px)`};
+  height: 28px;
   padding: 3px 12px;
   font-size: var(--font-size-title-small);
   font-weight: 700;
@@ -120,12 +129,13 @@ const Schedule = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  animation: ${slideIn} 1.5s ease-out;
+  /* animation: ${slideIn} 1.5s ease-out; */
   cursor: pointer;
+`
 
-  & + span {
-    margin-top: 6px;
-  }
+const ScheduleEmptyBar = styled.span`
+  display: block;
+  height: 28px;
 `
 
 const CalendarSchedule = ({
@@ -134,7 +144,14 @@ const CalendarSchedule = ({
   const [schedules, setSchedules] = useState([]);
 
   useEffect(() => {
-    const schedulesQuery = query(collection(db, "schedules"));
+    const user = auth.currentUser;
+    if (!user) return;
+  
+    // 현재 로그인한 유저의 일정만 가져옴
+    const schedulesQuery = query(collection(db, "schedules"),
+      where("userId", "==", user.uid)
+    );
+  
     const unsubscribe = onSnapshot(schedulesQuery, (snapshot) => {
       const schedules = snapshot.docs.map((doc) => {
         const { userId, title, startDate, endDate, selectedColor, contents } = doc.data();
@@ -152,32 +169,64 @@ const CalendarSchedule = ({
     });
     return () => unsubscribe();
   }, [])
+
+  const isSameDate = (d1, d2) =>
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate();
+
+  const getDateOnly = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
   return (
     <StyledCalendarDate>
       {weeks.map((week, weekIndex) => (
         <tr key={weekIndex}>
           {week.map(({ day, isDisabled, date }, dayIndex) => {
-            const getDateOnly = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
-            const todaySchedules = schedules.filter((schedule) => {
-              const scheduleStart = getDateOnly(schedule.startDate);
-              const scheduleEnd = getDateOnly(schedule.endDate);
-              const currentDate = getDateOnly(date);
-              return currentDate >= scheduleStart && currentDate <= scheduleEnd;
-            });
+            const today = getDateOnly(date);
+
             return (
               <td key={dayIndex} className={isDisabled ? "disabled" : ""}>
                 <span className="date" dateTime={`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`}>
                   {day}
                 </span>
-                {todaySchedules.map((schedule) => (
-                  <Schedule
-                    key={schedule.id}
-                    color={schedule.selectedColor}
-                    onClick={() => handleScheduleClick(schedule)}
-                  >
-                    {schedule.title}
-                  </Schedule>
-                ))}
+
+                {schedules.map((schedule) => {
+                  const start = getDateOnly(schedule.startDate);
+                  const end = getDateOnly(schedule.endDate);
+
+                  const isInThisWeek = week.some(({ date: d }) => {
+                    const current = getDateOnly(d);
+                    return current >= start && current <= end;
+                  });
+
+                  if (!isInThisWeek) return null;
+
+                  const firstDayInWeek = week.find(({ date: d }) => {
+                    const current = getDateOnly(d);
+                    return current >= start && current <= end;
+                  });
+
+                  const isFirstWeek = week.some(({ date: d }) => isSameDate(d, start));
+                  const isFirstDate = isSameDate(today, getDateOnly(firstDayInWeek.date));
+
+                  const colSpan = week.reduce((count, { date: d }) => {
+                    const current = getDateOnly(d);
+                    return current >= start && current <= end ? count + 1 : count;
+                  }, 0);
+
+                  return isFirstDate ? (
+                    <ScheduleBar
+                      key={schedule.id + (isFirstWeek ? '-title' : '-empty')}
+                      colSpan={colSpan}
+                      color={schedule.selectedColor}
+                      onClick={() => handleScheduleClick(schedule)}
+                    >
+                      {isFirstWeek ? schedule.title : ''}
+                    </ScheduleBar>
+                  ) : (
+                    <ScheduleEmptyBar key={schedule.id + '-empty'} />
+                  );
+                })}
               </td>
             );
           })}

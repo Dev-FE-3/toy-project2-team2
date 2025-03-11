@@ -11,6 +11,12 @@ const Label = styled.label`
   color: var(--text-disabled);
   display: block;
   margin-bottom: 16px;
+
+  ${(props) =>
+    props.$issubmitted &&
+    `
+      pointer-events: none;
+    `}
 `;
 
 const TextBoxArea = styled.textarea`
@@ -44,6 +50,7 @@ const TextBoxArea = styled.textarea`
   &:disabled {
     background-color: var(--white);
     pointer-events: none;
+    color: var(--disabled);
   }
 `;
 
@@ -53,12 +60,13 @@ const TextArea = ({
   isSubmitted,
   disabled,
   placeholder = "내용을 입력하세요",
+  value,
   onChange,
   rows,
 }) => {
   return (
     <TextBoxWrapper>
-      {label && <Label htmlFor={id}>{label}</Label>}
+      {label && <Label htmlFor={id} $issubmitted={isSubmitted}>{label}</Label>}
       <TextBoxArea
         id={id}
         rows={rows}
@@ -66,6 +74,7 @@ const TextArea = ({
         disabled={disabled}
         placeholder={placeholder}
         $issubmitted={isSubmitted} // 'isSubmitted' 값을 전달
+        value={value}
         onChange={onChange} // 입력값 처리
       />
     </TextBoxWrapper>

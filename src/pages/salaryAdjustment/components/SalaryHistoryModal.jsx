@@ -95,7 +95,7 @@ const SalaryHistoryModal = ({ selectedRequest }) => {
               </dd>
             </List>
           }
-          hasSubmitButton={false}
+          // hasSubmitButton={false}
           isOpen={isOpen} // 모달이 열리도록 상태 전달
           onClose={onClose} // 모달 닫기 기능
         />

@@ -1,10 +1,10 @@
 import { auth, db } from "../../shared/firebase";
 import { FirebaseError } from "@firebase/util";
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, Timestamp } from "firebase/firestore";
 import { authErrors } from "./constant/authErrors";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { handleError } from "./util/handleError";
 import logo from "/images/logo.svg";
 import {
@@ -21,35 +21,83 @@ import {
 import LoginInput from "./components/LoginInput";
 import PageTitle from "../../shared/components/PageTitle";
 import Button from "../../shared/components/Button";
+import styled from "styled-components";
+import SelectBox from "../../shared/components/SelectBox";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "../../store/userSlice";
+
+const UserInfoWrapper = styled.div`
+  gap: 20px;
+  display: flex;
+  padding: 0 4px;
+`;
+
+const InputBox = styled.div`
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 4px;
+  div {
+    margin-top: 14px;
+  }
+  .selectError {
+    margin: 0;
+  }
+`;
 
 const Signup = () => {
+  const dispatch = useDispatch();
+
+  const placeholder = {
+    location: "지점 선택",
+    position: "직급 선택",
+    name: "김스텐",
+    password: "특수기호를 포함하여 6자 이상",
+    email: "sweetten@xxxx.xxx",
+  };
+
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [randomNum, setRandomNum] = useState(null);
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    position: placeholder.position,
+    location: placeholder.location,
+  });
   const [error, setError] = useState({
     email: "",
     name: "",
+    location: "",
+    position: "",
   });
+
+  useEffect(() => {
+    setRandomNum(Math.floor(10000000 + Math.random() * 90000000));
+  }, []);
+
+  const handleSelect = (name, value) => {
+    setUserData((prev) => ({ ...prev, [name]: value }));
+    if (value !== placeholder[name]) {
+      handleError(setError, { [name]: "" });
+    }
+  };
 
   const isDisabled =
     isLoading ||
-    email === "" ||
-    password === "" ||
-    name === "" ||
+    userData.email === "" ||
+    userData.password === "" ||
+    userData.name === "" ||
     error.email ||
     error.password ||
-    error.name;
+    error.name ||
+    error.location;
 
-  const onChange = (e) => {
-    const {
-      target: { name, value },
-    } = e;
-
+  const validSignupInput = (name, value) => {
+    let isValid = true;
     if (name === "email") {
-      setEmail(value);
-      const isValid =
+      isValid =
         /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value) ||
         value === "";
       handleError(setError, {
@@ -58,8 +106,7 @@ const Signup = () => {
     }
 
     if (name === "password") {
-      setPassword(value);
-      const isValid =
+      isValid =
         (value.length > 6 && /[!@#$%^&*(),.?":{}|<>]/.test(value)) ||
         value === "";
       handleError(setError, {
@@ -70,8 +117,7 @@ const Signup = () => {
     }
 
     if (name === "name") {
-      setName(value);
-      const isValid = /^[a-zA-Z가-힣]+$/.test(value) || value === "";
+      isValid = /^[a-zA-Z가-힣]+$/.test(value) || value === "";
       handleError(setError, {
         name: isValid
           ? ""
@@ -80,20 +126,64 @@ const Signup = () => {
     }
   };
 
+  const onChange = (e) => {
+    const {
+      target: { name, value },
+    } = e;
+    setUserData((prev) => ({ ...prev, [name]: value }));
+    validSignupInput(name, value);
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (isLoading || !email || !password || !name) return;
+    if (isLoading || isDisabled) return;
+    if (
+      userData.location === placeholder.location ||
+      userData.position === placeholder.position
+    ) {
+      if (userData.location === placeholder.location) {
+        handleError(setError, {
+          location: "지점을 선택하세요",
+        });
+      }
+      if (userData.position === placeholder.position) {
+        handleError(setError, {
+          position: "직급을 선택하세요",
+        });
+      }
+      return;
+    }
     try {
       setIsLoading(true);
-      await createUserWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(
+        auth,
+        userData.email,
+        userData.password
+      );
+      const user = auth.currentUser; // 회원가입 후 로그인된 상태에서 auth.currentUser가 존재
+
       await setDoc(doc(db, "users", auth.currentUser.uid), {
-        employeeId: "",
-        hiredDate: null,
-        location: "",
-        name: name,
-        position: "",
+        employeeId: randomNum,
+        hiredDate: Timestamp.now(),
+        location: userData.location,
+        name: userData.name,
+        position: userData.position,
       });
-      alert(`${name} 님 회원이 되신 것을 환영합니다.`);
+
+      // Firebase에서 로그인된 유저 정보를 Redux 상태에 저장
+      dispatch(
+        setUserInfo({
+          uid: user.uid,
+          email: user.email,
+          name: userData.name,
+          location: userData.location,
+          position: userData.position,
+          hiredDate: Timestamp.now(),
+          employeeId: randomNum,
+        })
+      );
+
+      alert(`${userData.name} 님 회원이 되신 것을 환영합니다.`);
       navigate("/");
     } catch (e) {
       console.log(e);
@@ -126,20 +216,52 @@ const Signup = () => {
               label={"이름"}
               onChange={onChange}
               name="name"
-              value={name}
-              placeholder="김스텐"
+              value={userData.name}
+              placeholder={placeholder.name}
               error={error.name}
               maxLength="10"
             />
             <ErrorWrapper>
               <Error $hasError={!!error.name}>{error.name || " "}</Error>
             </ErrorWrapper>
+            <UserInfoWrapper>
+              <InputBox>
+                <SelectBox
+                  value={userData.position}
+                  name="position"
+                  onSelect={(value) => handleSelect("position", value)}
+                  label={"직급"}
+                  size="autoSmall"
+                  options={["메이트", "트레이너"]}
+                  defaultOption={userData.position}
+                  error={error.position}
+                />
+                <ErrorWrapper className="selectError">
+                  <Error $hasError={!!error.position}>{error.position}</Error>
+                </ErrorWrapper>
+              </InputBox>
+              <InputBox>
+                <SelectBox
+                  value={userData.location}
+                  name="location"
+                  onSelect={(value) => handleSelect("location", value)}
+                  label={"지점"}
+                  size="autoSmall"
+                  options={["광복점", "서면점"]}
+                  defaultOption={userData.location}
+                  error={error.location}
+                />
+                <ErrorWrapper className="selectError">
+                  <Error $hasError={!!error.location}>{error.location}</Error>
+                </ErrorWrapper>
+              </InputBox>
+            </UserInfoWrapper>
             <LoginInput
               label={"이메일"}
               onChange={onChange}
               name="email"
-              value={email}
-              placeholder="sweetTen@xxxx.xxx"
+              value={userData.email}
+              placeholder={placeholder.email}
               error={error.email}
             />
             <ErrorWrapper>
@@ -149,8 +271,8 @@ const Signup = () => {
               label={"비밀번호"}
               onChange={onChange}
               name="password"
-              value={password}
-              placeholder="특수기호를 포함하여 6자 이상"
+              value={userData.password}
+              placeholder={placeholder.password}
               type="password"
               error={error.password}
               minLength="6"

@@ -9,46 +9,35 @@ import SelectBox from "../../../shared/components/SelectBox";
 import DatePicker from "../../../shared/components/DatePicker";
 import TextArea from "../../../shared/components/TextArea";
 
-const List = styled.dl`
+const List = styled.ul`
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  gap: 20px;
 
-  dt {
-    width: 20%;
-    margin-top: 20px;
+  & > li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    align-items: center;
 
-    &:first-of-type {
-      margin-top: 0;
-    }
-
-    &:last-of-type {
+    &.textarea {
       width: 100%;
+
+      & > div {
+        width: 100%;
+      }
     }
 
-    label {
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 24px;
+    & > label {
+      min-width: 45px;
       color: var(--text-disabled);
     }
   }
+`;
 
-  dd {
-    width: 80%;
-    margin-top: 20px;
-
-    &:first-of-type {
-      margin-top: 0;
-    }
-
-    &:last-of-type {
-      width: 100%;
-      height: 118px;
-      margin-top: 16px;
-      margin-bottom: 100px;
-    }
-  }
+const LabelList = styled.ul`
+  display: flex;
+  gap: 12px;
 `;
 
 const leaveOptions = [
@@ -67,44 +56,42 @@ const SalaryRegisterModalContent = ({
   setYearMonth,
   setSelectedLeaveType,
   setInputValue,
+  isSubmitted,
 }) => {
   return (
     <List>
-      <dt>
+      <li>
         <label htmlFor="salary-date">정정 대상</label>
-      </dt>
-      <dd>
         <DatePicker
           id="salary-date"
           type="year-month"
           value={yearMonth}
           onChange={setYearMonth}
+          isSubmitted={isSubmitted}
         />
-      </dd>
-      <dt>
+      </li>
+      <li>
         <label htmlFor="salary-type">정정 유형</label>
-      </dt>
-      <dd>
         <SelectBox
           id="salary-type"
           options={leaveOptions}
           defaultOption={selectedLeaveType}
           onSelect={setSelectedLeaveType}
           size="large"
+          isSubmitted={isSubmitted}
         />
-      </dd>
-      <dt>
+      </li>
+      <li>
         <label htmlFor="reason">정정 사유</label>
-      </dt>
-      <dd>
         <TextArea
           rows={5}
           id="reason"
           placeholder="정정 사유를 입력하세요."
           onChange={(e) => setInputValue(e.target.value)}
           value={inputValue}
+          isSubmitted={isSubmitted}
         />
-      </dd>
+      </li>
     </List>
   );
 };
@@ -161,11 +148,11 @@ const SalaryRegisterModal = ({ userId }) => {
               setInputValue={setInputValue}
             />
           }
-          hasSubmitButton={true}
+          buttonName="등록하기"
+          // hasSubmitButton={true}
           onSubmit={handleSubmit}
           isOpen={isOpen}
           onClose={onClose}
-          SubmitButton={"등록하기"}
         />
       )}
     </>

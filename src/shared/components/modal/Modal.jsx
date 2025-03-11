@@ -12,6 +12,7 @@ const Overlay = styled.div`
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
 `;
 
 const ModalContainer = styled.div`
@@ -55,13 +56,12 @@ const CloseIcon = styled.img`
 const Modal = ({
   title,
   content,
-  hasSubmitButton,
-  deleteButton,
-  SubmitButton,
+  buttonName,
   isOpen,
   onClose,
-  onDelete,
   onSubmit,
+  onEdit,
+  onDelete,
 }) => {
   if (!isOpen) return null;
 
@@ -79,13 +79,17 @@ const Modal = ({
           <Button
             size="sm"
             color="gray"
-            onClick={deleteButton ? onDelete : onClose}
+            onClick={onDelete ? onDelete : onClose}
           >
-            {deleteButton ? "삭제" : "닫기"}
+            {onDelete ? "삭제" : "닫기"}
           </Button>
-          {hasSubmitButton && (
-            <Button type="submit" size="sm" onClick={onSubmit}>
-              {SubmitButton}
+          {(onEdit || onSubmit) && (
+            <Button
+              type={onEdit ? "button" : "submit"}
+              size="sm"
+              onClick={onEdit || onSubmit}
+            >
+              {onEdit ? "수정하기" : buttonName}
             </Button>
           )}
         </ModalFooter>

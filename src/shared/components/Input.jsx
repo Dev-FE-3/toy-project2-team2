@@ -12,6 +12,12 @@ const Label = styled.label`
   font-weight: 400;
   color: var(--text-disabled);
   display: inline-block;
+
+  ${(props) =>
+    props.$issubmitted &&
+    `
+      pointer-events: none;
+    `}
 `;
 
 const InputStyle = styled.input`
@@ -50,14 +56,16 @@ const Input = ({
   isSubmitted,
   placeholder = "필요에 의한 내용을 바꿔주세요",
   onChange,
+  value,
 }) => {
   return (
     <>
-      {label && <Label htmlFor={id}>{label}</Label>}
+      {label && <Label htmlFor={id} $issubmitted={isSubmitted}>{label}</Label>}
       <InputStyle
         id={id}
         type="text"
         placeholder={placeholder}
+        value={value}
         onChange={onChange}
         $issubmitted={isSubmitted} // 여기서 'issubmitted'로 전달!!!
       />
