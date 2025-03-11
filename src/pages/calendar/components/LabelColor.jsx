@@ -13,13 +13,19 @@ const Label = styled.label`
     color === "green" ? "linear-gradient(to right, var(--green) 50%, var(--green-bg) 50%)" :
     color === "blue" ? "linear-gradient(to right, var(--blue) 50%, var(--blue-bg) 50%)" : "transparent"};
   cursor: pointer;
+
+  ${(props) =>
+    props.$issubmitted &&
+    `
+      pointer-events: none;
+    `}
 `
 
 const Input = styled.input`
   display: none;
 `
 
-const LabelColor = ({ color, selectedColor, onSelect }) => {
+const LabelColor = ({ color, selectedColor, onSelect, isSubmitted }) => {
   return (
     <>
       <Input
@@ -33,6 +39,7 @@ const LabelColor = ({ color, selectedColor, onSelect }) => {
         htmlFor={`label-${color}`}
         color={color}
         $isSelected={selectedColor === color}
+        $issubmitted={isSubmitted}
       />
     </>
   );
