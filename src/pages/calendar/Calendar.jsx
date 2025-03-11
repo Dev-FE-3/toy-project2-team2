@@ -126,6 +126,10 @@ const Calendar = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (inputValue === "") {
+      return alert("제목을 입력해 주세요.");
+    }
+
     const user = auth.currentUser;
     if (!user) return;
 
@@ -152,11 +156,14 @@ const Calendar = () => {
 
   // 일정 수정 후 저장
   const handleSave = async (schedule) => {
-    const scheduleRef = doc(db, "schedules", schedule.id);
+    if (inputValue === "") {
+      return alert("제목을 입력해 주세요.");
+    }
 
     const user = auth.currentUser;
     if (!user) return;
 
+    const scheduleRef = doc(db, "schedules", schedule.id);
     try {
       await updateDoc(scheduleRef, {
         title: inputValue,

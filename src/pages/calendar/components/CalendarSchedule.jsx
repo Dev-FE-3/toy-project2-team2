@@ -197,7 +197,7 @@ const CalendarSchedule = ({
                   // 현재 주에서 해당 일정이 처음 등장하는 날짜 찾기
                   const firstContinuedDate = week.find(({ date }) => {
                     const d = getDateOnly(date);
-                    return d >= scheduleStart && d <= getDateOnly(week[6].date);;
+                    return d >= scheduleStart && d <= getDateOnly(week[6].date);
                   });
                 
                   // 현재 date가 그 첫 날짜인지 확인
