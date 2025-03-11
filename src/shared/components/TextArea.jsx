@@ -30,7 +30,6 @@ const TextBoxArea = styled.textarea`
   &:focus {
     border-color: var(--accent);
     background-color: var(--white);
-    color: var(--text-primary);
   }
 
   ${(props) =>
@@ -55,12 +54,14 @@ const TextArea = ({
   disabled,
   placeholder = "내용을 입력하세요",
   onChange,
+  rows,
 }) => {
   return (
     <TextBoxWrapper>
       {label && <Label htmlFor={id}>{label}</Label>}
       <TextBoxArea
         id={id}
+        rows={rows}
         maxLength={100} // 우선 100 설정
         disabled={disabled}
         placeholder={placeholder}

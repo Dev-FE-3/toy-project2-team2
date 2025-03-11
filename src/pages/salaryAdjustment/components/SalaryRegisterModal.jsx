@@ -1,12 +1,55 @@
 import React, { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../../shared/firebase";
+import styled from "styled-components";
 import useModal from "../../../shared/components/modal/useModal";
 import Modal from "../../../shared/components/modal/Modal";
 import Button from "../../../shared/components/Button";
 import SelectBox from "../../../shared/components/SelectBox";
 import DatePicker from "../../../shared/components/DatePicker";
 import TextArea from "../../../shared/components/TextArea";
+
+const List = styled.dl`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  dt {
+    width: 20%;
+    margin-top: 20px;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+
+    &:last-of-type {
+      width: 100%;
+    }
+
+    label {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--text-disabled);
+    }
+  }
+
+  dd {
+    width: 80%;
+    margin-top: 20px;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+
+    &:last-of-type {
+      width: 100%;
+      height: 118px;
+      margin-top: 16px;
+      margin-bottom: 100px;
+    }
+  }
+`;
 
 const leaveOptions = [
   "유급 휴가",
@@ -26,24 +69,43 @@ const SalaryRegisterModalContent = ({
   setInputValue,
 }) => {
   return (
-    <div>
-      <label>정정 대상</label>
-      <DatePicker type="year-month" value={yearMonth} onChange={setYearMonth} />
-      <label>정정 유형</label>
-      <SelectBox
-        options={leaveOptions}
-        defaultOption={selectedLeaveType}
-        onSelect={setSelectedLeaveType}
-        size="large"
-      />
-      <TextArea
-        id="reason"
-        label="정정 사유"
-        placeholder="정정 사유를 입력하세요."
-        onChange={(e) => setInputValue(e.target.value)}
-        value={inputValue}
-      />
-    </div>
+    <List>
+      <dt>
+        <label htmlFor="salary-date">정정 대상</label>
+      </dt>
+      <dd>
+        <DatePicker
+          id="salary-date"
+          type="year-month"
+          value={yearMonth}
+          onChange={setYearMonth}
+        />
+      </dd>
+      <dt>
+        <label htmlFor="salary-type">정정 유형</label>
+      </dt>
+      <dd>
+        <SelectBox
+          id="salary-type"
+          options={leaveOptions}
+          defaultOption={selectedLeaveType}
+          onSelect={setSelectedLeaveType}
+          size="large"
+        />
+      </dd>
+      <dt>
+        <label htmlFor="reason">정정 사유</label>
+      </dt>
+      <dd>
+        <TextArea
+          rows={5}
+          id="reason"
+          placeholder="정정 사유를 입력하세요."
+          onChange={(e) => setInputValue(e.target.value)}
+          value={inputValue}
+        />
+      </dd>
+    </List>
   );
 };
 

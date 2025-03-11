@@ -69,7 +69,7 @@ const Option = styled.li`
 `;
 
 const SelectBox = ({
-  options = [],
+  options,
   defaultOption = "선택",
   onSelect,
   size = "large",
