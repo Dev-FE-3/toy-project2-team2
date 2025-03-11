@@ -81,7 +81,7 @@ const Label = styled.label`
 
 const SelectBox = ({
   label,
-  options = [],
+  options,
   defaultOption = "선택",
   onSelect,
   size = "large",
@@ -100,7 +100,12 @@ const SelectBox = ({
     <>
       {label && <Label>{label}</Label>}
       <Container>
-        <Button onClick={() => setIsOpen(!isOpen)} size={size} $error={error} type="button">
+        <Button
+          onClick={() => setIsOpen(!isOpen)}
+          size={size}
+          $error={error}
+          type="button"
+        >
           {defaultOption}
           <Icon src={toggleIcon} alt="Toggle Dropdown" />
         </Button>
