@@ -6,6 +6,8 @@ import {
   where,
   orderBy,
   onSnapshot,
+  getDoc,
+  doc,
 } from "firebase/firestore";
 import { db, auth } from "../../shared/firebase"; // Firebase 설정 파일
 import PageTitle from "../../shared/components/PageTitle";
@@ -19,6 +21,7 @@ import TextArea from "../../shared/components/TextArea";
 import { rolesPermissions } from "../../shared/config/rolesPermissions";
 import { useSelector } from "react-redux";
 import { selectUserInfo } from "../../store/userSlice";
+import LoadingScreen from "../../shared/components/LoadingScreen";
 
 const TitleContainer = styled.div`
   position: relative;
@@ -46,6 +49,7 @@ const Table = styled.table`
     display: table;
     table-layout: fixed;
     width: 100%;
+
     border-bottom: 2px solid var(--background-color);
 
     &::after {
@@ -76,10 +80,13 @@ const Table = styled.table`
       td {
         color: var(--text-disabled);
 
-        &:nth-child(3) {
+        &:nth-last-child(2) {
           white-space: nowrap;
           text-overflow: ellipsis;
           overflow: hidden;
+        }
+        &:last-child {
+          padding-right: 14px;
         }
       }
     }
@@ -90,7 +97,7 @@ const Table = styled.table`
     width: 20%;
     padding: 24px;
 
-    &:nth-child(3) {
+    &:nth-last-child(2) {
       width: 40%;
     }
   }
@@ -221,6 +228,7 @@ const SalaryAdjustment = () => {
   const userInfo = useSelector(selectUserInfo);
   const [userId, setUserId] = useState(null);
   const [userPosition, setUserPosition] = useState(null);
+  const [usersName, setUsersName] = useState({});
 
   useEffect(() => {
     const savedUserId = localStorage.getItem("userId");
@@ -272,30 +280,46 @@ const SalaryAdjustment = () => {
     return () => unsubscribe();
   }, [userId]);
 
-  // 모든 사용자의 정정 내역 불러오기
   useEffect(() => {
-    const collectionRef = collection(db, "salary_requests");
-    const q = query(collectionRef, orderBy("createdAt", "desc")); // 필터 없이 전체 문서 가져오기
+    const fetchRequests = async () => {
+      // 1. salary_requests 컬렉션의 요청을 가져오기
+      const collectionRef = collection(db, "salary_requests");
+      const q = query(collectionRef, orderBy("createdAt", "desc"));
 
-    // 실시간으로 데이터 구독
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const fetchedRequests = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setAllRequests(fetchedRequests); // 데이터를 처리하는 로직
-    });
+      const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+        const fetchedRequests = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setAllRequests(fetchedRequests);
 
-    // 구독을 해제하려면 unsubscribe() 호출
-    return unsubscribe;
+        // 2. 요청에서 userId 목록 추출 & 중복 제거
+        const userIds = [...new Set(fetchedRequests.map((req) => req.userId))];
+
+        if (userIds.length === 0) return;
+
+        // 3. Firestore에서 userId에 맞는 사용자 문서 가져오기
+        const usersData = {};
+        for (const userId of userIds) {
+          const userDocRef = doc(db, "users", userId);
+          const userDoc = await getDoc(userDocRef);
+          if (userDoc.exists()) {
+            usersData[userId] = userDoc.data().name;
+          }
+        }
+
+        setUsersName(usersData);
+      });
+
+      return () => unsubscribe();
+    };
+
+    fetchRequests();
   }, []);
 
   if (!userPosition) {
-    // userPosition이 비어있을 때 로딩 상태 표시
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
-
-  console.log(userPosition);
 
   return (
     <>
@@ -341,6 +365,7 @@ const SalaryAdjustment = () => {
 
                 return (
                   <tr key={index}>
+                    <td>{usersName[request.userId] || "없는 사용자"}</td>
                     <td>{formattedDate}</td>
                     <td>{request.type}</td>
                     <td title={request.reason}>{request.reason}</td>
