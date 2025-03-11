@@ -54,9 +54,14 @@ const CloseIcon = styled.img`
 `;
 
 const Modal = ({
-  title, content, buttonName,
-  isOpen, onClose,
-  onSubmit, onEdit, onDelete,
+  title,
+  content,
+  buttonName,
+  isOpen,
+  onClose,
+  onSubmit,
+  onEdit,
+  onDelete,
 }) => {
   if (!isOpen) return null;
 

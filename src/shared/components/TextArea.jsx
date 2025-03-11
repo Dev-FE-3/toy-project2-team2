@@ -36,7 +36,6 @@ const TextBoxArea = styled.textarea`
   &:focus {
     border-color: var(--accent);
     background-color: var(--white);
-    color: var(--text-primary);
   }
 
   ${(props) =>
