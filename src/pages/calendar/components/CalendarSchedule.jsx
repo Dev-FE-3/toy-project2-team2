@@ -194,6 +194,15 @@ const CalendarSchedule = ({
                   const scheduleEnd = getDateOnly(schedule.endDate);
                   const isFirstDay = currentDate.getTime() === scheduleStart.getTime();
 
+                  // 현재 주에서 해당 일정이 처음 등장하는 날짜 찾기
+                  const firstContinuedDate = week.find(({ date }) => {
+                    const d = getDateOnly(date);
+                    return d >= scheduleStart && d <= getDateOnly(week[6].date);;
+                  });
+                
+                  // 현재 date가 그 첫 날짜인지 확인
+                  const isFirstContinuedDate = firstContinuedDate && firstContinuedDate.date.getTime() === currentDate.getTime();
+
                   const colSpan = week.reduce((count, { date: d }) => {
                     const current = getDateOnly(d);
                     return current >= scheduleStart && current <= scheduleEnd ? count + 1 : count;
@@ -202,7 +211,7 @@ const CalendarSchedule = ({
                   return (
                     <ScheduleBar
                       key={schedule.id}
-                      colSpan={isFirstDay ? colSpan : 1}
+                      colSpan={isFirstDay || isFirstContinuedDate ? colSpan : 1}
                       color={schedule.selectedColor}
                       onClick={() => handleScheduleClick(schedule)}
                     >
