@@ -86,6 +86,6 @@ const GlobalStyle = createGlobalStyle`
     background-color: var(--scrollbar-track, var(--background-color));
 		border-radius: 8px;
   }
-`
 
-export default GlobalStyle
+`;
+export default GlobalStyle;

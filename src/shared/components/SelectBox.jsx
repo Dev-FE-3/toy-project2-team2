@@ -74,7 +74,6 @@ const Option = styled.li`
   }
 `;
 const Label = styled.label`
-  padding-left: 4px;
   color: var(--text-disabled);
   font-size: var(--text-size-primary);
 `;

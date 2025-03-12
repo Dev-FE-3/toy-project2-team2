@@ -29,6 +29,7 @@ const Label = styled.label`
 `;
 
 const LoginInput = ({
+  id,
   name,
   value,
   onChange,
@@ -40,8 +41,9 @@ const LoginInput = ({
 }) => {
   return (
     <InputWrapper>
-      {label && <Label>{label}</Label>}
+      {label && <Label htmlFor={id} >{label}</Label>}
       <StyledInput
+        id={id}
         onChange={onChange}
         name={name}
         value={value}
