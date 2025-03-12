@@ -34,7 +34,8 @@ const Content = styled.div`
   display: flex;
   justify-content: space-between;
   font-weight: 500;
-  line-height: normal;
+  line-height: 45.24px;
+  align-items: center;
   &:not(:first-child) {
     margin-top: 18px;
   }

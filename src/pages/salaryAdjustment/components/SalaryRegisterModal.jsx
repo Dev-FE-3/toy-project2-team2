@@ -62,9 +62,9 @@ const SalaryRegisterModalContent = ({
   return (
     <List>
       <li>
-        <label htmlFor="salary-date">정정 대상</label>
         <DatePicker
           id="salary-date"
+          label="정정 대상"
           type="year-month"
           value={yearMonth}
           onChange={setYearMonth}
@@ -72,9 +72,9 @@ const SalaryRegisterModalContent = ({
         />
       </li>
       <li>
-        <label htmlFor="salary-type">정정 유형</label>
         <SelectBox
           id="salary-type"
+          label="정정 유형"
           options={leaveOptions}
           defaultOption={selectedLeaveType}
           onSelect={setSelectedLeaveType}
@@ -97,24 +97,20 @@ const SalaryRegisterModalContent = ({
   );
 };
 
-/**
- * 정정 신청 모달 컴포넌트
- * @param {Object} props - 부모 컴포넌트에서 전달받은 사용자 ID
- */
-/**
- * Firebase에 정정 신청 데이터를 저장하는 함수
- * @param {string} userId - 사용자 ID
- * @param {Date} date - 선택한 날짜
- * @param {string} type - 정정 유형
- * @param {string} reason - 정정 사유
- */
-const SalaryRegisterModal = ({ userId }) => {
-  const { isOpen, onOpen, onClose } = useModal(); // 모달 상태 관리
-  const [yearMonth, setYearMonth] = useState(new Date()); // 날짜 선택 상태
-  const [selectedLeaveType, setSelectedLeaveType] = useState("유형"); // 정정 유형 선택 상태
-  const [inputValue, setInputValue] = useState(""); // 정정 사유 입력 상태
+const SalaryRegisterModal = ({ userName, userId, userEmployeeId }) => {
+  const { isOpen, onOpen, onClose } = useModal();
+  const [yearMonth, setYearMonth] = useState(new Date());
+  const [selectedLeaveType, setSelectedLeaveType] = useState("유형");
+  const [inputValue, setInputValue] = useState("");
 
-  const handleRegister = async (userId, date, type, reason) => {
+  const handleRegister = async (
+    userId,
+    date,
+    type,
+    reason,
+    userName,
+    userEmployeeId
+  ) => {
     try {
       const collectionRef = collection(db, "salary_requests");
       await addDoc(collectionRef, {
@@ -124,6 +120,8 @@ const SalaryRegisterModal = ({ userId }) => {
         reason,
         status: "대기 중",
         createdAt: new Date(),
+        userName,
+        userEmployeeId,
       });
 
       alert("정정 신청이 완료되었습니다!");
@@ -142,7 +140,14 @@ const SalaryRegisterModal = ({ userId }) => {
       alert("모든 항목을 입력해주세요.");
       return;
     }
-    handleRegister(userId, yearMonth, selectedLeaveType, inputValue);
+    handleRegister(
+      userId,
+      yearMonth,
+      selectedLeaveType,
+      inputValue,
+      userName,
+      userEmployeeId
+    );
   };
 
   return (

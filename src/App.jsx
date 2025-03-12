@@ -1,71 +1,108 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { useEffect, useState, useMemo } from "react";
+import { auth, db } from "./shared/firebase";
+import { doc, getDoc } from "firebase/firestore";
 import Calendar from "./pages/calendar/Calendar";
 import Login from "./pages/auth/Login";
 import MySalary from "./pages/mySalary/MySalary";
 import SalaryAdjustment from "./pages/salaryAdjustment/SalaryAdjustment";
 import Guide from "./pages/guide/Guide";
-import { RouterProvider } from "react-router-dom";
 import Layout from "./shared/Layout";
-import { useEffect, useState } from "react";
-import { auth } from "./shared/firebase";
 import LoadingScreen from "./shared/components/LoadingScreen";
 import ProtectedRoute from "./shared/components/ProtectedRoute";
 import GlobalStyle from "./shared/components/styles/GlobalStyle";
 import Signup from "./pages/auth/Signup";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <ProtectedRoute>
-        <Layout />
-      </ProtectedRoute>
-    ),
-    children: [
-      {
-        path: "",
-        element: <Calendar />,
-      },
-      {
-        path: "MySalary",
-        element: <MySalary />,
-      },
-      {
-        path: "SalaryAdjustment",
-        element: <SalaryAdjustment />,
-      },
-      {
-        path: "Guide",
-        element: <Guide />,
-      },
-    ],
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/signup",
-    element: <Signup />,
-  },
-]);
+import { rolesPermissions } from "./shared/config/rolesPermissions";
+import EmployeeList from "./pages/employeeList/EmployeeList";
+import ProtectedRouteForManager from "./shared/components/ProtectedRouteForManager";
+import SalaryAdmin from "./pages/mySalary/SalaryAdmin";
 
 const App = () => {
   const [isLoading, setLoading] = useState(true);
-  const init = async () => {
-    //wait for firebase login check
-    await auth.authStateReady();
-    setLoading(false);
-  };
+  const [userPosition, setUserPosition] = useState(null);
 
   useEffect(() => {
-    init();
+    // Firebase 로그인 상태 감지
+    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+      if (currentUser) {
+        const docRef = doc(db, "users", currentUser.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setUserPosition(docSnap.data().position);
+        } else {
+          setUserPosition(null);
+        }
+      } else {
+        setUserPosition(null);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
+
+  // userPosition이 null이면 라우터 생성 지연
+  const router = useMemo(() => {
+    return createBrowserRouter([
+      {
+        path: "/",
+        element: (
+          <ProtectedRoute>
+            <Layout />
+          </ProtectedRoute>
+        ),
+        children: [
+          {
+            path: "",
+            element: <Calendar />,
+          },
+          {
+            path: "MySalary",
+            element: rolesPermissions[userPosition]?.canConfirm ? (
+              <EmployeeList />
+            ) : (
+              <MySalary />
+            ),
+          },
+          {
+            path: "/MySalary",
+            element: <ProtectedRouteForManager />,
+            children: [
+              {
+                path: ":employeeId",
+                element: <SalaryAdmin />,
+              },
+            ],
+          },
+          {
+            path: "SalaryAdjustment",
+            element: <SalaryAdjustment />,
+          },
+          {
+            path: "Guide",
+            element: <Guide />,
+          },
+        ],
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/signup",
+        element: <Signup />,
+      },
+    ]);
+  }, [userPosition]); // userPosition이 업데이트될 때만 다시 생성
 
   return (
     <>
       <GlobalStyle />
-      {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
+      {isLoading || !router ? (
+        <LoadingScreen />
+      ) : (
+        <RouterProvider router={router} />
+      )}
     </>
   );
 };
