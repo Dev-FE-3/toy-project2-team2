@@ -12,6 +12,12 @@ const Label = styled.label`
   font-weight: 400;
   color: var(--text-disabled);
   display: inline-block;
+
+  ${(props) =>
+    props.$issubmitted &&
+    `
+      pointer-events: none;
+    `}
 `;
 
 const InputStyle = styled.input`
@@ -24,7 +30,7 @@ const InputStyle = styled.input`
   font-weight: 400;
   line-height: 24px;
   border: 1px solid var(--disabled);
-  background-color: var(--background-color-3);
+  background-color: var(--white);
   color: var(--text-primary);
   transition: all 0.2s ease;
 
@@ -38,7 +44,7 @@ const InputStyle = styled.input`
     props.$issubmitted &&
     `
       border: 1px solid var(--disabled);
-      background-color: var(--white);
+      background-color: var(--background-color-3);
       color: var(--text-primary);
       pointer-events: none;
     `}
@@ -50,14 +56,16 @@ const Input = ({
   isSubmitted,
   placeholder = "필요에 의한 내용을 바꿔주세요",
   onChange,
+  value,
 }) => {
   return (
     <>
-      {label && <Label htmlFor={id}>{label}</Label>}
+      {label && <Label htmlFor={id} $issubmitted={isSubmitted}>{label}</Label>}
       <InputStyle
         id={id}
         type="text"
         placeholder={placeholder}
+        value={value}
         onChange={onChange}
         $issubmitted={isSubmitted} // 여기서 'issubmitted'로 전달!!!
       />
