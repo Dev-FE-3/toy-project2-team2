@@ -113,7 +113,7 @@ const SalaryAdmin = () => {
         setAvailableMonths(sortedMonths);
         setSelectedMonth(sortedMonths[0] || "");
       } catch (error) {
-        console.error("❌ 월 데이터 조회 오류:", error);
+        console.error("월 데이터 조회 오류:", error);
       }
     };
 
@@ -127,12 +127,11 @@ const SalaryAdmin = () => {
         const querySnapshot = await getDocs(q);
 
         if (!querySnapshot.empty) {
-          //setUserInfo(querySnapshot.docs[0].data());
           const userDoc = querySnapshot.docs[0];
-          setUserInfo({ ...userDoc.data(), uid: userDoc.id }); // 🔥 uid 추가
+          setUserInfo({ ...userDoc.data(), uid: userDoc.id }); // uid 추가
         }
       } catch (error) {
-        console.error("❌ 유저 데이터 조회 오류:", error);
+        console.error("유저 데이터 조회 오류:", error);
       }
     };
 
@@ -141,11 +140,9 @@ const SalaryAdmin = () => {
   }, [employeeId]);
 
   useEffect(() => {
-    if (!selectedMonth || !userInfo?.uid) return; // 🔥 userInfo?.uid 체크 추가
+    if (!selectedMonth || !userInfo?.uid) return; // userInfo?.uid 체크
 
     const fetchSalaryData = async () => {
-      console.log("📌 Fetching salary data for:", userInfo?.uid, selectedMonth);
-
       const salaryRef = doc(
         db,
         "salaries",
@@ -156,10 +153,8 @@ const SalaryAdmin = () => {
       const salarySnap = await getDoc(salaryRef);
 
       if (salarySnap.exists()) {
-        console.log("📌 Fetched salary data:", salarySnap.data());
         setSalaryData(salarySnap.data());
       } else {
-        console.log("⚠️ No salary data found, setting defaults");
         setSalaryData({ netSalary: 0, payments: [], deductions: [] });
       }
     };
@@ -176,7 +171,7 @@ const SalaryAdmin = () => {
       0
     );
 
-    // 공제 내역 재계산
+    // 변동된 지급 내역에 따른 공제 내역 재계산
     const recalculateDeductions = (payments) => {
       const baseSalary = payments?.baseSalary || 0;
       const overtimePay = payments?.overtimePay || 0;
@@ -212,15 +207,15 @@ const SalaryAdmin = () => {
         netSalary: updatedNetSalary,
       });
 
-      // 🔥 새로운 객체로 변경하여 강제 리렌더링
+      // 새로운 객체로 변경하여 강제 리렌더링
       setSalaryData((prev) => ({
         ...prev,
-        payments: { ...updatedPayments }, // ✅ 새로운 객체 할당
-        deductions: { ...updatedDeductions }, // ✅ 새로운 객체 할당
+        payments: { ...updatedPayments },
+        deductions: { ...updatedDeductions },
         netSalary: updatedNetSalary,
       }));
     } catch (error) {
-      console.error("❌ 급여 데이터 업데이트 오류:", error);
+      console.error("급여 데이터 업데이트 오류:", error);
     }
   };
 
@@ -256,25 +251,24 @@ const SalaryAdmin = () => {
             }}
           />
         </InfoWrap>
-        {salaryData && (
+        {salaryData ? (
           <SalaryCalcBox>
             <Left>실 지급액</Left>
             <Right>{salaryData.netSalary.toLocaleString()} 원</Right>
           </SalaryCalcBox>
+        ) : (
+          <SalaryCalcBox>
+            <Left>실 지급액</Left>
+            <Right>0 원</Right>
+          </SalaryCalcBox>
         )}
-        {salaryData && (
-          <CalcWrapper>
-            <EditableCalcBox
-              data={salaryData?.payments || []}
-              onSave={handleSavePayments}
-            />
-            <CalcBox
-              key={JSON.stringify(salaryData.deductions)}
-              type="deductions"
-              data={salaryData?.deductions || []}
-            />
-          </CalcWrapper>
-        )}
+        <CalcWrapper>
+          <EditableCalcBox
+            data={salaryData?.payments || []}
+            onSave={handleSavePayments}
+          />
+          <CalcBox type="deductions" data={salaryData?.deductions || []} />
+        </CalcWrapper>
       </ContentBox>
     </>
   );
