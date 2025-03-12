@@ -2,7 +2,10 @@ import { auth, db } from "../../shared/firebase";
 import { FirebaseError } from "@firebase/util";
 import { setDoc, doc, Timestamp } from "firebase/firestore";
 import { authErrors } from "./constant/authErrors";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { handleError } from "./util/handleError";
@@ -74,6 +77,15 @@ const Signup = () => {
     position: "",
   });
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
   useEffect(() => {
     setRandomNum(Math.floor(10000000 + Math.random() * 90000000));
   }, []);
@@ -161,6 +173,7 @@ const Signup = () => {
         userData.email,
         userData.password
       );
+
       const user = auth.currentUser; // 회원가입 후 로그인된 상태에서 auth.currentUser가 존재
 
       await setDoc(doc(db, "users", auth.currentUser.uid), {
@@ -185,10 +198,7 @@ const Signup = () => {
       );
 
       toast.success(`${userData.name} 님 회원이 되신 것을 환영합니다.`);
-
-      navigate("/");
     } catch (e) {
-      console.log(e);
       if (e instanceof FirebaseError) {
         const errorInfo = authErrors[e.code];
         if (errorInfo) {
@@ -204,7 +214,6 @@ const Signup = () => {
       setIsLoading(false);
     }
   };
-
   return (
     <Wrapper>
       <LoginBox>
@@ -215,6 +224,7 @@ const Signup = () => {
         <Form onSubmit={onSubmit}>
           <InputWrapper>
             <LoginInput
+              id="name"
               label={"이름"}
               onChange={onChange}
               name="name"
@@ -229,6 +239,7 @@ const Signup = () => {
             <UserInfoWrapper>
               <InputBox>
                 <SelectBox
+                  id="position"
                   value={userData.position}
                   name="position"
                   onSelect={(value) => handleSelect("position", value)}
@@ -244,6 +255,7 @@ const Signup = () => {
               </InputBox>
               <InputBox>
                 <SelectBox
+                  id="location"
                   value={userData.location}
                   name="location"
                   onSelect={(value) => handleSelect("location", value)}
@@ -259,6 +271,7 @@ const Signup = () => {
               </InputBox>
             </UserInfoWrapper>
             <LoginInput
+              id="email"
               label={"이메일"}
               onChange={onChange}
               name="email"
@@ -270,6 +283,7 @@ const Signup = () => {
               <Error $hasError={!!error.email}>{error.email || " "}</Error>
             </ErrorWrapper>
             <LoginInput
+              id="password"
               label={"비밀번호"}
               onChange={onChange}
               name="password"

@@ -124,6 +124,7 @@ const Login = () => {
         <Form onSubmit={onSubmit}>
           <InputWrapper>
             <LoginInput
+              id="email"
               onChange={onChange}
               name="email"
               value={email}
@@ -136,6 +137,7 @@ const Login = () => {
               </Error>
             </ErrorWrapper>
             <LoginInput
+              id="password"
               onChange={onChange}
               name="password"
               value={password}
