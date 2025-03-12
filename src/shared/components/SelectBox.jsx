@@ -67,10 +67,10 @@ const Dropdown = styled.ul`
 `;
 
 const Option = styled.li`
-  color: var(--text-disabled-2);
+  color: var(--text-primary);
   padding: 8px 12px;
   &:hover {
-    color: var(--text-primary);
+    background-color: var(--background-color);
   }
 `;
 const Label = styled.label`
