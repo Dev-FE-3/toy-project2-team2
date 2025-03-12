@@ -1,6 +1,6 @@
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
-import Button from '../components/Button'
+import Button from "../components/Button";
 
 const LogOut = () => {
   const navigate = useNavigate();
@@ -14,9 +14,14 @@ const LogOut = () => {
       .catch((error) => {
         console.error("로그아웃 실패:", error);
       });
+    localStorage.clear();
   };
 
-  return <Button onClick={logOut} size="sm" color="gray">로그아웃</Button>;
+  return (
+    <Button onClick={logOut} size="sm" color="gray">
+      로그아웃
+    </Button>
+  );
 };
 
 export default LogOut;
