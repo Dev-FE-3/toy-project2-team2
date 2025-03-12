@@ -12,6 +12,7 @@ import styled from "styled-components";
 import RegisterModalButton from "./components/SalaryRegisterModal";
 import SalaryHistoryModal from "./components/SalaryHistoryModal";
 
+// 제목과 버튼 컨테이너 스타일 정의
 const TitleContainer = styled.div`
   position: relative;
 
@@ -22,6 +23,7 @@ const TitleContainer = styled.div`
   }
 `;
 
+// 급여 정정 내역을 표시하는 테이블 스타일 정의
 const Table = styled.table`
   table-layout: fixed;
   width: 100%;
@@ -45,16 +47,7 @@ const Table = styled.table`
       display: block;
       height: 10px;
     }
-
-    tr {
-      border-bottom: 2px solid var(--background-color);
-
-      th {
-        color: var(--text-secondary);
-      }
-    }
   }
-
   tbody {
     display: block;
     max-height: 480px;
@@ -64,9 +57,7 @@ const Table = styled.table`
       display: table;
       width: 100%;
       table-layout: fixed;
-
-      //내역 확인 hover 속성
-      cursor: pointer;
+      cursor: pointer; // 행 클릭 가능하도록 설정
 
       &:hover {
         background-color: var(--background-color-3);
@@ -95,6 +86,7 @@ const Table = styled.table`
   }
 `;
 
+// 정정 상태별 스타일을 지정하는 컴포넌트
 const StatusCell = styled.span`
   display: inline-block;
   width: 96px;
@@ -120,10 +112,11 @@ const StatusCell = styled.span`
 `;
 
 const SalaryAdjustment = () => {
-  const [requests, setRequests] = useState([]);
-  const [userId, setUserId] = useState(null);
-  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [requests, setRequests] = useState([]); // 급여 정정 요청 목록 상태
+  const [userId, setUserId] = useState(null); // 현재 로그인한 사용자 ID 상태
+  const [selectedRequest, setSelectedRequest] = useState(null); // 선택된 정정 요청 상태
 
+  // 사용자의 로그인 상태를 감지하여 userId 설정
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -134,16 +127,18 @@ const SalaryAdjustment = () => {
     return () => unsubscribe();
   }, []);
 
+  // Firestore에서 현재 사용자의 급여 정정 신청 내역을 가져오는 함수
   useEffect(() => {
     if (!userId) return;
 
     const collectionRef = collection(db, "salary_requests");
     const q = query(
       collectionRef,
-      where("userId", "==", userId), // userId 기준으로 필터링
-      orderBy("createdAt", "desc") // createdAt을 기준으로 내림차순 정렬
+      where("userId", "==", userId), // 현재 로그인한 사용자의 정정 요청만 가져오기
+      orderBy("createdAt", "desc") // 생성 날짜 기준으로 내림차순 정렬
     );
 
+    // 실시간으로 데이터 가져오기
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const fetchedRequests = querySnapshot.docs.map((doc) => ({
         id: doc.id, // 문서 ID 추가
@@ -155,17 +150,20 @@ const SalaryAdjustment = () => {
     return () => unsubscribe();
   }, [userId]);
 
-  //정정 내역 모달 열기
+  // 특정 정정 내역을 클릭했을 때 해당 데이터를 모달에 전달하여 표시
   const handleRowClick = (request) => {
     setSelectedRequest(request);
   };
 
   return (
     <>
+      {/* 페이지 제목 및 정정 신청 버튼 */}
       <TitleContainer>
         <PageTitle title="정정 신청 / 내역" subtitle="정정 내역" />
         <RegisterModalButton userId={userId} className="registerBtn" />
       </TitleContainer>
+
+      {/* 정정 내역 테이블 */}
       <Table>
         <thead>
           <tr>
@@ -206,6 +204,7 @@ const SalaryAdjustment = () => {
         </tbody>
       </Table>
 
+      {/* 정정 내역 상세 모달 */}
       {selectedRequest && (
         <SalaryHistoryModal selectedRequest={selectedRequest} />
       )}
