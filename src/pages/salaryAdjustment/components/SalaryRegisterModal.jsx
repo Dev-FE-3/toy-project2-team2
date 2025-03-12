@@ -8,7 +8,6 @@ import Button from "../../../shared/components/Button";
 import SelectBox from "../../../shared/components/SelectBox";
 import DatePicker from "../../../shared/components/DatePicker";
 import TextArea from "../../../shared/components/TextArea";
-import { ToastContainer, toast } from "react-toastify";
 
 const List = styled.ul`
   display: flex;
@@ -125,6 +124,7 @@ const SalaryRegisterModal = ({ userName, userId, userEmployeeId }) => {
       });
 
       alert("정정 신청이 완료되었습니다!");
+
       onClose(); // 모달 닫기
     } catch (error) {
       console.error("정정 신청 오류:", error);
@@ -153,7 +153,18 @@ const SalaryRegisterModal = ({ userName, userId, userEmployeeId }) => {
   return (
     <>
       {/* 정정 신청 버튼 */}
-      <Button onClick={onOpen} className="registerBtn">
+      <Button
+        onClick={() => {
+          {
+            /*상태 초기화*/
+          }
+          setYearMonth(new Date());
+          setInputValue("");
+          setSelectedLeaveType("유형");
+          onOpen();
+        }}
+        className="registerBtn"
+      >
         정정 신청
       </Button>
       {isOpen && (
