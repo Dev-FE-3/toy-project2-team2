@@ -14,11 +14,9 @@ const Label = styled.label`
     color === "blue" ? "linear-gradient(to right, var(--blue) 50%, var(--blue-bg) 50%)" : "transparent"};
   cursor: pointer;
 
-  ${(props) =>
-    props.$issubmitted &&
-    `
-      pointer-events: none;
-    `}
+  ${(props) => props.$issubmitted && `
+    pointer-events: none;
+  `}
 `
 
 const Input = styled.input`

@@ -76,9 +76,11 @@ const Calendar = () => {
         date: new Date(year, month, i),
       });
     }
+    
+    // 1일 부터 시작
+    let nextMonthDay = 1;
 
     // 마지막 주 빈칸에 다음 달 날짜 추가
-    let nextMonthDay = 1; // 1일부터 시작
     while (calendarDays.length % 7 !== 0) {
       calendarDays.push({
         day: nextMonthDay++,
@@ -87,8 +89,9 @@ const Calendar = () => {
       });
     }
 
-    // 7일씩 나누어 배열 생성
     const weeks = [];
+
+    // 7일씩 배열 생성
     for (let i = 0; i < calendarDays.length; i += 7) {
       weeks.push(calendarDays.slice(i, i + 7));
     }
@@ -126,6 +129,7 @@ const Calendar = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // 제목 필수 입력 확인
     if (inputValue === "") {
       return alert("제목을 입력해 주세요.");
     }
@@ -142,11 +146,11 @@ const Calendar = () => {
         contents: textAreaValue,
         userId: user.uid,
       })
+
+      handleModalClose();
     } catch(error) {
       console.error("일정 추가 실패: ", error);
     }
-
-    handleModalClose();
   }
 
   // 일정 수정 가능 상태
@@ -156,6 +160,7 @@ const Calendar = () => {
 
   // 일정 수정 후 저장
   const handleSave = async (schedule) => {
+    // 제목 필수 입력 확인
     if (inputValue === "") {
       return alert("제목을 입력해 주세요.");
     }
@@ -172,16 +177,16 @@ const Calendar = () => {
         selectedColor,
         contents: textAreaValue,
       });
+
+      handleModalClose();
     } catch (error) {
       console.error("일정 수정 실패: ", error);
     }
-
-    // 수정 후 모달 닫기
-    handleModalClose();
   }
 
+  // 등록된 일정 클릭
   const handleScheduleClick = (schedule) => {
-    // 클릭한 일정을 저장
+    // 등록된 일정 내용 업데이트
     setSelectedSchedule(schedule);
     setInputValue(schedule.title);
     setStartDate(new Date(schedule.startDate));
