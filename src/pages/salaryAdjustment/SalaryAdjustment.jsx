@@ -141,6 +141,7 @@ const SalaryAdjustment = () => {
   const [allRequests, setAllRequests] = useState([]);
   const [requests, setRequests] = useState([]);
   const userInfo = useSelector(selectUserInfo);
+  const [userEmployeeId, setUserEmployeeId] = useState(null);
   const [userId, setUserId] = useState(null);
   const [userPosition, setUserPosition] = useState(null);
   const [userName, setUserName] = useState(null);
@@ -151,6 +152,7 @@ const SalaryAdjustment = () => {
     const savedUserId = localStorage.getItem("userId");
     const savedUserPosition = localStorage.getItem("userPosition");
     const savedUserName = localStorage.getItem("userName");
+    const savedUserEmployeeId = localStorage.getItem("userEmployeeId");
 
     if (savedUserId && savedUserId !== userId) {
       setUserId(savedUserId);
@@ -169,13 +171,19 @@ const SalaryAdjustment = () => {
     } else if (userInfo.name && userInfo.name !== userName) {
       setUserName(userInfo.name);
     }
+    if (savedUserEmployeeId && savedUserEmployeeId !== userEmployeeId) {
+      setUserEmployeeId(savedUserEmployeeId);
+    } else if (userInfo.employeeId && userInfo.employeeId !== userEmployeeId) {
+      setUserEmployeeId(userInfo.employeeId);
+    }
   }, [userInfo]);
 
   useEffect(() => {
     if (userId) localStorage.setItem("userId", userId);
     if (userPosition) localStorage.setItem("userPosition", userPosition);
     if (userName) localStorage.setItem("userName", userName);
-  }, [userId, userPosition, userName]);
+    if (userEmployeeId) localStorage.setItem("userEmployeeId", userEmployeeId);
+  }, [userId, userPosition, userName, userEmployeeId]);
 
   useEffect(() => {
     if (!userId || userPosition === "매니저") return;
@@ -237,6 +245,7 @@ const SalaryAdjustment = () => {
           ""
         ) : (
           <RegisterModalButton
+            userEmployeeId={userEmployeeId}
             userName={userName}
             userId={userId}
             className="registerBtn"
@@ -337,8 +346,8 @@ const SalaryAdjustment = () => {
           <SalaryManagementModal
             setSelectedRequest={setSelectedRequest}
             selectedRequest={selectedRequest}
-            name={selectedRequest.name}
-            employeeId={selectedRequest.userId}
+            userName={selectedRequest.userName}
+            userEmployeeId={selectedRequest.userEmployeeId}
           />
         ) : (
           <SalaryHistoryModal

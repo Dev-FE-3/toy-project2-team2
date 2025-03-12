@@ -47,15 +47,15 @@ const StyledBox = styled.div`
 const SalaryManagementModalContent = ({
   selectedRequest,
   updatedStatus,
-  name,
-  employeeId,
+  userName,
+  userEmployeeId,
   setUpdatedStatus,
 }) => {
   return (
     <List>
       <li>
         <label htmlFor="salary-date">이름/사번</label>
-        <StyledBox id="salary-date">{`${name} / ${employeeId}`}</StyledBox>
+        <StyledBox id="salary-date">{`${userName} / ${userEmployeeId}`}</StyledBox>
       </li>
       <li>
         <label htmlFor="salary-date">정정 대상</label>
@@ -91,8 +91,8 @@ const SalaryManagementModalContent = ({
 const SalaryManagementModal = ({
   setSelectedRequest,
   selectedRequest,
-  name,
-  employeeId,
+  userName,
+  userEmployeeId,
 }) => {
   const { isOpen, onOpen, onClose } = useModal();
   const [updatedStatus, setUpdatedStatus] = useState(selectedRequest.status);
@@ -134,8 +134,8 @@ const SalaryManagementModal = ({
               selectedRequest={selectedRequest}
               updatedStatus={updatedStatus}
               setUpdatedStatus={setUpdatedStatus}
-              name={name}
-              employeeId={employeeId}
+              userName={userName}
+              userEmployeeId={userEmployeeId}
             />
           }
           onSubmit={() => {
