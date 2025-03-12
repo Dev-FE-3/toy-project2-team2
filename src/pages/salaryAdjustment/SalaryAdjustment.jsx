@@ -102,6 +102,12 @@ const Table = styled.table`
     justify-content: space-around;
   }
 
+  th {
+    &:last-child{
+      padding: 0 24px;
+    }
+  }
+
   th,
   td {
     width: 20%;
@@ -109,9 +115,6 @@ const Table = styled.table`
 
     &:nth-last-child(2) {
       width: 40%;
-    }
-    &:last-child {
-      padding: 12px;
     }
   }
 `;
