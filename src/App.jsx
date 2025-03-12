@@ -40,8 +40,6 @@ const App = () => {
 
   // userPosition이 null이면 라우터 생성 지연
   const router = useMemo(() => {
-    if (userPosition === null) return null;
-
     return createBrowserRouter([
       {
         path: "/",
@@ -87,7 +85,11 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
-      {isLoading || !router ? <LoadingScreen /> : <RouterProvider router={router} />}
+      {isLoading || !router ? (
+        <LoadingScreen />
+      ) : (
+        <RouterProvider router={router} />
+      )}
     </>
   );
 };

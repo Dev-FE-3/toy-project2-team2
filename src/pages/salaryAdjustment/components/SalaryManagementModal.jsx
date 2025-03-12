@@ -1,8 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "../../../shared/components/modal/Modal"; // Modal 컴포넌트 임포트
 import useModal from "../../../shared/components/modal/useModal"; // useModal 훅 임포트
 import styled from "styled-components";
 import TextArea from "../../../shared/components/TextArea";
+import SelectBox from "../../../shared/components/SelectBox";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../shared/firebase";
 
 const List = styled.ul`
   display: flex;
@@ -40,9 +43,20 @@ const StyledBox = styled.div`
   box-sizing: border-box;
   color: var(--text-primary);
 `;
-const SalaryHistoryModalContent = ({ selectedRequest }) => {
+
+const SalaryManagementModalContent = ({
+  selectedRequest,
+  updatedStatus,
+  name,
+  employeeId,
+  setUpdatedStatus,
+}) => {
   return (
     <List>
+      <li>
+        <label htmlFor="salary-date">이름/사번</label>
+        <StyledBox id="salary-date">{`${name} / ${employeeId}`}</StyledBox>
+      </li>
       <li>
         <label htmlFor="salary-date">정정 대상</label>
         <StyledBox id="salary-date">{selectedRequest.date}</StyledBox>
@@ -50,6 +64,16 @@ const SalaryHistoryModalContent = ({ selectedRequest }) => {
       <li>
         <label htmlFor="salary-type">정정 유형</label>
         <StyledBox id="salary-type">{selectedRequest.type}</StyledBox>
+      </li>
+      <li>
+        <label htmlFor="salary-type">정정 상태</label>
+        <SelectBox
+          id="salary-type"
+          options={["대기 중", "정정 완료", "정정 불가"]}
+          defaultOption={updatedStatus}
+          onSelect={setUpdatedStatus}
+          size="large"
+        />
       </li>
       <li className="textarea">
         <TextArea
@@ -64,15 +88,40 @@ const SalaryHistoryModalContent = ({ selectedRequest }) => {
   );
 };
 
-const SalaryHistoryModal = ({ selectedRequest, setSelectedRequest }) => {
+const SalaryManagementModal = ({
+  setSelectedRequest,
+  selectedRequest,
+  name,
+  employeeId,
+}) => {
   const { isOpen, onOpen, onClose } = useModal();
+  const [updatedStatus, setUpdatedStatus] = useState(selectedRequest.status);
 
   useEffect(() => {
     if (selectedRequest) {
-      onOpen(); // selectedRequest가 존재하면 모달을 연다.
+      setUpdatedStatus(selectedRequest.status); // 새로운 요청이 들어올 때 상태 업데이트
+      onOpen(); // 모달 열기
     }
   }, [selectedRequest, onOpen]);
 
+  const handleStatus = async (updatedStatus) => {
+    try {
+      const docRef = doc(db, "salary_requests", selectedRequest.id);
+      await updateDoc(docRef, {
+        status: updatedStatus,
+      });
+
+      alert("처리 상태 수정이 완료되었습니다.");
+      onClose();
+    } catch (error) {
+      console.error("처리 상태 수정 오류:", error);
+      alert("처리 상태 수정에 실패했습니다.");
+    }
+  };
+
+  const handleSubmit = () => {
+    handleStatus(updatedStatus);
+  };
   // isOpen 상태가 true일 때만 모달을 표시하도록
   return (
     <>
@@ -80,11 +129,20 @@ const SalaryHistoryModal = ({ selectedRequest, setSelectedRequest }) => {
         <Modal
           title="정정 내역"
           content={
-            <SalaryHistoryModalContent
+            <SalaryManagementModalContent
               setSelectedRequest={setSelectedRequest}
               selectedRequest={selectedRequest}
+              updatedStatus={updatedStatus}
+              setUpdatedStatus={setUpdatedStatus}
+              name={name}
+              employeeId={employeeId}
             />
           }
+          onSubmit={() => {
+            setSelectedRequest(null);
+            handleSubmit();
+          }}
+          buttonName="저장하기"
           isOpen={isOpen}
           onClose={() => {
             setSelectedRequest(null);
@@ -96,4 +154,4 @@ const SalaryHistoryModal = ({ selectedRequest, setSelectedRequest }) => {
   );
 };
 
-export default SalaryHistoryModal;
+export default SalaryManagementModal;
