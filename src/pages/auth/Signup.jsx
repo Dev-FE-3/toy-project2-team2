@@ -171,7 +171,7 @@ const Signup = () => {
       });
 
       // Firebase에서 로그인된 유저 정보를 Redux 상태에 저장
-      dispatch(
+      await dispatch(
         setUserInfo({
           uid: user.uid,
           email: user.email,
