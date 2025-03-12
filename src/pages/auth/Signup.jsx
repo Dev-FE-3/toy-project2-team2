@@ -221,6 +221,7 @@ const Signup = () => {
         <Form onSubmit={onSubmit}>
           <InputWrapper>
             <LoginInput
+              id="name"
               label={"이름"}
               onChange={onChange}
               name="name"
@@ -235,6 +236,7 @@ const Signup = () => {
             <UserInfoWrapper>
               <InputBox>
                 <SelectBox
+                  id="position"
                   value={userData.position}
                   name="position"
                   onSelect={(value) => handleSelect("position", value)}
@@ -250,6 +252,7 @@ const Signup = () => {
               </InputBox>
               <InputBox>
                 <SelectBox
+                  id="location"
                   value={userData.location}
                   name="location"
                   onSelect={(value) => handleSelect("location", value)}
@@ -265,6 +268,7 @@ const Signup = () => {
               </InputBox>
             </UserInfoWrapper>
             <LoginInput
+              id="email"
               label={"이메일"}
               onChange={onChange}
               name="email"
@@ -276,6 +280,7 @@ const Signup = () => {
               <Error $hasError={!!error.email}>{error.email || " "}</Error>
             </ErrorWrapper>
             <LoginInput
+              id="password"
               label={"비밀번호"}
               onChange={onChange}
               name="password"
