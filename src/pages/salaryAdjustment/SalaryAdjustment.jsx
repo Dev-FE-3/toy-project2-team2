@@ -57,7 +57,9 @@ const Table = styled.table`
       display: table;
       width: 100%;
       table-layout: fixed;
-      cursor: pointer; // 행 클릭 가능하도록 설정
+
+      //내역 확인 hover 속성
+      cursor: pointer;
 
       &:hover {
         background-color: var(--background-color-3);
@@ -160,6 +162,7 @@ const SalaryAdjustment = () => {
       {/* 페이지 제목 및 정정 신청 버튼 */}
       <TitleContainer>
         <PageTitle title="정정 신청 / 내역" subtitle="정정 내역" />
+        <RegisterModalButton userId={userId} className="registerBtn" />
         <RegisterModalButton userId={userId} className="registerBtn" />
       </TitleContainer>
 

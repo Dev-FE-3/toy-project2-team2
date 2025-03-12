@@ -6,6 +6,7 @@ import CalendarSchedule from "./components/CalendarSchedule";
 import useModal from "../../shared/components/modal/useModal";
 import Modal from "./../../shared/components/modal/Modal";
 import ModalCalendar from "./components/ModalCalendar";
+import { useCalendar } from "./hooks/useCalendar";
 import { db, auth } from "../../shared/firebase";
 import { collection, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 
@@ -37,10 +38,8 @@ const StyledCalendarWeek = styled.thead`
 
 const Calendar = () => {
   // 달력
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
   const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
+  const { currentDate, weeks, handlePrevMonth, handleNextMonth } = useCalendar();
 
   // 모달
   const { isOpen, onOpen, onClose } = useModal();
@@ -51,62 +50,6 @@ const Calendar = () => {
   const [textAreaValue, setTextAreaValue] = useState("");
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  // 달력 생성
-  const generateCalendarDays = (year, month) => {
-    const firstDayOfMonth = new Date(year, month, 1).getDay(); // 첫 번째 날짜의 요일
-    const daysInMonth = new Date(year, month + 1, 0).getDate(); // 이번 달의 총 일 수
-    const prevMonthDays = new Date(year, month, 0).getDate(); // 이전 달의 총 일 수
-    const calendarDays = [];
-
-    // 첫 주 빈칸에 이전 달 날짜 추가
-    for (let i = firstDayOfMonth - 1; i >= 0; i--) {
-      calendarDays.push({
-        day: prevMonthDays - i,
-        isDisabled: true,
-        date: new Date(year, month - 1, prevMonthDays - i),
-      });
-    }
-
-    // 이번 달 날짜 추가
-    for (let i = 1; i <= daysInMonth; i++) {
-      calendarDays.push({
-        day: i,
-        isDisabled: false,
-        date: new Date(year, month, i),
-      });
-    }
-
-    // 마지막 주 빈칸에 다음 달 날짜 추가
-    let nextMonthDay = 1; // 1일부터 시작
-    while (calendarDays.length % 7 !== 0) {
-      calendarDays.push({
-        day: nextMonthDay++,
-        isDisabled: true,
-        date: new Date(year, month + 1, nextMonthDay - 1),
-      });
-    }
-
-    // 7일씩 나누어 배열 생성
-    const weeks = [];
-    for (let i = 0; i < calendarDays.length; i += 7) {
-      weeks.push(calendarDays.slice(i, i + 7));
-    }
-
-    return weeks;
-  };
-
-  const weeks = generateCalendarDays(year, month);
-
-  // 이전 달로 이동
-  const handlePrevMonth = () => {
-    setCurrentDate(new Date(year, month - 1, 1));
-  };
-
-  // 다음 달로 이동
-  const handleNextMonth = () => {
-    setCurrentDate(new Date(year, month + 1, 1));
-  };
 
   const handleModalClose = () => {
     // 상태 초기화
@@ -126,6 +69,11 @@ const Calendar = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // 제목 필수 입력 확인
+    if (inputValue === "") {
+      return alert("제목을 입력해 주세요.");
+    }
+
     const user = auth.currentUser;
     if (!user) return;
 
@@ -138,11 +86,11 @@ const Calendar = () => {
         contents: textAreaValue,
         userId: user.uid,
       })
+
+      handleModalClose();
     } catch(error) {
       console.error("일정 추가 실패: ", error);
     }
-
-    handleModalClose();
   }
 
   // 일정 수정 가능 상태
@@ -152,11 +100,15 @@ const Calendar = () => {
 
   // 일정 수정 후 저장
   const handleSave = async (schedule) => {
-    const scheduleRef = doc(db, "schedules", schedule.id);
+    // 제목 필수 입력 확인
+    if (inputValue === "") {
+      return alert("제목을 입력해 주세요.");
+    }
 
     const user = auth.currentUser;
     if (!user) return;
 
+    const scheduleRef = doc(db, "schedules", schedule.id);
     try {
       await updateDoc(scheduleRef, {
         title: inputValue,
@@ -165,16 +117,16 @@ const Calendar = () => {
         selectedColor,
         contents: textAreaValue,
       });
+
+      handleModalClose();
     } catch (error) {
       console.error("일정 수정 실패: ", error);
     }
-
-    // 수정 후 모달 닫기
-    handleModalClose();
   }
 
+  // 등록된 일정 클릭
   const handleScheduleClick = (schedule) => {
-    // 클릭한 일정을 저장
+    // 등록된 일정 내용 업데이트
     setSelectedSchedule(schedule);
     setInputValue(schedule.title);
     setStartDate(new Date(schedule.startDate));
@@ -208,8 +160,8 @@ const Calendar = () => {
       <PageTitle title="내 일정" />
       <StyledCalendarWrapper>
         <CalendarHeader
-          year={year}
-          month={month}
+          year={currentDate.getFullYear()}
+          month={currentDate.getMonth()}
           handlePrevMonth={handlePrevMonth}
           handleNextMonth={handleNextMonth}
           onOpen={onOpen}

@@ -32,10 +32,7 @@ const StyledCalendarBtn = styled.div`
   }
 `
 
-const CalendarHeader = ({
-  year, month, handlePrevMonth, handleNextMonth, onOpen
-}) => {
-
+const CalendarHeader = ({ year, month, handlePrevMonth, handleNextMonth, onOpen }) => {
   return (
     <StyledCalendarTop>
       <StyledCalendarBtn>

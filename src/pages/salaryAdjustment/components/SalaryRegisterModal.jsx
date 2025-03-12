@@ -9,7 +9,7 @@ import SelectBox from "../../../shared/components/SelectBox";
 import DatePicker from "../../../shared/components/DatePicker";
 import TextArea from "../../../shared/components/TextArea";
 import { ToastContainer, toast } from "react-toastify";
-// 스타일 정의
+
 const List = styled.ul`
   display: flex;
   flex-wrap: wrap;
@@ -101,19 +101,19 @@ const SalaryRegisterModalContent = ({
  * 정정 신청 모달 컴포넌트
  * @param {Object} props - 부모 컴포넌트에서 전달받은 사용자 ID
  */
+/**
+ * Firebase에 정정 신청 데이터를 저장하는 함수
+ * @param {string} userId - 사용자 ID
+ * @param {Date} date - 선택한 날짜
+ * @param {string} type - 정정 유형
+ * @param {string} reason - 정정 사유
+ */
 const SalaryRegisterModal = ({ userId }) => {
   const { isOpen, onOpen, onClose } = useModal(); // 모달 상태 관리
   const [yearMonth, setYearMonth] = useState(new Date()); // 날짜 선택 상태
   const [selectedLeaveType, setSelectedLeaveType] = useState("유형"); // 정정 유형 선택 상태
   const [inputValue, setInputValue] = useState(""); // 정정 사유 입력 상태
 
-  /**
-   * Firebase에 정정 신청 데이터를 저장하는 함수
-   * @param {string} userId - 사용자 ID
-   * @param {Date} date - 선택한 날짜
-   * @param {string} type - 정정 유형
-   * @param {string} reason - 정정 사유
-   */
   const handleRegister = async (userId, date, type, reason) => {
     try {
       const collectionRef = collection(db, "salary_requests");
@@ -122,7 +122,7 @@ const SalaryRegisterModal = ({ userId }) => {
         date: date.toISOString().split("T")[0],
         type,
         reason,
-        status: "대기 중", // 초기 상태
+        status: "대기 중",
         createdAt: new Date(),
       });
 
@@ -173,5 +173,4 @@ const SalaryRegisterModal = ({ userId }) => {
     </>
   );
 };
-
 export default SalaryRegisterModal;
