@@ -59,7 +59,9 @@ const SalaryManagementModalContent = ({
       </li>
       <li>
         <label htmlFor="salary-date">정정 대상</label>
-        <StyledBox id="salary-date">{selectedRequest.date}</StyledBox>
+        <StyledBox id="salary-date">
+          {selectedRequest.date.split("-").slice(0, 2).join(" / ")}
+        </StyledBox>
       </li>
       <li>
         <label htmlFor="salary-type">정정 유형</label>

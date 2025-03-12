@@ -103,7 +103,7 @@ const Table = styled.table`
   }
 
   th {
-    &:last-child{
+    &:last-child {
       padding: 0 24px;
     }
   }

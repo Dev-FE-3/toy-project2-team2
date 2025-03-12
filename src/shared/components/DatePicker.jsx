@@ -11,13 +11,13 @@ const Label = styled.label`
   font-size: var(--font-size-primary);
   font-weight: 400;
   color: var(--text-disabled);
-  
+
   ${(props) =>
     props.$issubmitted &&
     `
       pointer-events: none;
     `}
-`
+`;
 
 const DatePickerWrapper = styled.div`
   align-items: center;
@@ -113,12 +113,19 @@ const CustomInput = React.forwardRef(({ value, onClick, ...rest }, ref) => {
   );
 });
 
-const DatePicker = ({ id, label, type = "date", value = new Date(), onChange, isSubmitted }) => {
+const DatePicker = ({
+  id,
+  label,
+  type = "date",
+  value = new Date(),
+  onChange,
+  isSubmitted,
+}) => {
   const datePickerRef = useRef(null);
 
   return (
     <>
-      {label && <Label htmlFor={id} $issubmitted={isSubmitted} onClick={() => datePickerRef.current?.setOpen(true)}>{label}</Label>}
+      {label && <Label>{label}</Label>}{" "}
       <DatePickerWrapper $type={type} $issubmitted={isSubmitted}>
         <ReactDatePicker
           id={id}
