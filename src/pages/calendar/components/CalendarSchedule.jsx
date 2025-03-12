@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { db, auth } from "../../../shared/firebase";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 
@@ -48,7 +48,8 @@ const ScheduleBar = styled.span`
     color === "red" ? "var(--red)" : 
     color === "green" ? "var(--green)" : 
     color === "blue" ? "var(--blue)" : "var(--text-primary)"};
-  background-color: ${({ color }) => 
+  background-color: ${({ empty, color }) => 
+    empty === "" ? "transparent" :
 		color === "orange" ? "var(--orange-bg)" : 
     color === "regular" ? "var(--regular-bg)" : 
     color === "red" ? "var(--red-bg)" : 
@@ -61,6 +62,12 @@ const ScheduleBar = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
+
+  ${({ empty }) =>
+    empty === "" &&
+    `
+      pointer-events: none;
+    `}
 `
 
 const CalendarSchedule = ({ weeks, handleScheduleClick }) => {
@@ -155,6 +162,7 @@ const CalendarSchedule = ({ weeks, handleScheduleClick }) => {
                       colSpan={isFirstDay || isFirstContinuedDate ? colSpan : 1}
                       color={schedule.selectedColor}
                       onClick={() => handleScheduleClick(schedule)}
+                      empty={isFirstContinuedDate === false ? "" : null}
                     >
                       {isFirstDay ? schedule.title : ""}
                     </ScheduleBar>
