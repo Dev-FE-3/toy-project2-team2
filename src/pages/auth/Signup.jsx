@@ -183,7 +183,8 @@ const Signup = () => {
         })
       );
 
-      alert(`${userData.name} 님 회원이 되신 것을 환영합니다.`);
+      toast.success(`${userData.name} 님 회원이 되신 것을 환영합니다.`);
+
       navigate("/");
     } catch (e) {
       console.log(e);
@@ -195,7 +196,7 @@ const Signup = () => {
             [errorInfo.field]: errorInfo.message,
           }));
         } else {
-          alert("예상치 못한 오류가 발생하였습니다.");
+          toast.error("예상치 못한 오류가 발생하였습니다.");
         }
       }
     } finally {
