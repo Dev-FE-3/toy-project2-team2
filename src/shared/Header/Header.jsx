@@ -110,38 +110,18 @@ const Header = () => {
     fetchUserInfo();
   }, [user, dispatch, userInfo]); // userInfo가 변경될 때만 실행
 
-  // 프로필 이미지 가져오기
-  useEffect(() => {
-    const fetchProfile = async () => {
-      if (!user) return;
-      try {
-        const profileUrl = await getDownloadURL(
-          ref(storage, `profiles/${user.uid}`)
-        );
-        setProfile(profileUrl);
-      } catch (error) {
-        setProfile(null);
-      }
-    };
-
-    fetchProfile();
-  }, [user]);
-
-  // 프로필 사진 변경 처리
   const onProfileChange = async (e) => {
     const { files } = e.target;
-    if (!user || !files?.length) return;
-
-    const file = files[0];
-    const locationRef = ref(storage, `profiles/${user.uid}`);
-    try {
+    if (!user) return;
+    if (files && files.length === 1) {
+      const file = files[0];
+      const locationRef = ref(storage, `profiles/${user?.uid}`);
       const result = await uploadBytes(locationRef, file);
       const profileUrl = await getDownloadURL(result.ref);
       setProfile(profileUrl);
-      await updateProfile(user, { photoURL: profileUrl });
-    } catch (error) {
-      setProfile(null);
-      console.error("프로필 사진 업로드 실패:", error);
+      await updateProfile(user, {
+        photoURL: profileUrl,
+      });
     }
   };
 
