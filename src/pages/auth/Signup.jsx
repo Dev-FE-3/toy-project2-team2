@@ -25,6 +25,7 @@ import styled from "styled-components";
 import SelectBox from "../../shared/components/SelectBox";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "../../store/userSlice";
+import { toast } from "react-toastify";
 
 const UserInfoWrapper = styled.div`
   gap: 20px;
