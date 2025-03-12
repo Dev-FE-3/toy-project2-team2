@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from "react";
 import {
   collection,
-  addDoc,
   query,
   where,
   orderBy,
   onSnapshot,
 } from "firebase/firestore";
-import { db, auth } from "../../shared/firebase"; // Firebase 설정 파일
+import { db } from "../../shared/firebase"; // Firebase 설정 파일
 import PageTitle from "../../shared/components/PageTitle";
 import styled from "styled-components";
-import Button from "../../shared/components/Button";
+import { rolesPermissions } from "../../shared/config/rolesPermissions";
+import { useSelector } from "react-redux";
+import { selectUserInfo } from "../../store/userSlice";
+import LoadingScreen from "../../shared/components/LoadingScreen";
+import RegisterModalButton from "./components/SalaryRegisterModal";
+import SalaryHistoryModal from "./components/SalaryHistoryModal";
+import SalaryManagementModal from "./components/SalaryManagementModal";
 import SelectBox from "../../shared/components/SelectBox";
-import DatePicker from "../../shared/components/DatePicker";
-import useModal from "../../shared/components/modal/useModal";
-import Modal from "../../shared/components/modal/Modal";
-import TextArea from "../../shared/components/TextArea";
 
 const TitleContainer = styled.div`
   position: relative;
@@ -43,6 +44,7 @@ const Table = styled.table`
     display: table;
     table-layout: fixed;
     width: 100%;
+
     border-bottom: 2px solid var(--background-color);
 
     &::after {
@@ -70,16 +72,34 @@ const Table = styled.table`
       width: 100%;
       table-layout: fixed;
 
+      //내역 확인 hover 속성
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--background-color-3);
+      }
+
       td {
         color: var(--text-disabled);
 
-        &:nth-child(3) {
+        &:nth-last-child(2) {
           white-space: nowrap;
           text-overflow: ellipsis;
           overflow: hidden;
         }
+        &:last-child {
+          padding-right: 14px;
+        }
       }
     }
+  }
+
+  th > div {
+    width: 116px;
+  }
+
+  th > div > button {
+    justify-content: space-around;
   }
 
   th,
@@ -87,7 +107,7 @@ const Table = styled.table`
     width: 20%;
     padding: 24px;
 
-    &:nth-child(3) {
+    &:nth-last-child(2) {
       width: 40%;
     }
   }
@@ -117,117 +137,48 @@ const StatusCell = styled.span`
   box-sizing: border-box;
 `;
 
-const leaveOptions = ["유급휴가", "무급휴가", "연차", "병가", "기타"];
-
-const ScheduleRegisterContent = ({
-  yearMonth,
-  selectedLeaveType,
-  inputValue,
-  setYearMonth,
-  setSelectedLeaveType,
-  setInputValue,
-}) => {
-  return (
-    <div>
-      <label>정정 대상</label>
-      <DatePicker type="year-month" value={yearMonth} onChange={setYearMonth} />
-      <label>정정 유형</label>
-      <SelectBox
-        options={leaveOptions}
-        defaultOption={selectedLeaveType}
-        onSelect={setSelectedLeaveType}
-        size="large"
-      />
-      <TextArea
-        id="reason"
-        label="정정 사유"
-        placeholder="정정 사유를 입력하세요."
-        onChange={(e) => setInputValue(e.target.value)}
-        value={inputValue}
-      />
-    </div>
-  );
-};
-
-const ScheduleRegisterButton = ({ userId }) => {
-  const { isOpen, onOpen, onClose } = useModal();
-  const [yearMonth, setYearMonth] = useState(new Date());
-  const [selectedLeaveType, setSelectedLeaveType] = useState("유형");
-  const [inputValue, setInputValue] = useState("");
-
-  const handleRegister = async (userId, date, type, reason) => {
-    try {
-      const collectionRef = collection(db, "salary_requests");
-      await addDoc(collectionRef, {
-        userId,
-        date: date.toISOString().split("T")[0],
-        type,
-        reason,
-        status: "대기 중",
-        createdAt: new Date(),
-      });
-
-      alert("정정 신청이 완료되었습니다!");
-      onClose();
-    } catch (error) {
-      console.error("정정 신청 오류:", error);
-      alert("정정 신청에 실패했습니다.");
-    }
-  };
-
-  const handleSubmit = () => {
-    if (selectedLeaveType === "유형" || inputValue.trim() === "") {
-      alert("모든 항목을 입력해주세요.");
-      return;
-    }
-    handleRegister(userId, yearMonth, selectedLeaveType, inputValue);
-  };
-
-  return (
-    <>
-      <Button onClick={onOpen} className="registerBtn">
-        정정 신청
-      </Button>
-      {isOpen && (
-        <Modal
-          title="정정 신청"
-          content={
-            <ScheduleRegisterContent
-              yearMonth={yearMonth}
-              selectedLeaveType={selectedLeaveType}
-              inputValue={inputValue}
-              setYearMonth={setYearMonth}
-              setSelectedLeaveType={setSelectedLeaveType}
-              setInputValue={setInputValue}
-            />
-          }
-          hasSubmitButton={true}
-          onSubmit={handleSubmit}
-          isOpen={isOpen}
-          onClose={onClose}
-          submitButton={"등록하기"}
-        />
-      )}
-    </>
-  );
-};
-
 const SalaryAdjustment = () => {
+  const [allRequests, setAllRequests] = useState([]);
   const [requests, setRequests] = useState([]);
+  const userInfo = useSelector(selectUserInfo);
   const [userId, setUserId] = useState(null);
+  const [userPosition, setUserPosition] = useState(null);
+  const [userName, setUserName] = useState(null);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [statusFilter, setStatusFilter] = useState("전체");
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUserId(user.uid);
-      }
-    });
+    const savedUserId = localStorage.getItem("userId");
+    const savedUserPosition = localStorage.getItem("userPosition");
+    const savedUserName = localStorage.getItem("userName");
 
-    return () => unsubscribe();
-  }, []);
+    if (savedUserId && savedUserId !== userId) {
+      setUserId(savedUserId);
+    } else if (userInfo.uid && userInfo.uid !== userId) {
+      setUserId(userInfo.uid);
+    }
+
+    if (savedUserPosition && savedUserPosition !== userPosition) {
+      setUserPosition(savedUserPosition);
+    } else if (userInfo.position && userInfo.position !== userPosition) {
+      setUserPosition(userInfo.position);
+    }
+
+    if (savedUserName && savedUserName !== userName) {
+      setUserName(savedUserName);
+    } else if (userInfo.name && userInfo.name !== userName) {
+      setUserName(userInfo.name);
+    }
+  }, [userInfo]);
 
   useEffect(() => {
-    if (!userId) return;
+    if (userId) localStorage.setItem("userId", userId);
+    if (userPosition) localStorage.setItem("userPosition", userPosition);
+    if (userName) localStorage.setItem("userName", userName);
+  }, [userId, userPosition, userName]);
+
+  useEffect(() => {
+    if (!userId || userPosition === "매니저") return;
 
     const collectionRef = collection(db, "salary_requests");
     const q = query(
@@ -247,23 +198,115 @@ const SalaryAdjustment = () => {
     return () => unsubscribe();
   }, [userId]);
 
+  useEffect(() => {
+    const fetchRequests = async () => {
+      // 1. salary_requests 컬렉션의 요청을 가져오기
+      const collectionRef = collection(db, "salary_requests");
+      const q = query(collectionRef, orderBy("createdAt", "desc"));
+
+      const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+        const fetchedRequests = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setAllRequests(fetchedRequests);
+      });
+
+      return () => unsubscribe();
+    };
+
+    fetchRequests();
+  }, []);
+
+  if (!userPosition) {
+    return <LoadingScreen />;
+  }
+  //정정 내역 모달 열기
+  const handleRowClick = (request) => {
+    setSelectedRequest(request);
+  };
+  const filteredRequests =
+    statusFilter === "전체"
+      ? allRequests
+      : allRequests.filter((request) => request.status === statusFilter);
   return (
     <>
       <TitleContainer>
         <PageTitle title="정정 신청 / 내역" subtitle="정정 내역" />
-        <ScheduleRegisterButton userId={userId} className="registerBtn" />
+        {rolesPermissions[userPosition].canConfirm ? (
+          ""
+        ) : (
+          <RegisterModalButton
+            userName={userName}
+            userId={userId}
+            className="registerBtn"
+          />
+        )}
       </TitleContainer>
       <Table>
         <thead>
           <tr>
-            <th>정정 대상</th>
-            <th>정정 유형</th>
-            <th>정정 사유</th>
-            <th>처리 상태</th>
+            {rolesPermissions[userPosition].canConfirm ? (
+              <>
+                <th>신청자</th>
+                <th>신청 날짜</th>
+                <th>정정 대상</th>
+                <th>정정 사유</th>
+                <th>
+                  <SelectBox
+                    id="salary-type"
+                    options={["전체", "대기 중", "정정 완료", "정정 불가"]}
+                    defaultOption={statusFilter}
+                    onSelect={setStatusFilter}
+                    size="autoSmall"
+                  />
+                </th>
+              </>
+            ) : (
+              <>
+                <th>정정 대상</th>
+                <th>정정 유형</th>
+                <th>정정 사유</th>
+                <th>처리 상태</th>
+              </>
+            )}
           </tr>
         </thead>
         <tbody>
-          {requests.length > 0 ? (
+          {rolesPermissions[userPosition].canConfirm ? (
+            filteredRequests.length === 0 ? (
+              <tr>
+                <td colSpan="4">신청된 정정 내역이 없습니다.</td>
+              </tr>
+            ) : (
+              filteredRequests.map((request, index) => {
+                const date = new Date(request.date);
+                const formattedDate = `${date.getFullYear()} / ${(
+                  date.getMonth() + 1
+                )
+                  .toString()
+                  .padStart(2, "0")}`;
+
+                return (
+                  <tr key={index} onClick={() => handleRowClick(request)}>
+                    <td>{request.userName}</td>
+                    <td>{formattedDate}</td>
+                    <td>{request.type}</td>
+                    <td title={request.reason}>{request.reason}</td>
+                    <td>
+                      <StatusCell $status={request.status}>
+                        {request.status}
+                      </StatusCell>
+                    </td>
+                  </tr>
+                );
+              })
+            )
+          ) : requests.length === 0 ? (
+            <tr>
+              <td colSpan="4">신청된 정정 내역이 없습니다.</td>
+            </tr>
+          ) : (
             requests.map((request, index) => {
               const date = new Date(request.date);
               const formattedDate = `${date.getFullYear()} / ${(
@@ -273,7 +316,7 @@ const SalaryAdjustment = () => {
                 .padStart(2, "0")}`;
 
               return (
-                <tr key={index}>
+                <tr key={index} onClick={() => handleRowClick(request)}>
                   <td>{formattedDate}</td>
                   <td>{request.type}</td>
                   <td title={request.reason}>{request.reason}</td>
@@ -285,13 +328,24 @@ const SalaryAdjustment = () => {
                 </tr>
               );
             })
-          ) : (
-            <tr>
-              <td colSpan="4">신청된 정정 내역이 없습니다.</td>
-            </tr>
           )}
         </tbody>
       </Table>
+
+      {selectedRequest &&
+        (rolesPermissions[userPosition].canConfirm ? (
+          <SalaryManagementModal
+            setSelectedRequest={setSelectedRequest}
+            selectedRequest={selectedRequest}
+            name={selectedRequest.name}
+            employeeId={selectedRequest.userId}
+          />
+        ) : (
+          <SalaryHistoryModal
+            selectedRequest={selectedRequest}
+            setSelectedRequest={setSelectedRequest}
+          />
+        ))}
     </>
   );
 };

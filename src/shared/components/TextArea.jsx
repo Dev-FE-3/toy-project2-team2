@@ -28,7 +28,7 @@ const TextBoxArea = styled.textarea`
   font-size: var(--font-size-primary);
   font-weight: 400;
   line-height: 24px; /* 150% */
-  background-color: var(--background-color-3);
+  background-color: var(--white);
   border: 1px solid var(--disabled);
   transition: all 0.2s ease;
   box-sizing: border-box;
@@ -36,30 +36,22 @@ const TextBoxArea = styled.textarea`
   &:focus {
     border-color: var(--accent);
     background-color: var(--white);
-    color: var(--text-primary);
   }
 
   ${(props) =>
     props.$issubmitted &&
     `
       border: 1px solid var(--disabled);
-      background-color: var(--white);
+      background-color: var(--background-color-3);
       color: var(--text-primary);
       pointer-events: none;
     `}
-
-  &:disabled {
-    background-color: var(--white);
-    pointer-events: none;
-    color: var(--disabled);
-  }
 `;
 
 const TextArea = ({
   id,
   label,
   isSubmitted,
-  disabled,
   placeholder = "내용을 입력하세요",
   value,
   onChange,
@@ -72,7 +64,6 @@ const TextArea = ({
         id={id}
         rows={rows}
         maxLength={100} // 우선 100 설정
-        disabled={disabled}
         placeholder={placeholder}
         $issubmitted={isSubmitted} // 'isSubmitted' 값을 전달
         value={value}

@@ -14,6 +14,8 @@ const LogOut = () => {
       .catch((error) => {
         console.error("로그아웃 실패:", error);
       });
+      localStorage.removeItem('userId'); // 로컬 스토리지에서 userId 삭제
+      localStorage.removeItem('userPosition'); // 로컬 스토리지에서 userId 삭제
   };
 
   return <Button onClick={logOut} size="sm" color="gray">로그아웃</Button>;
