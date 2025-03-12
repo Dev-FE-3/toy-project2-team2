@@ -65,10 +65,11 @@ const ScheduleBar = styled.span`
     $empty === "" &&
     `
       pointer-events: none;
-    `}
+    `
+  }
 `
 
-const CalendarSchedule = ({ weeks, handleScheduleClick }) => {
+const CalendarBody = ({ weeks, handleScheduleClick }) => {
   return (
     <StyledCalendarDate>
       {weeks.map((week, weekIndex) => (
@@ -108,4 +109,4 @@ const CalendarSchedule = ({ weeks, handleScheduleClick }) => {
   )
 }
 
-export default CalendarSchedule
+export default CalendarBody
