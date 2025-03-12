@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
-import { db } from "../../../shared/firebase";
+import { db } from "../../../shared/firebase"; // Firebase 설정 파일 import
 import styled from "styled-components";
-import useModal from "../../../shared/components/modal/useModal";
+import useModal from "../../../shared/components/modal/useModal"; // 모달 관련 커스텀 훅 import
 import Modal from "../../../shared/components/modal/Modal";
 import Button from "../../../shared/components/Button";
 import SelectBox from "../../../shared/components/SelectBox";
 import DatePicker from "../../../shared/components/DatePicker";
 import TextArea from "../../../shared/components/TextArea";
+import { ToastContainer, toast } from "react-toastify";
 
 const List = styled.ul`
   display: flex;
@@ -35,6 +36,7 @@ const List = styled.ul`
   }
 `;
 
+// 정정 유형 옵션 리스트
 const leaveOptions = [
   "유급 휴가",
   "무급 휴가",
@@ -44,6 +46,10 @@ const leaveOptions = [
   "병가",
 ];
 
+/**
+ * 정정 신청 모달의 내용 컴포넌트
+ * @param {Object} props - 부모 컴포넌트에서 전달받은 상태 및 setter 함수
+ */
 const SalaryRegisterModalContent = ({
   yearMonth,
   selectedLeaveType,
@@ -117,23 +123,34 @@ const SalaryRegisterModal = ({ userName, userId, userEmployeeId }) => {
       });
 
       alert("정정 신청이 완료되었습니다!");
-      onClose();
+      onClose(); // 모달 닫기
     } catch (error) {
       console.error("정정 신청 오류:", error);
       alert("정정 신청에 실패했습니다.");
     }
   };
 
+  /**
+   * 입력값 검증 후 신청 처리하는 함수
+   */
   const handleSubmit = () => {
     if (selectedLeaveType === "유형" || inputValue.trim() === "") {
       alert("모든 항목을 입력해주세요.");
       return;
     }
-    handleRegister(userId, yearMonth, selectedLeaveType, inputValue, userName, userEmployeeId);
+    handleRegister(
+      userId,
+      yearMonth,
+      selectedLeaveType,
+      inputValue,
+      userName,
+      userEmployeeId
+    );
   };
 
   return (
     <>
+      {/* 정정 신청 버튼 */}
       <Button onClick={onOpen} className="registerBtn">
         정정 신청
       </Button>
@@ -151,7 +168,6 @@ const SalaryRegisterModal = ({ userName, userId, userEmployeeId }) => {
             />
           }
           buttonName="등록하기"
-          // hasSubmitButton={true}
           onSubmit={handleSubmit}
           isOpen={isOpen}
           onClose={onClose}
