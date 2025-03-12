@@ -110,6 +110,9 @@ const Table = styled.table`
     &:nth-last-child(2) {
       width: 40%;
     }
+    &:last-child {
+      padding: 12px;
+    }
   }
 `;
 
