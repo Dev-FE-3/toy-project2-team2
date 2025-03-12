@@ -13,6 +13,9 @@ import ProtectedRoute from "./shared/components/ProtectedRoute";
 import GlobalStyle from "./shared/components/styles/GlobalStyle";
 import Signup from "./pages/auth/Signup";
 import { rolesPermissions } from "./shared/config/rolesPermissions";
+import EmployeeList from "./pages/employeeList/EmployeeList";
+import ProtectedRouteForManager from "./shared/components/ProtectedRouteForManager";
+import SalaryAdmin from "./pages/mySalary/SalaryAdmin";
 
 const App = () => {
   const [isLoading, setLoading] = useState(true);
@@ -56,10 +59,20 @@ const App = () => {
           {
             path: "MySalary",
             element: rolesPermissions[userPosition]?.canConfirm ? (
-              <Guide />
+              <EmployeeList />
             ) : (
               <MySalary />
             ),
+          },
+          {
+            path: "/MySalary",
+            element: <ProtectedRouteForManager />,
+            children: [
+              {
+                path: ":employeeId",
+                element: <SalaryAdmin />,
+              },
+            ],
           },
           {
             path: "SalaryAdjustment",

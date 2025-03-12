@@ -28,20 +28,25 @@ const List = styled.ul`
       color: var(--text-disabled);
     }
   }
-`
+`;
 
 const LabelList = styled.ul`
   display: flex;
   gap: 12px;
-`
+`;
 
 const ModalCalendar = ({
-  inputValue, setInputValue,
-  startDate, setStartDate,
-  endDate, setEndDate,
-  selectedColor, setSelectedColor,
-  textAreaValue, setTextAreaValue,
-  isSubmitted
+  inputValue,
+  setInputValue,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
+  selectedColor,
+  setSelectedColor,
+  textAreaValue,
+  setTextAreaValue,
+  isSubmitted,
 }) => {
   return (
     <List>
@@ -51,7 +56,9 @@ const ModalCalendar = ({
           label="제목"
           placeholder="제목을 입력해 주세요."
           value={inputValue}
-          onChange={(e) => {setInputValue(e.target.value)}}
+          onChange={(e) => {
+            setInputValue(e.target.value);
+          }}
           isSubmitted={isSubmitted}
         />
       </li>
@@ -97,12 +104,14 @@ const ModalCalendar = ({
           rows="4"
           placeholder="내용을 입력해 주세요."
           value={textAreaValue}
-          onChange={(e) => {setTextAreaValue(e.target.value)}}
+          onChange={(e) => {
+            setTextAreaValue(e.target.value);
+          }}
           isSubmitted={isSubmitted}
         />
       </li>
     </List>
-  )
-}
+  );
+};
 
-export default ModalCalendar
+export default ModalCalendar;

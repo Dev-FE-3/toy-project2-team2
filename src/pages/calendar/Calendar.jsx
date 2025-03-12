@@ -7,7 +7,13 @@ import useModal from "../../shared/components/modal/useModal";
 import Modal from "./../../shared/components/modal/Modal";
 import ModalCalendar from "./components/ModalCalendar";
 import { db, auth } from "../../shared/firebase";
-import { collection, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 
 const StyledCalendarWrapper = styled.div`
   margin-bottom: 82px;
@@ -141,18 +147,18 @@ const Calendar = () => {
         selectedColor,
         contents: textAreaValue,
         userId: user.uid,
-      })
-    } catch(error) {
+      });
+    } catch (error) {
       console.error("일정 추가 실패: ", error);
     }
 
     handleModalClose();
-  }
+  };
 
   // 일정 수정 가능 상태
   const handleEdit = () => {
     setIsSubmitted(false);
-  }
+  };
 
   // 일정 수정 후 저장
   const handleSave = async (schedule) => {
@@ -178,7 +184,7 @@ const Calendar = () => {
 
     // 수정 후 모달 닫기
     handleModalClose();
-  }
+  };
 
   const handleScheduleClick = (schedule) => {
     // 클릭한 일정을 저장
@@ -240,7 +246,11 @@ const Calendar = () => {
               />
             }
             buttonName={selectedSchedule ? "저장하기" : "등록하기"}
-            onSubmit={selectedSchedule ? () => handleSave(selectedSchedule) : handleSubmit}
+            onSubmit={
+              selectedSchedule
+                ? () => handleSave(selectedSchedule)
+                : handleSubmit
+            }
             onEdit={isSubmitted ? handleEdit : null}
             onDelete={selectedSchedule ? handleDelete : null}
             isOpen={isOpen}

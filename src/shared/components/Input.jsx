@@ -57,10 +57,16 @@ const Input = ({
   placeholder = "필요에 의한 내용을 바꿔주세요",
   onChange,
   value,
+  onKeyDown,
+  style,
 }) => {
   return (
     <>
-      {label && <Label htmlFor={id} $issubmitted={isSubmitted}>{label}</Label>}
+      {label && (
+        <Label htmlFor={id} $issubmitted={isSubmitted}>
+          {label}
+        </Label>
+      )}
       <InputStyle
         id={id}
         type="text"
@@ -68,6 +74,8 @@ const Input = ({
         value={value}
         onChange={onChange}
         $issubmitted={isSubmitted} // 여기서 'issubmitted'로 전달!!!
+        onKeyDown={onKeyDown} // 여기서 onKeyDown 전달
+        style={style}
       />
     </>
   );
