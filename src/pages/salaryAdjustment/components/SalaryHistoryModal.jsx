@@ -44,12 +44,12 @@ const SalaryHistoryModalContent = ({ selectedRequest }) => {
   return (
     <List>
       <li>
-        <label htmlFor="salary-date">정정 대상</label>
-        <StyledBox id="salary-date">{selectedRequest.date}</StyledBox>
+        <label>정정 대상</label>
+        <StyledBox>{selectedRequest.date}</StyledBox>
       </li>
       <li>
-        <label htmlFor="salary-type">정정 유형</label>
-        <StyledBox id="salary-type">{selectedRequest.type}</StyledBox>
+        <label>정정 유형</label>
+        <StyledBox>{selectedRequest.type}</StyledBox>
       </li>
       <li className="textarea">
         <TextArea

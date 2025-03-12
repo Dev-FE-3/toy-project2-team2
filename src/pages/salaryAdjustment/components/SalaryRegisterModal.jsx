@@ -56,9 +56,8 @@ const SalaryRegisterModalContent = ({
   return (
     <List>
       <li>
-        <label htmlFor="salary-date">정정 대상</label>
+        <label>정정 대상</label>
         <DatePicker
-          id="salary-date"
           type="year-month"
           value={yearMonth}
           onChange={setYearMonth}
@@ -66,9 +65,8 @@ const SalaryRegisterModalContent = ({
         />
       </li>
       <li>
-        <label htmlFor="salary-type">정정 유형</label>
+        <label>정정 유형</label>
         <SelectBox
-          id="salary-type"
           options={leaveOptions}
           defaultOption={selectedLeaveType}
           onSelect={setSelectedLeaveType}
