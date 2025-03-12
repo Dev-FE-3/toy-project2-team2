@@ -91,13 +91,13 @@ const SalaryRegisterModalContent = ({
   );
 };
 
-const SalaryRegisterModal = ({ userId }) => {
+const SalaryRegisterModal = ({ userName, userId }) => {
   const { isOpen, onOpen, onClose } = useModal();
   const [yearMonth, setYearMonth] = useState(new Date());
   const [selectedLeaveType, setSelectedLeaveType] = useState("유형");
   const [inputValue, setInputValue] = useState("");
 
-  const handleRegister = async (userId, date, type, reason) => {
+  const handleRegister = async (userId, date, type, reason, userName) => {
     try {
       const collectionRef = collection(db, "salary_requests");
       await addDoc(collectionRef, {
@@ -107,6 +107,7 @@ const SalaryRegisterModal = ({ userId }) => {
         reason,
         status: "대기 중",
         createdAt: new Date(),
+        userName,
       });
 
       alert("정정 신청이 완료되었습니다!");
@@ -122,7 +123,7 @@ const SalaryRegisterModal = ({ userId }) => {
       alert("모든 항목을 입력해주세요.");
       return;
     }
-    handleRegister(userId, yearMonth, selectedLeaveType, inputValue);
+    handleRegister(userId, yearMonth, selectedLeaveType, inputValue, userName);
   };
 
   return (

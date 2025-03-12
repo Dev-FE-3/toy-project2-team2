@@ -5,8 +5,6 @@ import {
   where,
   orderBy,
   onSnapshot,
-  getDoc,
-  doc,
 } from "firebase/firestore";
 import { db } from "../../shared/firebase"; // Firebase 설정 파일
 import PageTitle from "../../shared/components/PageTitle";
@@ -145,39 +143,39 @@ const SalaryAdjustment = () => {
   const userInfo = useSelector(selectUserInfo);
   const [userId, setUserId] = useState(null);
   const [userPosition, setUserPosition] = useState(null);
-  const [usersName, setUsersName] = useState({});
-  const [usersEmployeeId, setUsersEmployeeId] = useState({});
+  const [userName, setUserName] = useState(null);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [statusFilter, setStatusFilter] = useState("전체");
 
   useEffect(() => {
     const savedUserId = localStorage.getItem("userId");
     const savedUserPosition = localStorage.getItem("userPosition");
+    const savedUserName = localStorage.getItem("userName");
 
     if (savedUserId && savedUserId !== userId) {
       setUserId(savedUserId);
-    } else if (userInfo.uid && savedUserId !== userInfo.uid) {
+    } else if (userInfo.uid && userInfo.uid !== userId) {
       setUserId(userInfo.uid);
     }
 
     if (savedUserPosition && savedUserPosition !== userPosition) {
       setUserPosition(savedUserPosition);
-    } else if (userInfo.position && savedUserPosition !== userInfo.position) {
+    } else if (userInfo.position && userInfo.position !== userPosition) {
       setUserPosition(userInfo.position);
     }
-  }, [userInfo, userId, userPosition]);
+
+    if (savedUserName && savedUserName !== userName) {
+      setUserName(savedUserName);
+    } else if (userInfo.name && userInfo.name !== userName) {
+      setUserName(userInfo.name);
+    }
+  }, [userInfo]);
 
   useEffect(() => {
-    if (userId) {
-      localStorage.setItem("userId", userId);
-    }
-  }, [userId]);
-
-  useEffect(() => {
-    if (userPosition) {
-      localStorage.setItem("userPosition", userPosition);
-    }
-  }, [userPosition]);
+    if (userId) localStorage.setItem("userId", userId);
+    if (userPosition) localStorage.setItem("userPosition", userPosition);
+    if (userName) localStorage.setItem("userName", userName);
+  }, [userId, userPosition, userName]);
 
   useEffect(() => {
     if (!userId || userPosition === "매니저") return;
@@ -212,33 +210,6 @@ const SalaryAdjustment = () => {
           ...doc.data(),
         }));
         setAllRequests(fetchedRequests);
-
-        // 2. 요청에서 userId 목록 추출 & 중복 제거
-        const userIds = [...new Set(fetchedRequests.map((req) => req.userId))];
-
-        if (userIds.length === 0) return;
-
-        // 3. Firestore에서 userId에 맞는 사용자 문서 가져오기
-        const usersNameData = {};
-        for (const userId of userIds) {
-          const userDocRef = doc(db, "users", userId);
-          const userDoc = await getDoc(userDocRef);
-          if (userDoc.exists()) {
-            usersNameData[userId] = userDoc.data().name;
-          }
-        }
-
-        const usersEmployeeIdData = {};
-        for (const userId of userIds) {
-          const userDocRef = doc(db, "users", userId);
-          const userDoc = await getDoc(userDocRef);
-          if (userDoc.exists()) {
-            usersEmployeeIdData[userId] = userDoc.data().employeeId;
-          }
-        }
-
-        setUsersEmployeeId(usersEmployeeIdData);
-        setUsersName(usersNameData);
       });
 
       return () => unsubscribe();
@@ -247,7 +218,7 @@ const SalaryAdjustment = () => {
     fetchRequests();
   }, []);
 
-  if (!userPosition || !usersName) {
+  if (!userPosition) {
     return <LoadingScreen />;
   }
   //정정 내역 모달 열기
@@ -265,7 +236,11 @@ const SalaryAdjustment = () => {
         {rolesPermissions[userPosition].canConfirm ? (
           ""
         ) : (
-          <RegisterModalButton userId={userId} className="registerBtn" />
+          <RegisterModalButton
+            userName={userName}
+            userId={userId}
+            className="registerBtn"
+          />
         )}
       </TitleContainer>
       <Table>
@@ -281,9 +256,7 @@ const SalaryAdjustment = () => {
                   <SelectBox
                     id="salary-type"
                     options={["전체", "대기 중", "정정 완료", "정정 불가"]}
-                    defaultOption={
-                      statusFilter
-                    }
+                    defaultOption={statusFilter}
                     onSelect={setStatusFilter}
                     size="autoSmall"
                   />
@@ -316,7 +289,7 @@ const SalaryAdjustment = () => {
 
                 return (
                   <tr key={index} onClick={() => handleRowClick(request)}>
-                    <td>{usersName[request.userId]}</td>
+                    <td>{request.userName}</td>
                     <td>{formattedDate}</td>
                     <td>{request.type}</td>
                     <td title={request.reason}>{request.reason}</td>
@@ -364,8 +337,8 @@ const SalaryAdjustment = () => {
           <SalaryManagementModal
             setSelectedRequest={setSelectedRequest}
             selectedRequest={selectedRequest}
-            name={usersName[selectedRequest.userId]}
-            employeeId={usersEmployeeId[selectedRequest.userId]}
+            name={selectedRequest.name}
+            employeeId={selectedRequest.userId}
           />
         ) : (
           <SalaryHistoryModal
