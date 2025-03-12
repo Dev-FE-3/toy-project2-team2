@@ -28,6 +28,7 @@ import styled from "styled-components";
 import SelectBox from "../../shared/components/SelectBox";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "../../store/userSlice";
+import { toast } from "react-toastify";
 
 const UserInfoWrapper = styled.div`
   gap: 20px;
@@ -195,6 +196,8 @@ const Signup = () => {
           employeeId: randomNum,
         })
       );
+
+      toast.success(`${userData.name} 님 회원이 되신 것을 환영합니다.`);
     } catch (e) {
       if (e instanceof FirebaseError) {
         const errorInfo = authErrors[e.code];
@@ -204,7 +207,7 @@ const Signup = () => {
             [errorInfo.field]: errorInfo.message,
           }));
         } else {
-          alert("예상치 못한 오류가 발생하였습니다.");
+          toast.error("예상치 못한 오류가 발생하였습니다.");
         }
       }
     } finally {

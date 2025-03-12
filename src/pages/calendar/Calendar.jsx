@@ -15,6 +15,7 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 const StyledCalendarWrapper = styled.div`
   margin-bottom: 82px;
@@ -78,7 +79,7 @@ const Calendar = () => {
 
     // 제목 필수 입력 확인
     if (inputValue === "") {
-      return alert("제목을 입력해 주세요.");
+      return toast.warn("제목을 입력해 주세요.");
     }
 
     const user = auth.currentUser;
@@ -109,7 +110,7 @@ const Calendar = () => {
   const handleSave = async (schedule) => {
     // 제목 필수 입력 확인
     if (inputValue === "") {
-      return alert("제목을 입력해 주세요.");
+      return toast.warn("제목을 입력해 주세요.");
     }
 
     const user = auth.currentUser;
