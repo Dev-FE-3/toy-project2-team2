@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import ReactDatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
@@ -6,6 +6,18 @@ import styled from "styled-components";
 import CalendarIconSrc from "/images/Group.svg";
 
 registerLocale("ko", ko);
+
+const Label = styled.label`
+  font-size: var(--font-size-primary);
+  font-weight: 400;
+  color: var(--text-disabled);
+  
+  ${(props) =>
+    props.$issubmitted &&
+    `
+      pointer-events: none;
+    `}
+`
 
 const DatePickerWrapper = styled.div`
   align-items: center;
@@ -101,19 +113,26 @@ const CustomInput = React.forwardRef(({ value, onClick, ...rest }, ref) => {
   );
 });
 
-const DatePicker = ({ type = "date", value = new Date(), onChange, isSubmitted }) => {
+const DatePicker = ({ id, label, type = "date", value = new Date(), onChange, isSubmitted }) => {
+  const datePickerRef = useRef(null);
+
   return (
-    <DatePickerWrapper $type={type} $issubmitted={isSubmitted}>
-      <ReactDatePicker
-        selected={value}
-        onChange={onChange}
-        dateFormat={type === "year-month" ? "yyyy/MM" : "yyyy/MM/dd"}
-        locale="ko"
-        showMonthYearPicker={type === "year-month"}
-        customInput={<CustomInput value={formatDate(value, type)} />}
-        showPopperArrow={false}
-      />
-    </DatePickerWrapper>
+    <>
+      {label && <Label htmlFor={id} $issubmitted={isSubmitted} onClick={() => datePickerRef.current?.setOpen(true)}>{label}</Label>}
+      <DatePickerWrapper $type={type} $issubmitted={isSubmitted}>
+        <ReactDatePicker
+          id={id}
+          ref={datePickerRef}
+          selected={value}
+          onChange={onChange}
+          dateFormat={type === "year-month" ? "yyyy/MM" : "yyyy/MM/dd"}
+          locale="ko"
+          showMonthYearPicker={type === "year-month"}
+          customInput={<CustomInput value={formatDate(value, type)} />}
+          showPopperArrow={false}
+        />
+      </DatePickerWrapper>
+    </>
   );
 };
 

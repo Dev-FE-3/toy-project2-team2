@@ -63,9 +63,9 @@ const ModalCalendar = ({
         />
       </li>
       <li>
-        <label htmlFor="start-date">시작일</label>
         <DatePicker
           id="start-date"
+          label="시작일"
           type="date"
           value={startDate}
           onChange={setStartDate}
@@ -73,9 +73,9 @@ const ModalCalendar = ({
         />
       </li>
       <li>
-        <label htmlFor="end-date">종료일</label>
         <DatePicker
           id="end-date"
+          label="종료일"
           type="date"
           value={endDate}
           onChange={setEndDate}

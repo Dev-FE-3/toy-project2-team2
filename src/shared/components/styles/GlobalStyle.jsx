@@ -64,7 +64,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
 	input {
-    all: unset; // 기본 스타일 제거
+    all: unset;
     box-sizing: border-box;
   }
 	
