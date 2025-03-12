@@ -148,7 +148,7 @@ const SalaryAdjustment = () => {
   const [usersName, setUsersName] = useState({});
   const [usersEmployeeId, setUsersEmployeeId] = useState({});
   const [selectedRequest, setSelectedRequest] = useState(null);
-  const [statusFilter, setStatusFilter] = useState("처리 상태");
+  const [statusFilter, setStatusFilter] = useState("전체");
 
   useEffect(() => {
     const savedUserId = localStorage.getItem("userId");
@@ -255,7 +255,7 @@ const SalaryAdjustment = () => {
     setSelectedRequest(request);
   };
   const filteredRequests =
-    statusFilter === "처리 상태" || statusFilter === "전체"
+    statusFilter === "전체"
       ? allRequests
       : allRequests.filter((request) => request.status === statusFilter);
   return (
@@ -282,7 +282,7 @@ const SalaryAdjustment = () => {
                     id="salary-type"
                     options={["전체", "대기 중", "정정 완료", "정정 불가"]}
                     defaultOption={
-                      statusFilter === "전체" ? "처리 상태" : statusFilter
+                      statusFilter
                     }
                     onSelect={setStatusFilter}
                     size="autoSmall"
@@ -316,7 +316,7 @@ const SalaryAdjustment = () => {
 
                 return (
                   <tr key={index} onClick={() => handleRowClick(request)}>
-                    <td>{usersName[request.userId] || "없는 사용자"}</td>
+                    <td>{usersName[request.userId]}</td>
                     <td>{formattedDate}</td>
                     <td>{request.type}</td>
                     <td title={request.reason}>{request.reason}</td>
