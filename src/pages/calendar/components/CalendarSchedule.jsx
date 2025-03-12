@@ -48,8 +48,8 @@ const ScheduleBar = styled.span`
     color === "red" ? "var(--red)" : 
     color === "green" ? "var(--green)" : 
     color === "blue" ? "var(--blue)" : "var(--text-primary)"};
-  background-color: ${({ empty, color }) => 
-    empty === "" ? "transparent" :
+  background-color: ${({ $empty, color }) => 
+    $empty === "" ? "transparent" :
 		color === "orange" ? "var(--orange-bg)" : 
     color === "regular" ? "var(--regular-bg)" : 
     color === "red" ? "var(--red-bg)" : 
@@ -63,8 +63,8 @@ const ScheduleBar = styled.span`
   white-space: nowrap;
   cursor: pointer;
 
-  ${({ empty }) =>
-    empty === "" &&
+  ${({ $empty }) =>
+    $empty === "" &&
     `
       pointer-events: none;
     `}
@@ -162,7 +162,7 @@ const CalendarSchedule = ({ weeks, handleScheduleClick }) => {
                       colSpan={isFirstDay || isFirstContinuedDate ? colSpan : 1}
                       color={schedule.selectedColor}
                       onClick={() => handleScheduleClick(schedule)}
-                      empty={isFirstContinuedDate === false ? "" : null}
+                      $empty={isFirstContinuedDate === false ? "" : null}
                     >
                       {isFirstDay ? schedule.title : ""}
                     </ScheduleBar>
