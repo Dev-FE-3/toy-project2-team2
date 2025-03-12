@@ -7,7 +7,7 @@ const Box = styled.div`
   display: flex;
   height: auto; // 하단 여백에 따라 자동으로 크기가 조정되도록 수정
   min-height: 562px; // 최소 높이는 유지
-  padding: 40px 52px 22px 52px;
+  padding: 40px 52px 32px 52px;
   flex-direction: column;
   align-items: flex-start;
   flex: 1 0 0;
@@ -31,7 +31,7 @@ const Title = styled.span`
   margin-right: 20px;
 `;
 
-const Wrapper = styled.div`
+const ContentWrapper = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -72,40 +72,29 @@ const Calc = styled.span`
 
 const Line = styled.div`
   width: 100%;
-  height: 1.5px;
+  height: 2px;
   background-color: var(--disabled);
-  margin-top: 24px; // 32px -> 24px로 줄여서 여백 조정
+  margin-top: 32px;
+  margin-bottom: 10px;
 `;
 
 const BottomSection = styled.div`
   width: 100%;
-  height: auto; // 버튼이 추가될 때 자동으로 크기 조정
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding-bottom: 10px; // 버튼이 생길 때 공간 확보
 `;
 
 const ButtonWrapper = styled.div`
+  width: 100%;
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  min-height: 44px; // 버튼이 없을 때도 여백 유지!
-  margin-top: 10px; // 수정하기 버튼이 없을 때 여백 유지
 `;
-
-const salaryMapping = {
-  baseSalary: "기본급",
-  overtimePay: "초과근무수당",
-  mealAllowance: "식대",
-};
 
 const EditableCalcBox = ({ data = {}, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState(data || {});
 
   useEffect(() => {
-    setEditData(data || {}); // ✅ data 변경 시 editData 초기화
+    setEditData(data || {}); // data 변경 시 editData 초기화
   }, [data]);
 
   const totalAmount = Object.values(editData || {}).reduce(
@@ -122,6 +111,12 @@ const EditableCalcBox = ({ data = {}, onSave }) => {
     });
   };
 
+  const salaryMapping = {
+    baseSalary: "기본급",
+    overtimePay: "초과근무수당",
+    mealAllowance: "식대",
+  };
+
   const handleSave = () => {
     setIsEditing(false);
     onSave(editData);
@@ -131,13 +126,8 @@ const EditableCalcBox = ({ data = {}, onSave }) => {
     <Box>
       <TitleWrapper>
         <Title>지급 내역</Title>
-        {!isEditing && (
-          <Button size="sm" onClick={() => setIsEditing(true)}>
-            수정하기
-          </Button>
-        )}
       </TitleWrapper>
-      <Wrapper>
+      <ContentWrapper>
         {Object.keys(editData).length === 0 ? (
           <Content>
             <Left>미입력</Left>
@@ -168,13 +158,18 @@ const EditableCalcBox = ({ data = {}, onSave }) => {
               </Content>
             ))
         )}
-      </Wrapper>
+      </ContentWrapper>
       <BottomSection>
         <Calc>
           <Left>총 지급액</Left>
           <Right>{totalAmount.toLocaleString()} 원</Right>
         </Calc>
         <Line />
+        {!isEditing && (
+          <Button size="sm" onClick={() => setIsEditing(true)}>
+            수정하기
+          </Button>
+        )}
         {isEditing && (
           <ButtonWrapper>
             <Button size="sm" color="gray" onClick={() => setIsEditing(false)}>
