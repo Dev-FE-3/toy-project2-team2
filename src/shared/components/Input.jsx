@@ -30,7 +30,7 @@ const InputStyle = styled.input`
   font-weight: 400;
   line-height: 24px;
   border: 1px solid var(--disabled);
-  background-color: var(--background-color-3);
+  background-color: var(--white);
   color: var(--text-primary);
   transition: all 0.2s ease;
 
@@ -44,7 +44,7 @@ const InputStyle = styled.input`
     props.$issubmitted &&
     `
       border: 1px solid var(--disabled);
-      background-color: var(--white);
+      background-color: var(--background-color-3);
       color: var(--text-primary);
       pointer-events: none;
     `}

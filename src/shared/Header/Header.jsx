@@ -75,36 +75,40 @@ const Header = () => {
   const dispatch = useDispatch();
   const [profile, setProfile] = useState(user?.photoURL);
   const { name, position } = useSelector(selectUserInfo);
+  const userInfo = useSelector(selectUserInfo); // Redux 상태에서 바로 가져오기
 
-  // Firestore에서 사용자 정보 가져와 Redux 업데이트 (단, Redux에 데이터가 없을 때만 Firebase 요청)
   useEffect(() => {
     const fetchUserInfo = async () => {
       if (!user) return;
-      // Redux 상태에 사용자 정보가 없다면 Firebase에서 가져오기
-      if (!name || !position) {
+
+      // Redux에 필요한 정보가 없는 경우만 실행
+      if (
+        !userInfo ||
+        !userInfo.name ||
+        !userInfo.position ||
+        !userInfo.employeeId
+      ) {
         try {
           const docRef = doc(db, "users", user.uid);
           const docSnap = await getDoc(docRef);
 
           if (docSnap.exists()) {
-            const { name, position } = docSnap.data();
-            dispatch(
-              setUserInfo({
-                name: name || "anonymous",
-                position: position || "메이트",
-              })
-            );
-            console.log("사용자 데이터를 다시 받아왔습니다.");
+            const newUserInfo = docSnap.data();
+
+            // 기존 Redux 상태와 비교 후 변경된 경우에만 업데이트
+            if (JSON.stringify(userInfo) !== JSON.stringify(newUserInfo)) {
+              dispatch(setUserInfo(newUserInfo));
+              //console.log("사용자 데이터를 Redux에 한 번만 저장");
+            }
           }
         } catch (error) {
           console.error("Error fetching user info:", error);
-          dispatch(setUserInfo({ name: "anonymous", position: "메이트" }));
         }
       }
     };
 
     fetchUserInfo();
-  }, [user, dispatch, name, position]); // name, position 값이 없을 때만 Firebase에서 불러오기
+  }, [user, dispatch, userInfo]); // userInfo가 변경될 때만 실행
 
   // 프로필 이미지 가져오기
   useEffect(() => {
