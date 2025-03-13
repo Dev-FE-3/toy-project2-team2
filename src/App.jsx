@@ -4,18 +4,18 @@ import { auth, db } from "./shared/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import Calendar from "./pages/calendar/Calendar";
 import Login from "./pages/auth/Login";
-import MySalary from "./pages/mySalary/MySalary";
+import Salary from "./pages/salary/Salary";
 import SalaryAdjustment from "./pages/salaryAdjustment/SalaryAdjustment";
 import Guide from "./pages/guide/Guide";
 import Layout from "./shared/Layout";
 import LoadingScreen from "./shared/components/LoadingScreen";
-import ProtectedRoute from "./shared/components/ProtectedRoute";
-import GlobalStyle from "./shared/components/styles/GlobalStyle";
+import ProtectedRoute from "./shared/components/protectedRoute/ProtectedRoute";
+import GlobalStyle from "./shared/styles/GlobalStyle";
 import Signup from "./pages/auth/Signup";
 import { rolesPermissions } from "./shared/config/rolesPermissions";
 import EmployeeList from "./pages/employeeList/EmployeeList";
-import ProtectedRouteForManager from "./shared/components/ProtectedRouteForManager";
-import SalaryAdmin from "./pages/mySalary/SalaryAdmin";
+import ProtectedRouteForManager from "./shared/components/protectedRoute/ProtectedRouteForManager";
+import SalaryAdmin from "./pages/salary/SalaryAdmin";
 
 const App = () => {
   const [isLoading, setLoading] = useState(true);
@@ -61,7 +61,7 @@ const App = () => {
             element: rolesPermissions[userPosition]?.canConfirm ? (
               <EmployeeList />
             ) : (
-              <MySalary />
+              <Salary />
             ),
           },
           {
