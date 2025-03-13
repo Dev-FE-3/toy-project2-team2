@@ -5,7 +5,8 @@
 ## ✨ 프로젝트 소개
 ### H&B 급여 관리 시스템 - Sweet Tan 💰
 >**직원들의 급여 및 급여 정정 신청을 효율적으로 관리하는 스마트 시스템!** <br />
-Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관리할 수 있도록 설계된 웹 애플리케이션입니다. 본 프로젝트는 React.js와 Firebase를 기반으로 개발되었으며, Redux를 활용하여 상태 관리를 수행합니다.
+Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관리할 수 있도록 설계된 웹 애플리케이션입니다. <br/>
+본 프로젝트는 React.js와 Firebase를 기반으로 개발되었으며, Redux를 활용하여 상태 관리를 수행합니다.
 
 &nbsp;
 
@@ -15,7 +16,7 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 | <img width="200px" src="https://avatars.githubusercontent.com/u/113437204?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/38741900?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/148299246?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/94222592?v=4" style="max-width: 100%;"> |
 | :---: | :---: | :---: | :---: |
 | **[안요셉](https://github.com/YosepAhn)** | **[박현아](https://github.com/pha1155)** | **[조유나](https://github.com/j0n0m2)** | **[정지윤](https://github.com/jiyoon04)** |
-| 정정 신청 / 내역(직원) <br/> 공통 컴포넌트 <br/> toast 알림 | 내 일정(캘린더) <br/> Layout & Header <br/> css & 공통 컴포넌트 작업 | 로그인 & 회원가입 <br/> 정정 신청 / 내역 (관리자)<br/> 디자인 <br/> Routing | 급여 확인 (직원 & 관리자)<br/> 내 일정(캘린더) <br/> 공통 컴포넌트 작업 <br/> 프로필 이미지 업로드<br/> routing & Redux |
+| 정정 신청 / 내역(직원) <br/> 공통 컴포넌트 <br/> Toast 알림 | 내 일정(캘린더) <br/> Layout & Header <br/> CSS & 공통 컴포넌트 작업 | 로그인 & 회원가입 <br/> 정정 신청 / 내역 (관리자)<br/> 디자인 <br/> Routing | 급여 확인 (직원 & 관리자)<br/> 내 일정(캘린더) <br/> 공통 컴포넌트 작업 <br/> 프로필 이미지 업로드<br/> Routing & Redux |
 </div>
 
 &nbsp;
@@ -30,10 +31,10 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 - Redux Store를 활용한 상태 관리
 
 ![Image](https://github.com/user-attachments/assets/b1226347-558f-4775-ba68-c04af333d3d3)
-> 에러 확인 후 로그인 넘어가기
+> Error 확인 후 로그인 성공 시 환영 Toast 확인 
 
 ![Image](https://github.com/user-attachments/assets/f333bce0-f76f-4ca5-bef9-81098a1c9828)
-> 정상적으로 가입 후 toast & header 프로필 업로드까지
+> 정상적으로 가입 후 Toast & Header 프로필 업로드
 
 &nbsp;
 
@@ -45,7 +46,7 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 - 라벨 색상으로 일정 구분 표시
 
 ![Image](https://github.com/user-attachments/assets/33519c4e-a4dc-40cc-9cb4-c9e872d7b4e6)
-> 제목 토스트 확인 일정 등록, 눌러서 확인, 수정, 삭제
+> 제목 Toast 확인 일정 등록, 등록된 일정 클릭 하여 확인, 수정, 삭제
 
 &nbsp;
 
@@ -55,7 +56,7 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 - Redux Store를 활용하여 개인 정보를 유지하고, 필요 시 Firestore에서 재조회
 
 ![Image](https://github.com/user-attachments/assets/d56465d9-bf4c-472f-8a2b-02a8ff2cbdd9)
-> 월 별 select box 선택 
+> 월 별 Select Box 선택 
 
 &nbsp;
 
@@ -67,19 +68,19 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 - 신청 내역을 Firebase Firestore에 저장 및 관리
 
 ![Image](https://github.com/user-attachments/assets/f572ba54-6194-4ddc-a925-529939bbe3d5)
-> 정정 신청 등록, 토스트 확인, 눌러서 상세 확인
+> 정정 신청 등록, Toast 확인, 등록된 정정 내역 클릭하여 상세 내용 확인
 
 &nbsp;
 
-### 5. 직원 리스팅 관리자
+### 5. 직원 리스팅 - Admin
 ![Image](https://github.com/user-attachments/assets/d5b19dce-4ab3-4bc1-bdf9-ebb88cc2192d)
-> 이름 / 사번으로 검색, 아이콘 눌러 검색 상태 새로고침, 눌러서 페이지 넘어가기
+> 이름 / 사번으로 검색, 아이콘 클릭 - 검색 상태 새로고침, 리스팅 항목 클릭 후 페이지 이동
 
 &nbsp;
 
-### 6. 급여 정정  관리자
+### 6. 급여 정정  - Admin
 ![Image](https://github.com/user-attachments/assets/02e2e04f-8a6b-411d-8914-eaf7f7498195)
-> 월 선택 후 급여 수정, 저장 후 바뀌는 것 확인
+> 월 선택 후 급여 수정, 저장 후 업데이트 확인
 
 &nbsp;
 
