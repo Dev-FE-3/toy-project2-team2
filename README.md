@@ -20,7 +20,7 @@ Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 �
 | <img width="200px" src="https://avatars.githubusercontent.com/u/113437204?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/38741900?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/148299246?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/94222592?v=4" style="max-width: 100%;"> |
 | :---: | :---: | :---: | :---: |
 | **[안요셉](https://github.com/YosepAhn)** | **[박현아](https://github.com/pha1155)** | **[조유나](https://github.com/j0n0m2)** | **[정지윤](https://github.com/jiyoon04)** |
-| 정정 신청 / 내역 (직원) <br/> 공통 컴포넌트 <br/> Toast 알림 <br/> README | 내 일정 (캘린더) <br/> Layout & Header <br/> CSS & 공통 컴포넌트  | 로그인 & 회원가입 <br/> 정정 신청 / 내역 (메니저)<br/> 디자인 <br/> Routing | 급여 확인 (직원 & 매니저)<br/> 직원 리스팅 (매니저) <br/> 공통 컴포넌트  <br/> 프로필 이미지 업로드<br/> Routing & Redux |
+| 정정 신청 / 내역 (직원) <br/> 공통 컴포넌트 <br/> Toast 알림 <br/> README | 내 일정 (캘린더) <br/> Layout & Header <br/> CSS & 공통 컴포넌트  | 로그인 & 회원가입 <br/> 정정 신청 / 내역 (메니저)<br/> 디자인 <br/> Routing | 급여확인 (직원 & 매니저)<br/> 직원 리스팅 (매니저) <br/> 공통 컴포넌트  <br/> 프로필 이미지 업로드<br/> Routing & Redux |
 </div>
 
 &nbsp;
