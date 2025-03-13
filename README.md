@@ -10,7 +10,7 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 
 &nbsp;
 
-## 🤓 팀원 소개
+## 🤓 팀 - 후크선장  
 <div align="center">
    
 | <img width="200px" src="https://avatars.githubusercontent.com/u/113437204?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/38741900?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/148299246?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/94222592?v=4" style="max-width: 100%;"> |
