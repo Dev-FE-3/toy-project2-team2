@@ -138,7 +138,7 @@ const EmployeeList = () => {
   };
 
   const handleRowClick = (employeeId) => {
-    navigate(`/MySalary/${employeeId}`);
+    navigate(`/Salary/${employeeId}`);
   };
 
   return (
