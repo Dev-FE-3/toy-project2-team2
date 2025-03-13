@@ -2,10 +2,10 @@ import { useState } from "react";
 import styled from "styled-components";
 import PageTitle from "../../shared/components/PageTitle";
 import CalendarHeader from "./components/CalendarHeader";
-import CalendarSchedule from "./components/CalendarSchedule";
+import CalendarBody from "./components/CalendarBody";
 import useModal from "../../shared/components/modal/useModal";
 import Modal from "./../../shared/components/modal/Modal";
-import ModalCalendar from "./components/ModalCalendar";
+import ModalContent from "./components/ModalContent";
 import { useCalendar } from "./hooks/useCalendar";
 import { db, auth } from "../../shared/firebase";
 import {
@@ -15,6 +15,7 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 const StyledCalendarWrapper = styled.div`
   margin-bottom: 82px;
@@ -78,7 +79,7 @@ const Calendar = () => {
 
     // 제목 필수 입력 확인
     if (inputValue === "") {
-      return alert("제목을 입력해 주세요.");
+      return toast.warn("제목을 입력해 주세요.");
     }
 
     const user = auth.currentUser;
@@ -109,7 +110,7 @@ const Calendar = () => {
   const handleSave = async (schedule) => {
     // 제목 필수 입력 확인
     if (inputValue === "") {
-      return alert("제목을 입력해 주세요.");
+      return toast.warn("제목을 입력해 주세요.");
     }
 
     const user = auth.currentUser;
@@ -177,7 +178,7 @@ const Calendar = () => {
           <Modal
             title={selectedSchedule ? "일정 상세" : "일정 등록"}
             content={
-              <ModalCalendar
+              <ModalContent
                 inputValue={inputValue}
                 setInputValue={setInputValue}
                 startDate={startDate}
@@ -211,7 +212,7 @@ const Calendar = () => {
               ))}
             </tr>
           </StyledCalendarWeek>
-          <CalendarSchedule
+          <CalendarBody
             weeks={weeks}
             handleScheduleClick={handleScheduleClick}
           />

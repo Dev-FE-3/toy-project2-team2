@@ -9,6 +9,8 @@ import DatePicker from "../../shared/components/DatePicker";
 import useModal from "../../shared/components/modal/useModal";
 import Modal from "../../shared/components/modal/Modal";
 
+// // 공통 컴포넌트 활용 확인을 위한 가이드 페이지 입니다. 기능 페이지 X
+
 const ScheduleRegisterContent = () => (
   <div>
     <p>일정을 등록하는 방법:</p>

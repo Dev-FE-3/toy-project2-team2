@@ -35,7 +35,7 @@ const Nav = () => {
         </li>
         <li>
           <NavLink
-            to="/MySalary"
+            to="/Salary"
             className={({ isActive }) => (isActive ? "active" : "")}
           >
             급여 확인

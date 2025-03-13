@@ -33,7 +33,6 @@ const Table = styled.table`
   margin-bottom: 138px;
   text-align: center;
   font-size: var(--font-size-title-small);
-  font-weight: 500;
   border-spacing: 10px;
   border-top: 2px solid var(--background-color);
   border-bottom: 2px solid var(--background-color);
@@ -42,6 +41,7 @@ const Table = styled.table`
     display: table;
     table-layout: fixed;
     width: 100%;
+    font-weight: 700;
     border-bottom: 2px solid var(--background-color);
 
     &::after {
@@ -74,7 +74,7 @@ const Table = styled.table`
       table-layout: fixed;
 
       td {
-        color: var(--text-disabled);
+        color: var(--text-primary);
       }
     }
   }
@@ -138,7 +138,7 @@ const EmployeeList = () => {
   };
 
   const handleRowClick = (employeeId) => {
-    navigate(`/MySalary/${employeeId}`);
+    navigate(`/Salary/${employeeId}`);
   };
 
   return (
