@@ -61,10 +61,10 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 
 ### 4. 정정 내역 / 신청 (Salary Adjustment)
 
-- **useModal 커스텀 훅**을 활용한 모달 창 구현
-- **로그인한 사용자가 급여 정정 신청 가능**
-- **자신의 정정 내역을 Firestore에서 조회 가능**
-- **신청 내역을 Firebase Firestore에 저장 및 관리**
+- useModal 커스텀 훅을 활용한 모달 창 구현
+- 로그인한 사용자가 급여 정정 신청 가능
+- 자신의 정정 내역을 Firestore에서 조회 가능
+- 신청 내역을 Firebase Firestore에 저장 및 관리
 
 ![Image](https://github.com/user-attachments/assets/f572ba54-6194-4ddc-a925-529939bbe3d5)
 > 정정 신청 등록, 토스트 확인, 눌러서 상세 확인
