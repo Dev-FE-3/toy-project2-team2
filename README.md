@@ -1,22 +1,29 @@
+## ✨ 프로젝트 소개
+
+### H&B 급여 관리 시스템 - Sweet Ten 💰
+
 ![image](https://github.com/user-attachments/assets/bb29e9ce-b0d6-4d50-af21-651233385d48)
 
+> **직원들의 개인 일정 관리와 급여 확인 및 급여 정정을 효율적으로 관리하는 스마트 시스템!** <br />
+
+Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 위한 일정정 관리 뿐만 아니라 지급 내역과 정정 신청을 체계적으로 관리할 수 있는 웹 애플리케이션입니다.
+<br/>
+
+직급별로 사용해야 하는 기능이 다르다는 점을 주목해 직급별 맞춤 기능을 제안합니다.
+<br/>
+
+본 프로젝트는 React.js와 Firebase를 기반으로 개발되었으며, Redux를 활용하여 로그인한 유저의 상태를 효율적으로 관리하였습니다.
+
 &nbsp;
 
-## ✨ 프로젝트 소개
-### H&B 급여 관리 시스템 - Sweet Ten 💰
->**직원들의 급여 및 급여 정정 신청을 효율적으로 관리하는 스마트 시스템!** <br />
-Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관리할 수 있도록 설계된 웹 애플리케이션입니다. <br/>
-본 프로젝트는 React.js와 Firebase를 기반으로 개발되었으며, Redux를 활용하여 상태 관리를 수행합니다.
+## 🤓 팀 - 후크선장
 
-&nbsp;
-
-## 🤓 팀 - 후크선장  
 <div align="center">
    
 | <img width="200px" src="https://avatars.githubusercontent.com/u/113437204?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/38741900?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/148299246?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/94222592?v=4" style="max-width: 100%;"> |
 | :---: | :---: | :---: | :---: |
 | **[안요셉](https://github.com/YosepAhn)** | **[박현아](https://github.com/pha1155)** | **[조유나](https://github.com/j0n0m2)** | **[정지윤](https://github.com/jiyoon04)** |
-| 정정 신청 / 내역(직원) <br/> 공통 컴포넌트 <br/> Toast 알림 | 내 일정(캘린더) <br/> Layout & Header <br/> CSS & 공통 컴포넌트 작업 | 로그인 & 회원가입 <br/> 정정 신청 / 내역 (관리자)<br/> 디자인 <br/> Routing | 급여 확인 (직원 & 관리자)<br/> 내 일정(캘린더) <br/> 공통 컴포넌트 작업 <br/> 프로필 이미지 업로드<br/> Routing & Redux |
+| 정정 신청 / 내역 (직원) <br/> 공통 컴포넌트 <br/> Toast 알림 <br/> README | 내 일정 (캘린더) <br/> Layout & Header <br/> CSS & 공통 컴포넌트  | 로그인 & 회원가입 <br/> 정정 신청 / 내역 (메니저)<br/> 디자인 <br/> Routing | 급여 확인 (직원 & 매니저)<br/> 직원 리스팅 (매니저) <br/> 공통 컴포넌트  <br/> 프로필 이미지 업로드<br/> Routing & Redux |
 </div>
 
 &nbsp;
@@ -31,65 +38,113 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 - Redux Store를 활용한 상태 관리
 
 ![Image](https://github.com/user-attachments/assets/b1226347-558f-4775-ba68-c04af333d3d3)
-> Error 확인 후 로그인 성공 시 환영 Toast 확인 
+
+> Error 확인 후 로그인 성공 시 환영 Toast 확인
+> ----------**GIF** 변경----------
 
 ![Image](https://github.com/user-attachments/assets/f333bce0-f76f-4ca5-bef9-81098a1c9828)
+
 > 정상적으로 가입 후 Toast & Header 프로필 업로드
 
 &nbsp;
 
 ### 2. 내 일정 (Calendar)
 
-- useModal 커스텀 훅을 활용하여 모달 구현
+- useModal 커스텀 Hook을 활용하여 모달 구현
 - 일정 추가, 조회, 수정, 삭제(CRUD) 기능 구현
 - 로그인한 직원의 일정 Firestore DB 연동
 - 라벨 색상으로 일정 구분 표시
+- 달력 생성과 일정 부분을 useCalendar, useSchedules 훅을 이용하여 렌더링
 
 ![Image](https://github.com/user-attachments/assets/33519c4e-a4dc-40cc-9cb4-c9e872d7b4e6)
+
 > 제목 Toast 확인 일정 등록, 등록된 일정 클릭 하여 확인, 수정, 삭제
 
 &nbsp;
 
 ### 3. 급여 확인 (Salary)
 
-- 로그인한 직원의 급여 정보를 Firestore에서 불러와 월별로 렌더링
+- 로그인한 직원의 급여 정보를 Firestore에서 불러와 useSalaryData(userId, selectedMonth) Hook으로 렌더링
+- useAvailableMonths(userId)로 13개월 이상 근속 시 최근 12개월의 급여 정보만 제공
 - Redux Store를 활용하여 개인 정보를 유지하고, 필요 시 Firestore에서 재조회
 
 ![Image](https://github.com/user-attachments/assets/d56465d9-bf4c-472f-8a2b-02a8ff2cbdd9)
-> 월 별 Select Box 선택 
+
+> 월 별 Select Box 선택
 
 &nbsp;
 
-### 4. 정정 내역 / 신청 (Salary Adjustment)
+### 4. 정정 신청 / 내역 (Salary Adjustment)
 
-- useModal 커스텀 훅을 활용한 모달 창 구현
+- useModal 커스텀 Hook을 활용한 모달 창 구현
 - 로그인한 사용자가 급여 정정 신청 가능
 - 자신의 정정 내역을 Firestore에서 조회 가능
 - 신청 내역을 Firebase Firestore에 저장 및 관리
 
 ![Image](https://github.com/user-attachments/assets/f572ba54-6194-4ddc-a925-529939bbe3d5)
+
 > 정정 신청 등록, Toast 확인, 등록된 정정 내역 클릭하여 상세 내용 확인
 
 &nbsp;
 
-### 5. 직원 리스팅 - Admin
+### 5. 급여 확인 (직원 리스트) - Manager
+
+- 매니저가 모든 직원에 대한 정보를 리스팅 페이지를 통해 접근
+- 사번과 이름으로 검색이 가능하고 입력 시 뜨는 Icon을 통해 검색 내역 초기화 가능
+
 ![Image](https://github.com/user-attachments/assets/d5b19dce-4ab3-4bc1-bdf9-ebb88cc2192d)
-> 이름 / 사번으로 검색, 아이콘 클릭 - 검색 상태 새로고침, 리스팅 항목 클릭 후 페이지 이동
+
+> 이름 / 사번으로 검색, Icon 클릭 - 검색 상태 새로고침, 리스팅 항목 클릭 후 페이지 이동
 
 &nbsp;
 
-### 6. 급여 정정  - Admin
+### 6. 급여 관리 - Manager
+
+- 선택한 직원의 급여 정보를 useAvailableMonths(employeeId)와 useSalaryData(employeeId, selectedMonth) Hook을 통해 달 별로 확인
+- 지급 내역 수정이 있는 경우 4대 보험 & 실 지급액이 useRecalculateDeductions(payments) Hook을 통해 재계산되어 Firestore에 업데이트
+
 ![Image](https://github.com/user-attachments/assets/02e2e04f-8a6b-411d-8914-eaf7f7498195)
+
 > 월 선택 후 급여 수정, 저장 후 업데이트 확인
 
 &nbsp;
 
-### 7. 정정 신청 / 내역 관리 - Admin
+### 7. 정정 신청 / 내역 관리 - Manager
 
+- useModal 커스텀 Hook을 활용하여 모달 구현
 - 모든 직원의 정정 신청 내역 열람 가능
-  - 정정 신청 처리 상태를 기준으로 내역 필터링 조회 가능
+- 정정 신청 처리 상태를 기준으로 내역 필터링 조회 가능
 - 모든 직원의 정정 신청 승인 및 반려 기능 구현
-  - 수정된 정정 신청 정보를 기반으로 Firestore 해당 문서 업데이트
+- 수정된 정정 신청 정보를 기반으로 Firestore 해당 문서 업데이트
+
+----------**GIF**추가----------
+
+&nbsp;
+
+## 🔨 기술 스택
+
+<div >
+<h3>Frontend</h3>
+<div align="center">
+<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
+<img src="https://img.shields.io/badge/styled-components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white">
+<img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white">
+</div>
+
+<h3>Backend</h3>
+<div align="center">
+<img src="https://img.shields.io/badge/Firebase-ff9900?style=for-the-badge&logo=Firebase&logoColor=white">  
+</div>
+
+<h3> Tools</h2>
+<div align="center">
+ <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white">
+   <img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=Github&logoColor=white">
+   <img src="https://img.shields.io/badge/Zoom-2D8CFF?style=for-the-badge&logo=Zoom&logoColor=white">
+   <img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white">
+   <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white">
+</div>
+</div>
 
 &nbsp;
 
@@ -118,32 +173,6 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 
 &nbsp;
 
-## 🔨 기술 스택
-<div >
-<h3>Frontend</h3>
-<div align="center">
-<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
-<img src="https://img.shields.io/badge/styled-components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white">
-<img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white">
-</div>
-
-<h3>Backend</h3>
-<div align="center">
-<img src="https://img.shields.io/badge/Firebase-ff9900?style=for-the-badge&logo=Firebase&logoColor=white">  
-</div>
-
-<h3> Tools</h2>
-<div align="center">
- <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white">
-   <img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=Github&logoColor=white">
-   <img src="https://img.shields.io/badge/Zoom-2D8CFF?style=for-the-badge&logo=Zoom&logoColor=white">
-   <img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white">
-   <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white">
-</div>
-</div>
-
-&nbsp;
-
 ## 🎮 프로젝트 실행 방법
 
 1. `.env` 파일 설정: API 키를 안전하게 보관하기 위해 `.env` 파일을 생성하고, 필요한 환경 변수를 설정합니다.
@@ -168,14 +197,43 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
    npm run dev
 
    ```
-   
+
+&nbsp;
+
+## ⏰ 타임 라인
+
+![image](https://github.com/user-attachments/assets/5afcd389-a246-45aa-bda6-6168ae11cd75)
+
+> 2025년 2월 17일 ~ 3월 14일 / 리팩토링 ~ 3월 19일
+
 &nbsp;
 
 ## ⚡ 브랜치 전략
 
-- `main` : 배포용 브랜치
-- `dev` : 개발 브랜치
-- `feature/[기능명]` : 기능 개발 브랜치
+### 1. 브랜치 종류
+
+| 브랜치명           | 설명                                   |
+| ------------------ | -------------------------------------- |
+| `main`             | 제품의 안정적인 배포를 위한 브랜치     |
+| `dev`              | 개발 브랜치로, 모든 기능이 병합되는 곳 |
+| `feature/[기능명]` | 기능 개발을 위한 개별 브랜치           |
+
+### 2. 브랜치 흐름
+
+| 대상 브랜치                | Merge 방식                          |
+| -------------------------- | ----------------------------------- |
+| `feature/[기능명]` → `dev` | **Squash Merge** (커밋 내역 정리)   |
+| `dev` → `main`             | **Merge** (Squash 적용된 내용 유지) |
+
+### 3. 브랜치 운영 방식
+
+1. **기능 개발**: `feature/[기능명]`에서 작업 후 `dev` 브랜치로 `Squash Merge`
+2. **개발 완료 후 배포**: `dev`에서 안정적인 상태가 되면 `main`으로 `Merge`
+3. **Squash Merge 적용 이유**: 기능 단위로 커밋을 정리하여 `dev` 브랜치를 깔끔하게 유지
+
+---
+
+> 위 전략을 따르면 브랜치 관리가 깔끔해지고, `main` 브랜치에 이력이 명확하게 남을 수 있습니다. ✨
 
 &nbsp;
 
@@ -268,19 +326,3 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 
 - 리뷰 요구사항을 적어주세요!
 ```
-
-&nbsp;
-
-## 💄 디자인 시안
-![image](https://github.com/user-attachments/assets/d63b748c-7652-4449-a145-734ea89ccaab)
-
-&nbsp;
-
-## ⏰ 타임 라인
-![image](https://github.com/user-attachments/assets/5afcd389-a246-45aa-bda6-6168ae11cd75)
-
-&nbsp;
-
-## 💦 협업 과정
-
-![alt text](image.png)
