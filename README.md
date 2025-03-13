@@ -9,7 +9,7 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 
 &nbsp;
 
-## 팀원 소개
+## 🤓 팀원 소개
 <div align="center">
    
 | <img width="200px" src="https://avatars.githubusercontent.com/u/113437204?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/38741900?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/148299246?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/94222592?v=4" style="max-width: 100%;"> |
@@ -20,7 +20,7 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 
 &nbsp;
 
-## 페이지 소개 및 주요 기능
+## 🚀 페이지 소개 및 주요 기능
 
 ### 1. 로그인 / 회원가입 (Auth)
 
@@ -92,7 +92,7 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 
 &nbsp;
 
-## 폴더 구조
+## 🧱 폴더 구조
 
 ```
 📦src
@@ -117,9 +117,8 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 
 &nbsp;
 
+## 🔨 기술 스택
 <div >
-<h2 align="center"> Tech Stacks</h2>
-
 <h3>Frontend</h3>
 <div align="center">
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
@@ -132,15 +131,9 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 <img src="https://img.shields.io/badge/Firebase-ff9900?style=for-the-badge&logo=Firebase&logoColor=white">  
 </div>
 
-</div>
-
-<br />
-
-<div>
-<h2 align="center"> Tools</h2>
-<br />
+<h3> Tools</h2>
 <div align="center">
-   <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white">
+ <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white">
    <img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=Github&logoColor=white">
    <img src="https://img.shields.io/badge/Zoom-2D8CFF?style=for-the-badge&logo=Zoom&logoColor=white">
    <img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white">
@@ -150,7 +143,7 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 
 &nbsp;
 
-## 프로젝트 실행 방법
+## 🎮 프로젝트 실행 방법
 
 1. `.env` 파일 설정: API 키를 안전하게 보관하기 위해 `.env` 파일을 생성하고, 필요한 환경 변수를 설정합니다.
 2. 프로젝트 클론:
@@ -177,7 +170,7 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
    
 &nbsp;
 
-## 브랜치 전략
+## ⚡ 브랜치 전략
 
 - `main` : 배포용 브랜치
 - `dev` : 개발 브랜치
@@ -185,7 +178,7 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 
 &nbsp;
 
-## 커밋 컨벤션
+## 🤙 커밋 컨벤션
 
 ```jsx
 # 제목은 최대 50글자까지 아래에 작성: ex) Feat: Add Key mapping
@@ -228,7 +221,7 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 
 &nbsp;
 
-## 네이밍 컨벤션
+## 🤙 네이밍 컨벤션
 
 ```
 - 변수: camelCase
@@ -241,7 +234,7 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 
 &nbsp;
 
-## 문서 템플릿
+## 📘 문서 템플릿
 
 ```markdown
 ### 📄 Describe
@@ -277,11 +270,16 @@ Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관
 
 &nbsp;
 
-## 타임 라인
+## 💄 디자인 시안
+![image](https://github.com/user-attachments/assets/d63b748c-7652-4449-a145-734ea89ccaab)
+
+&nbsp;
+
+## ⏰ 타임 라인
 ![image](https://github.com/user-attachments/assets/5afcd389-a246-45aa-bda6-6168ae11cd75)
 
 &nbsp;
 
-## 협업 과정
+## 💦 협업 과정
 
 ![alt text](image.png)
