@@ -1,7 +1,4 @@
 ## ✨ 프로젝트 소개
-
-### H&B 급여 관리 시스템 - Sweet Ten 💰
-
 ![image](https://github.com/user-attachments/assets/bb29e9ce-b0d6-4d50-af21-651233385d48)
 
 > **직원들의 개인 일정 관리와 급여 확인 및 급여 정정을 효율적으로 관리하는 스마트 시스템!** <br />
@@ -133,7 +130,7 @@ Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 �
 
 <h3>Backend</h3>
 <div align="center">
-<img src="https://img.shields.io/badge/Firebase-ff9900?style=for-the-badge&logo=Firebase&logoColor=white">  
+<img src="https://img.shields.io/badge/Firebase-DD2C00?style=for-the-badge&logo=Firebase&logoColor=white">  
 </div>
 
 <h3> Tools</h2>
@@ -151,23 +148,23 @@ Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 �
 ## 🧱 폴더 구조
 
 ```
-📦src
- ┣ 📂pages
- ┃ ┣ 📂auth
- ┃ ┣ 📂calendar
- ┃ ┣ 📂employeeList
- ┃ ┣ 📂salary
- ┃ ┗ 📂salaryAdjustment
- ┣ 📂shared
- ┃ ┣ 📂components
- ┃ ┣ 📂styles
- ┃ ┣ 📂config
- ┃ ┣ 📂header
- ┃ ┣ 📜firebase.js
- ┃ ┗ 📜Layout.jsx
- ┣ 📂store
- ┣ 📜App.jsx
- ┗ 📜main.jsx
+💚src
+ ┣ 📚pages
+ ┃ ┣ 🔒auth
+ ┃ ┣ 📁calendar
+ ┃ ┣ 📁employeeList
+ ┃ ┣ 📁salary
+ ┃ ┗ 📁salaryAdjustment
+ ┣ 📓shared
+ ┃ ┣ ⭐️components
+ ┃ ┣ 💄styles
+ ┃ ┣ 📁config
+ ┃ ┣ 📁header
+ ┃ ┣ 📄firebase.js
+ ┃ ┗ 📄Layout.jsx
+ ┣ 🧰store
+ ┣ 📄App.jsx
+ ┗ 📄main.jsx
 
 ```
 
@@ -231,9 +228,7 @@ Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 �
 2. **개발 완료 후 배포**: `dev`에서 안정적인 상태가 되면 `main`으로 `Merge`
 3. **Squash Merge 적용 이유**: 기능 단위로 커밋을 정리하여 `dev` 브랜치를 깔끔하게 유지
 
----
 
-> 위 전략을 따르면 브랜치 관리가 깔끔해지고, `main` 브랜치에 이력이 명확하게 남을 수 있습니다. ✨
 
 &nbsp;
 
