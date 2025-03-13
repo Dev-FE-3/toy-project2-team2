@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { auth, db } from "../firebase";
+import { auth, db } from "../../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import LoadingScreen from "./LoadingScreen";
+import LoadingScreen from "../LoadingScreen";
 
 const ProtectedRouteForManager = () => {
   const [isLoading, setLoading] = useState(true);
@@ -28,7 +28,7 @@ const ProtectedRouteForManager = () => {
     return <LoadingScreen />;
   }
 
-  return isManager ? <Outlet /> : <Navigate to="/MySalary" replace />;
+  return isManager ? <Outlet /> : <Navigate to="/Salary" replace />;
 };
 
 export default ProtectedRouteForManager;

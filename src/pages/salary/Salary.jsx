@@ -62,7 +62,7 @@ const Right = styled.span`
   text-align: right;
 `;
 
-const MySalary = () => {
+const Salary = () => {
   const dispatch = useDispatch();
   const userInfo = useSelector(selectUserInfo); // Redux 상태에서 바로 가져오기
   const user = auth.currentUser;
@@ -149,4 +149,4 @@ const MySalary = () => {
   );
 };
 
-export default MySalary;
+export default Salary;
