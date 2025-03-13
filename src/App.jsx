@@ -57,7 +57,7 @@ const App = () => {
             element: <Calendar />,
           },
           {
-            path: "MySalary",
+            path: "Salary",
             element: rolesPermissions[userPosition]?.canConfirm ? (
               <EmployeeList />
             ) : (
@@ -65,7 +65,7 @@ const App = () => {
             ),
           },
           {
-            path: "/MySalary",
+            path: "/Salary",
             element: <ProtectedRouteForManager />,
             children: [
               {
@@ -79,7 +79,7 @@ const App = () => {
             element: <SalaryAdjustment />,
           },
           {
-            path: "Guide",
+            path: "Guide", // 공통 컴포넌트 활용 확인을 위한 가이드 페이지 입니다.
             element: <Guide />,
           },
         ],

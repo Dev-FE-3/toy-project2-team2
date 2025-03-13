@@ -1,21 +1,16 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import {
-  doc,
-  getDoc,
-  query,
-  collection,
-  where,
-  getDocs,
-  updateDoc,
-  Timestamp,
-} from "firebase/firestore";
+import { query, collection, where, getDocs } from "firebase/firestore";
 import { db } from "../../shared/firebase";
 import PageTitle from "../../shared/components/PageTitle";
 import SelectBox from "../../shared/components/SelectBox";
 import CalcBox from "../mySalary/components/CalcBox";
 import EditableCalcBox from "../mySalary/components/EditableCalcBox";
 import styled from "styled-components";
+import useAvailableMonths from "./hooks/useAvailableMonths";
+import useSalaryData from "./hooks/useSalaryData";
+import useRecalculateDeductions from "./hooks/useRecalculateDeductions";
+import formatHiredDate from "./utils/formatHiredDate";
 
 const ContentBox = styled.div`
   margin-top: 30px;
@@ -69,54 +64,13 @@ const CalcWrapper = styled.div`
 
 const SalaryAdmin = () => {
   const { employeeId } = useParams();
-  const [salaryData, setSalaryData] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
-  const [selectedMonth, setSelectedMonth] = useState("");
-  const [availableMonths, setAvailableMonths] = useState([]);
+  const { recalculateDeductions } = useRecalculateDeductions();
+  const formattedHiredDate = formatHiredDate(userInfo?.hiredDate);
 
   useEffect(() => {
     if (!employeeId) return;
-
-    const fetchAvailableMonths = async () => {
-      try {
-        const usersRef = collection(db, "users");
-        const q = query(
-          usersRef,
-          where("employeeId", "==", Number(employeeId))
-        );
-        const querySnapshot = await getDocs(q);
-
-        if (querySnapshot.empty) return;
-
-        const userDoc = querySnapshot.docs[0];
-        const userUid = userDoc.id;
-
-        const monthsRef = collection(db, "salaries", userUid, "months");
-        const monthsSnap = await getDocs(monthsRef);
-
-        if (monthsSnap.empty) {
-          setAvailableMonths([]);
-          setSelectedMonth("");
-          return;
-        }
-
-        const sortedMonths = monthsSnap.docs
-          .map((doc) => doc.id)
-          .sort((a, b) => {
-            return (
-              new Date(b.replace(/년 |월/g, "")) -
-              new Date(a.replace(/년 |월/g, ""))
-            );
-          })
-          .slice(0, 12);
-
-        setAvailableMonths(sortedMonths);
-        setSelectedMonth(sortedMonths[0] || "");
-      } catch (error) {
-        console.error("월 데이터 조회 오류:", error);
-      }
-    };
-
+    // 사번으로 유저 데이터 조회
     const fetchUserData = async () => {
       try {
         const usersRef = collection(db, "users");
@@ -135,96 +89,40 @@ const SalaryAdmin = () => {
       }
     };
 
-    fetchAvailableMonths();
     fetchUserData();
   }, [employeeId]);
 
-  useEffect(() => {
-    if (!selectedMonth || !userInfo?.uid) return; // userInfo?.uid 체크
+  const {
+    months: availableMonths,
+    selectedMonth,
+    setSelectedMonth,
+  } = useAvailableMonths(userInfo?.uid);
 
-    const fetchSalaryData = async () => {
-      const salaryRef = doc(
-        db,
-        "salaries",
-        userInfo.uid,
-        "months",
-        selectedMonth
-      );
-      const salarySnap = await getDoc(salaryRef);
-
-      if (salarySnap.exists()) {
-        setSalaryData(salarySnap.data());
-      } else {
-        setSalaryData({ netSalary: 0, payments: [], deductions: [] });
-      }
-    };
-
-    fetchSalaryData();
-  }, [selectedMonth, userInfo]);
+  const { salaryData, updateSalaryData } = useSalaryData(
+    userInfo?.uid,
+    selectedMonth
+  );
 
   const handleSavePayments = async (updatedPayments) => {
     if (!salaryData) return;
 
-    // 총 지급액 계산
     const totalPayments = Object.values(updatedPayments).reduce(
       (acc, val) => acc + val,
       0
     );
-
-    // 변동된 지급 내역에 따른 공제 내역 재계산
-    const recalculateDeductions = (payments) => {
-      const baseSalary = payments?.baseSalary || 0;
-      const overtimePay = payments?.overtimePay || 0;
-
-      return {
-        pension: Math.floor((baseSalary + overtimePay) * 0.045),
-        healthInsurance: Math.floor((baseSalary + overtimePay) * 0.0345),
-        employmentInsurance: Math.floor((baseSalary + overtimePay) * 0.008),
-        incomeTax: Math.floor((baseSalary + overtimePay) * 0.07),
-        localIncomeTax: Math.floor((baseSalary + overtimePay) * 0.01),
-      };
-    };
-
-    const updatedDeductions = recalculateDeductions(updatedPayments);
+    const updatedDeductions = recalculateDeductions(updatedPayments); // 훅 사용
     const totalDeductions = Object.values(updatedDeductions).reduce(
       (acc, val) => acc + val,
       0
     );
-
     const updatedNetSalary = totalPayments - totalDeductions;
 
-    try {
-      const salaryRef = doc(
-        db,
-        "salaries",
-        userInfo.uid,
-        "months",
-        selectedMonth
-      );
-      await updateDoc(salaryRef, {
-        payments: updatedPayments,
-        deductions: updatedDeductions,
-        netSalary: updatedNetSalary,
-      });
-
-      // 새로운 객체로 변경하여 강제 리렌더링
-      setSalaryData((prev) => ({
-        ...prev,
-        payments: { ...updatedPayments },
-        deductions: { ...updatedDeductions },
-        netSalary: updatedNetSalary,
-      }));
-    } catch (error) {
-      console.error("급여 데이터 업데이트 오류:", error);
-    }
+    await updateSalaryData({
+      payments: updatedPayments,
+      deductions: updatedDeductions,
+      netSalary: updatedNetSalary,
+    });
   };
-
-  // 입사일 포맷팅
-  const formattedHiredDate = userInfo?.hiredDate
-    ? userInfo.hiredDate instanceof Timestamp
-      ? new Date(userInfo.hiredDate.seconds * 1000).toISOString().split("T")[0]
-      : new Date(userInfo.hiredDate).toISOString().split("T")[0]
-    : "입사일 없음";
 
   return (
     <>
