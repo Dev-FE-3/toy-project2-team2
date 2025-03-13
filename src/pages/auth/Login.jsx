@@ -25,6 +25,7 @@ import { setUserInfo } from "../../store/userSlice";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../shared/firebase";
 import { Timestamp } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const dispatch = useDispatch(); // 추가
@@ -91,6 +92,7 @@ const Login = () => {
 
         // Redux에 전체 정보 저장
         dispatch(setUserInfo({ uid: user.uid, ...userData }));
+        toast.success(`${userData.name}님 반갑습니다.`);
       } else {
         console.warn("사용자 정보가 Firestore에 없음.");
       }
