@@ -17,15 +17,20 @@ const useAvailableMonths = (userId) => {
         const snapshot = await getDocs(monthsRef);
         const availableMonths = snapshot.docs.map((doc) => doc.id);
 
-        // 최신 12개월 정렬
+        // "YYYY년 MM월" -> Date 객체로 변환하여 정렬
         const sortedMonths = availableMonths
-          .sort((a, b) => {
-            return (
-              new Date(b.replace(/년 |월/g, "")) -
-              new Date(a.replace(/년 |월/g, ""))
-            );
+          .map((month) => {
+            const match = month.match(/(\d{4})년 (\d{1,2})월/);
+            if (!match) return { date: new Date(0), original: month }; // 포맷이 잘못된 경우 방어 코드
+            const [_, year, monthNum] = match;
+            return {
+              date: new Date(parseInt(year), parseInt(monthNum) - 1),
+              original: month,
+            };
           })
-          .slice(0, 12);
+          .sort((a, b) => b.date - a.date) // 최신순 정렬
+          .map((item) => item.original) // 원래 문자열 포맷 유지
+          .slice(0, 12); // 최신 12개월만 선택
 
         setMonths(sortedMonths);
         setSelectedMonth(sortedMonths[0] || ""); // 최신 월을 기본 선택
