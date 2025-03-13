@@ -35,7 +35,7 @@ const LabelList = styled.ul`
   gap: 12px;
 `;
 
-const ModalCalendar = ({
+const ModalContent = ({
   inputValue,
   setInputValue,
   startDate,
@@ -112,4 +112,4 @@ const ModalCalendar = ({
   );
 };
 
-export default ModalCalendar;
+export default ModalContent;

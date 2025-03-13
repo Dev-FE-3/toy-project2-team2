@@ -2,10 +2,10 @@ import { useState } from "react";
 import styled from "styled-components";
 import PageTitle from "../../shared/components/PageTitle";
 import CalendarHeader from "./components/CalendarHeader";
-import CalendarSchedule from "./components/CalendarSchedule";
+import CalendarBody from "./components/CalendarBody";
 import useModal from "../../shared/components/modal/useModal";
 import Modal from "./../../shared/components/modal/Modal";
-import ModalCalendar from "./components/ModalCalendar";
+import ModalContent from "./components/ModalContent";
 import { useCalendar } from "./hooks/useCalendar";
 import { db, auth } from "../../shared/firebase";
 import {
@@ -178,7 +178,7 @@ const Calendar = () => {
           <Modal
             title={selectedSchedule ? "일정 상세" : "일정 등록"}
             content={
-              <ModalCalendar
+              <ModalContent
                 inputValue={inputValue}
                 setInputValue={setInputValue}
                 startDate={startDate}
@@ -212,7 +212,7 @@ const Calendar = () => {
               ))}
             </tr>
           </StyledCalendarWeek>
-          <CalendarSchedule
+          <CalendarBody
             weeks={weeks}
             handleScheduleClick={handleScheduleClick}
           />
