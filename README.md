@@ -1,83 +1,154 @@
-![image.png](attachment:320daa92-a8d3-43af-a80c-f5a332052160:image.png)
+![image](https://github.com/user-attachments/assets/bb29e9ce-b0d6-4d50-af21-651233385d48)
 
-## 프로젝트 소개
+&nbsp;
 
-H&B 급여 관리 시스템 Sweet Tan은 직원들의 급여 및 급여 정정 신청을 효율적으로 관리할 수 있도록 설계된 웹 애플리케이션입니다. 본 프로젝트는 React.js와 Firebase를 기반으로 개발되었으며, Redux를 활용하여 상태 관리를 수행합니다.
+## ✨ 프로젝트 소개
+### H&B 급여 관리 시스템 - Sweet Tan 💰
+>**직원들의 급여 및 급여 정정 신청을 효율적으로 관리하는 스마트 시스템!** <br />
+Sweet Tan은 직원들의 급여 및 급여 정정 신청을 체계적으로 관리할 수 있도록 설계된 웹 애플리케이션입니다. 본 프로젝트는 React.js와 Firebase를 기반으로 개발되었으며, Redux를 활용하여 상태 관리를 수행합니다.
+
+&nbsp;
 
 ## 팀원 소개
-
 <div align="center">
-<table>
-<tr>
-<td align="center">
-<a href="https://github.com/YosepAhn">
-<img src="https://avatars.githubusercontent.com/u/113437204?v=4" width="120" height="120" alt="Profile Picture"/>
-</a>
-<br />
-<strong>안요셉</strong>
-<br />
-<p>정정 신청/ 내역(직원) <br/>
-
-공통 컴포넌트 작업 <br>
-
-toast 알림
-
-</p>
-</td>
-<td align="center">
-<a href="https://github.com/pha1155">
-<img src="https://avatars.githubusercontent.com/u/38741900?v=4" width="120" height="120" alt="Profile Picture"/>
-</a>
-<br />
-<strong>박현아</strong>
-<br />
-<p>내 일정(캘린더) <br/>
-
-Layout & Header <br>
-
-css & 공통 컴포넌트 작업
-
-</p>
-</td>
-<td align="center">
-<a href="https://github.com/j0n0m2">
-<img src="[https://avatars.githubusercontent.com/u/148299246?v=4"width="120](https://avatars.githubusercontent.com/u/148299246?v=4%22width=%22120)" height="120" alt="Profile Picture"/>
-</a>
-<br />
-<strong>조유나</strong>
-<br />
-<p> 로그인 & 회원가입<br/>
-
-정정 신청 / 내역 (관리자)<br/>
-
-디자인 <br/>
-
-routing
-
-</p>
-</td>
-<td align="center">
-<a href="https://github.com/jiyoon04">
-<img src="https://avatars.githubusercontent.com/u/94222592?v=4" width="120" height="120" alt="Profile Picture"/>
-</a>
-<br />
-<strong>정지윤</strong>
-<br />
-<p>급여 확인 (직원 & 관리자)<br/>
-
-내 일정(캘린더) <br/>
-
-공통 컴포넌트 작업 <br/>
-
-프로필 이미지 업로드<br/>
-
-routing & Redux
-
-</p>
-</td>
-</tr>
-</table>
+   
+| <img width="200px" src="https://avatars.githubusercontent.com/u/113437204?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/38741900?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/148299246?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/94222592?v=4" style="max-width: 100%;"> |
+| :---: | :---: | :---: | :---: |
+| **[안요셉](https://github.com/YosepAhn)** | **[박현아](https://github.com/pha1155)** | **[조유나](https://github.com/j0n0m2)** | **[정지윤](https://github.com/jiyoon04)** |
+| 정정 신청 / 내역(직원) <br/> 공통 컴포넌트 <br/> toast 알림 | 내 일정(캘린더) <br/> Layout & Header <br/> css & 공통 컴포넌트 작업 | 로그인 & 회원가입 <br/> 정정 신청 / 내역 (관리자)<br/> 디자인 <br/> Routing | 급여 확인 (직원 & 관리자)<br/> 내 일정(캘린더) <br/> 공통 컴포넌트 작업 <br/> 프로필 이미지 업로드<br/> routing & Redux |
 </div>
+
+&nbsp;
+
+## 페이지 소개 및 주요 기능
+
+### 1. 로그인 / 회원가입 (Auth)
+
+- Firebase Authentication을 활용한 회원가입 및 로그인 기능
+- 이메일/비밀번호 로그인 방식
+- 사용자 데이터를 Firestore에 저장
+- Redux Store를 활용한 상태 관리
+
+![Image](https://github.com/user-attachments/assets/b1226347-558f-4775-ba68-c04af333d3d3)
+> 에러 확인 후 로그인 넘어가기
+
+![Image](https://github.com/user-attachments/assets/f333bce0-f76f-4ca5-bef9-81098a1c9828)
+> 정상적으로 가입 후 toast & header 프로필 업로드까지
+
+&nbsp;
+
+### 2. 내 일정 (Calendar)
+
+- useModal 커스텀 훅을 활용하여 모달 구현
+- 일정 추가, 조회, 수정, 삭제(CRUD) 기능 구현
+- 로그인한 직원의 일정 Firestore DB 연동
+- 라벨 색상으로 일정 구분 표시
+
+![Image](https://github.com/user-attachments/assets/33519c4e-a4dc-40cc-9cb4-c9e872d7b4e6)
+> 제목 토스트 확인 일정 등록, 눌러서 확인, 수정, 삭제
+
+&nbsp;
+
+### 3. 급여 확인 (Salary)
+
+- 로그인한 직원의 급여 정보를 Firestore에서 불러와 월별로 렌더링
+- Redux Store를 활용하여 개인 정보를 유지하고, 필요 시 Firestore에서 재조회
+
+![Image](https://github.com/user-attachments/assets/d56465d9-bf4c-472f-8a2b-02a8ff2cbdd9)
+> 월 별 select box 선택 
+
+&nbsp;
+
+### 4. 정정 내역 / 신청 (Salary Adjustment)
+
+- **useModal 커스텀 훅**을 활용한 모달 창 구현
+- **로그인한 사용자가 급여 정정 신청 가능**
+- **자신의 정정 내역을 Firestore에서 조회 가능**
+- **신청 내역을 Firebase Firestore에 저장 및 관리**
+
+![Image](https://github.com/user-attachments/assets/f572ba54-6194-4ddc-a925-529939bbe3d5)
+> 정정 신청 등록, 토스트 확인, 눌러서 상세 확인
+
+&nbsp;
+
+### 5. 직원 리스팅 관리자
+![Image](https://github.com/user-attachments/assets/d5b19dce-4ab3-4bc1-bdf9-ebb88cc2192d)
+> 이름 / 사번으로 검색, 아이콘 눌러 검색 상태 새로고침, 눌러서 페이지 넘어가기
+
+&nbsp;
+
+### 6. 급여 정정  관리자
+![Image](https://github.com/user-attachments/assets/02e2e04f-8a6b-411d-8914-eaf7f7498195)
+> 월 선택 후 급여 수정, 저장 후 바뀌는 것 확인
+
+&nbsp;
+
+### 7. 정정 신청 / 내역 관리 - Admin
+
+- 모든 직원의 정정 신청 내역 열람 가능
+  - 정정 신청 처리 상태를 기준으로 내역 필터링 조회 가능
+- 모든 직원의 정정 신청 승인 및 반려 기능 구현
+  - 수정된 정정 신청 정보를 기반으로 Firestore 해당 문서 업데이트
+
+&nbsp;
+
+## 폴더 구조
+
+```
+📦src
+ ┣ 📂pages
+ ┃ ┣ 📂auth
+ ┃ ┣ 📂calendar
+ ┃ ┣ 📂employeeList
+ ┃ ┣ 📂salary
+ ┃ ┗ 📂salaryAdjustment
+ ┣ 📂shared
+ ┃ ┣ 📂components
+ ┃ ┣ 📂styles
+ ┃ ┣ 📂config
+ ┃ ┣ 📂header
+ ┃ ┣ 📜firebase.js
+ ┃ ┗ 📜Layout.jsx
+ ┣ 📂store
+ ┣ 📜App.jsx
+ ┗ 📜main.jsx
+
+```
+
+&nbsp;
+
+<div >
+<h2 align="center"> Tech Stacks</h2>
+
+<h3>Frontend</h3>
+<div align="center">
+<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
+<img src="https://img.shields.io/badge/styled-components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white">
+<img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white">
+</div>
+
+<h3>Backend</h3>
+<div align="center">
+<img src="https://img.shields.io/badge/Firebase-ff9900?style=for-the-badge&logo=Firebase&logoColor=white">  
+</div>
+
+</div>
+
+<br />
+
+<div>
+<h2 align="center"> Tools</h2>
+<br />
+<div align="center">
+   <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white">
+   <img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=Github&logoColor=white">
+   <img src="https://img.shields.io/badge/Zoom-2D8CFF?style=for-the-badge&logo=Zoom&logoColor=white">
+   <img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white">
+   <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white">
+</div>
+</div>
+
+&nbsp;
 
 ## 프로젝트 실행 방법
 
@@ -103,100 +174,16 @@ routing & Redux
    npm run dev
 
    ```
-
-## 페이지 소개 및 주요 기능
-
-### 1. 로그인 / 회원가입 (Auth)
-
-- Firebase Authentication을 활용한 회원가입 및 로그인 기능
-- 이메일/비밀번호 로그인 방식
-- 사용자 데이터를 Firestore에 저장
-- Redux Store를 활용한 상태 관리
-
-### 2. 내 일정 (Calendar)
-
-- useModal 커스텀 훅을 활용하여 모달 구현
-- 일정 추가, 조회, 수정, 삭제(CRUD) 기능 구현
-- 로그인한 직원의 일정 Firestore DB 연동
-- 라벨 색상으로 일정 구분 표시
-
-### 3. 급여 확인 (Salary)
-
-- 로그인한 직원의 급여 정보를 Firestore에서 불러와 월별로 렌더링
-- Redux Store를 활용하여 개인 정보를 유지하고, 필요 시 Firestore에서 재조회
-
-### 4. 정정 내역 / 신청 (Salary Adjustment)
-
-- **useModal 커스텀 훅**을 활용한 모달 창 구현
-- **로그인한 사용자가 급여 정정 신청 가능**
-- **자신의 정정 내역을 Firestore에서 조회 가능**
-- **신청 내역을 Firebase Firestore에 저장 및 관리**
-
-### 5. 정정 신청 / 내역 관리 - Admin
-
-- 모든 직원의 정정 신청 내역 열람 가능
-  - 정정 신청 처리 상태를 기준으로 내역 필터링 조회 가능
-- 모든 직원의 정정 신청 승인 및 반려 기능 구현
-  - 수정된 정정 신청 정보를 기반으로 Firestore 해당 문서 업데이트
-
-## 폴더 구조
-
-```
-📦src
- ┣ 📂pages
- ┃ ┣ 📂auth
- ┃ ┣ 📂calendar
- ┃ ┣ 📂employeeList
- ┃ ┣ 📂salary
- ┃ ┗ 📂salaryAdjustment
- ┣ 📂shared
- ┃ ┣ 📂components
- ┃ ┣ 📂styles
- ┃ ┣ 📂config
- ┃ ┣ 📂header
- ┃ ┣ 📜firebase.js
- ┃ ┗ 📜Layout.jsx
- ┣ 📂store
- ┣ 📜App.jsx
- ┗ 📜main.jsx
-
-```
-
-<div >
-<h2 align="center"> Tech Stacks</h2>
-
-<h3>Frontend</h3>
-<div align="center">
-<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
-
-</div>
-
-<h3>Backend</h3>
-<div align="center">
-<img src="https://img.shields.io/badge/Firebase-ff9900?style=plastic&logo=Firebase&logoColor=white">
-</div>
-
-</div>
-
-<br />
-
-<div>
-<h2 align="center"> Tools</h2>
-<br />
-<div align="center">
-<img src="https://img.shields.io/badge/Git-F05032?style=plastic&logo=Git&logoColor=white">
-<img src="https://img.shields.io/badge/Github-181717?style=plastic&logo=Github&logoColor=white">
-<img src="https://img.shields.io/badge/Zoom-2D8CFF?style=plastic&logo=Zoom&logoColor=white">
-<img src="https://img.shields.io/badge/Slack-4A154B?style=plastic&logo=Slack&logoColor=white">
-<img src="https://img.shields.io/badge/Notion-000000?style=plastic&logo=Notion&logoColor=white">
-</div>
-</div>
+   
+&nbsp;
 
 ## 브랜치 전략
 
 - `main` : 배포용 브랜치
 - `dev` : 개발 브랜치
 - `feature/[기능명]` : 기능 개발 브랜치
+
+&nbsp;
 
 ## 커밋 컨벤션
 
@@ -239,6 +226,8 @@ routing & Redux
 
 ```
 
+&nbsp;
+
 ## 네이밍 컨벤션
 
 ```
@@ -249,6 +238,8 @@ routing & Redux
 - 포멧터: Prettier / ESLint (w. Airbnb style guide)
 
 ```
+
+&nbsp;
 
 ## 문서 템플릿
 
@@ -284,9 +275,12 @@ routing & Redux
 - 리뷰 요구사항을 적어주세요!
 ```
 
-## 타임 라인
+&nbsp;
 
-![image.png](attachment:b76084c2-d51e-4230-bfbd-cf01e9b8f296:image.png)
+## 타임 라인
+![image](https://github.com/user-attachments/assets/5afcd389-a246-45aa-bda6-6168ae11cd75)
+
+&nbsp;
 
 ## 협업 과정
 
