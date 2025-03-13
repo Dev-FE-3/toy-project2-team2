@@ -7,10 +7,8 @@ import ToastProvider from "./shared/components/ToastProvider";
 
 // store.js 사용하려면 Provider로 감싸줘야함!!
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
     <Provider store={store}>
       <App />
       <ToastProvider />
     </Provider>
-  </React.StrictMode>
 );
