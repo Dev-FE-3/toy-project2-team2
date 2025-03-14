@@ -1,11 +1,10 @@
 ## ✨ 프로젝트 소개
+
 ![image](https://github.com/user-attachments/assets/bb29e9ce-b0d6-4d50-af21-651233385d48)
 
 > **직원들의 개인 일정 관리와 급여 확인 및 급여 정정을 효율적으로 관리하는 스마트 시스템!** <br />
 
 Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 위한 일정정 관리 뿐만 아니라 지급 내역과 정정 신청을 체계적으로 관리할 수 있는 웹 애플리케이션입니다.
-<br/>
-
 직급별로 사용해야 하는 기능이 다르다는 점을 주목해 직급별 맞춤 기능을 제안합니다.
 <br/>
 
@@ -175,25 +174,15 @@ Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 �
 1. `.env` 파일 설정: API 키를 안전하게 보관하기 위해 `.env` 파일을 생성하고, 필요한 환경 변수를 설정합니다.
 2. 프로젝트 클론:
 
-   ```
-   git clone [repository-url]
-   cd hnb-payroll-system
-
-   ```
+   `git clone https://github.com/Dev-FE-3/toy-project2-team2.git`
 
 3. 패키지 설치:
 
-   ```
-   npm install
-
-   ```
+   `npm install`
 
 4. 프로젝트 실행:
 
-   ```
-   npm run dev
-
-   ```
+   `npm run dev `
 
 &nbsp;
 
@@ -201,7 +190,7 @@ Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 �
 
 ![image](https://github.com/user-attachments/assets/5afcd389-a246-45aa-bda6-6168ae11cd75)
 
-> 2025년 2월 17일 ~ 3월 14일 / 리팩토링 ~ 3월 19일
+> 개발 2025년 2월 17일 ~ 2025년 3월 14일 / 리팩토링 ~ 2025년 3월 19일
 
 &nbsp;
 
@@ -227,8 +216,6 @@ Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 �
 1. **기능 개발**: `feature/[기능명]`에서 작업 후 `dev` 브랜치로 `Squash Merge`
 2. **개발 완료 후 배포**: `dev`에서 안정적인 상태가 되면 `main`으로 `Merge`
 3. **Squash Merge 적용 이유**: 기능 단위로 커밋을 정리하여 `dev` 브랜치를 깔끔하게 유지
-
-
 
 &nbsp;
 
