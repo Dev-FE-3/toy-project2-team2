@@ -19,7 +19,7 @@ Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 �
 | <img width="200px" src="https://avatars.githubusercontent.com/u/113437204?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/38741900?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/148299246?v=4" style="max-width: 100%;"> | <img width="200px" src="https://avatars.githubusercontent.com/u/94222592?v=4" style="max-width: 100%;"> |
 | :---: | :---: | :---: | :---: |
 | **[안요셉](https://github.com/YosepAhn)** | **[박현아](https://github.com/pha1155)** | **[조유나](https://github.com/j0n0m2)** | **[정지윤](https://github.com/jiyoon04)** |
-| 정정 신청 / 내역 (직원) <br/> 공통 컴포넌트 <br/> Toast 알림 <br/> README | 내 일정 (캘린더) <br/> Layout & Header <br/> CSS & 공통 컴포넌트  | 로그인 & 회원가입 <br/> 정정 신청 / 내역 (메니저)<br/> 디자인 <br/> Routing | 급여확인 (직원 & 매니저)<br/> 직원 리스팅 (매니저) <br/> 공통 컴포넌트  <br/> 프로필 이미지 업로드<br/> Routing & Redux |
+| 정정 신청 / 내역 (직원) <br/> 공통 컴포넌트 <br/> Toast 알림 <br/> README | 내 일정 (캘린더) <br/> Layout & Header <br/> CSS & 공통 컴포넌트  | 로그인 & 회원가입 <br/> 정정 신청 / 내역 (매니저)<br/> 디자인 <br/> Routing | 급여확인 (직원 & 매니저)<br/> 직원 리스팅 (매니저) <br/> 공통 컴포넌트  <br/> 프로필 이미지 업로드<br/> Routing & Redux |
 </div>
 
 &nbsp;
@@ -36,7 +36,6 @@ Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 �
 ![Image](https://github.com/user-attachments/assets/b1226347-558f-4775-ba68-c04af333d3d3)
 
 > Error 확인 후 로그인 성공 시 환영 Toast 확인
-> ----------**GIF** 변경----------
 
 ![Image](https://github.com/user-attachments/assets/f333bce0-f76f-4ca5-bef9-81098a1c9828)
 
@@ -46,11 +45,11 @@ Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 �
 
 ### 2. 내 일정 (Calendar)
 
+- 달력 생성과 일정 부분을 useCalendar, useSchedules 커스텀 Hook을 이용하여 렌더링
 - useModal 커스텀 Hook을 활용하여 모달 구현
 - 일정 추가, 조회, 수정, 삭제(CRUD) 기능 구현
 - 로그인한 직원의 일정 Firestore DB 연동
 - 라벨 색상으로 일정 구분 표시
-- 달력 생성과 일정 부분을 useCalendar, useSchedules 훅을 이용하여 렌더링
 
 ![Image](https://github.com/user-attachments/assets/33519c4e-a4dc-40cc-9cb4-c9e872d7b4e6)
 
@@ -121,19 +120,19 @@ Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 �
 
 <div >
 <h3>Frontend</h3>
-<div align="center">
+<div align="left">
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
 <img src="https://img.shields.io/badge/styled-components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white">
 <img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white">
 </div>
 
 <h3>Backend</h3>
-<div align="center">
+<div align="left">
 <img src="https://img.shields.io/badge/Firebase-DD2C00?style=for-the-badge&logo=Firebase&logoColor=white">  
 </div>
 
 <h3> Tools</h2>
-<div align="center">
+<div align="left">
  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white">
    <img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=Github&logoColor=white">
    <img src="https://img.shields.io/badge/Zoom-2D8CFF?style=for-the-badge&logo=Zoom&logoColor=white">
@@ -169,6 +168,14 @@ Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 �
 
 &nbsp;
 
+## ⏰ 프로젝트 일정
+
+![image](https://github.com/user-attachments/assets/5afcd389-a246-45aa-bda6-6168ae11cd75)
+
+> 개발 2025년 2월 17일 ~ 2025년 3월 14일 / 리팩토링 ~ 2025년 3월 19일
+
+&nbsp;
+
 ## 🎮 프로젝트 실행 방법
 
 1. `.env` 파일 설정: API 키를 안전하게 보관하기 위해 `.env` 파일을 생성하고, 필요한 환경 변수를 설정합니다.
@@ -183,14 +190,6 @@ Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 �
 4. 프로젝트 실행:
 
    `npm run dev `
-
-&nbsp;
-
-## ⏰ 타임 라인
-
-![image](https://github.com/user-attachments/assets/5afcd389-a246-45aa-bda6-6168ae11cd75)
-
-> 개발 2025년 2월 17일 ~ 2025년 3월 14일 / 리팩토링 ~ 2025년 3월 19일
 
 &nbsp;
 
