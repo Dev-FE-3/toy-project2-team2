@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { auth, db } from "../../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import LoadingScreen from "../LoadingScreen";
+import { auth, db } from "../../../firebase";
+import LoadingScreen from "../../LoadingScreen";
 
 const ProtectedRouteForManager = () => {
   const [isLoading, setLoading] = useState(true);
