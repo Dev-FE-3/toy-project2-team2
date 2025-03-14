@@ -6,6 +6,7 @@ import TextArea from "../../../shared/components/TextArea";
 import SelectBox from "../../../shared/components/SelectBox";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../shared/firebase";
+import { toast } from "react-toastify";
 
 const List = styled.ul`
   display: flex;
@@ -109,12 +110,11 @@ const SalaryManagementModal = ({
       await updateDoc(docRef, {
         status: updatedStatus,
       });
-
-      alert("처리 상태 수정이 완료되었습니다.");
+      toast.success("처리 상태 수정이 완료되었습니다.");
       onClose();
     } catch (error) {
       console.error("처리 상태 수정 오류:", error);
-      alert("처리 상태 수정에 실패했습니다.");
+      toast.error("처리 상태 수정에 실패했습니다.");
     }
   };
 

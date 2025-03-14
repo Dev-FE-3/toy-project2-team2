@@ -33,7 +33,7 @@ Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 �
 - 사용자 데이터를 Firestore에 저장
 - Redux Store를 활용한 상태 관리
 
-![Image](https://github.com/user-attachments/assets/b1226347-558f-4775-ba68-c04af333d3d3)
+![Image](https://github.com/user-attachments/assets/6422e99e-119e-4bfa-98d1-012caee8a1de)
 
 > Error 확인 후 로그인 성공 시 환영 Toast 확인
 
@@ -112,7 +112,9 @@ Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 �
 - 모든 직원의 정정 신청 승인 및 반려 기능 구현
 - 수정된 정정 신청 정보를 기반으로 Firestore 해당 문서 업데이트
 
-----------**GIF**추가----------
+![Image](https://github.com/user-attachments/assets/a342c47c-e454-4431-88f0-8706db1189ef)
+
+> 정정 상태에 대한 필터링 적용, 정정 상태 수정 후 제출하면 firebase 업데이트
 
 &nbsp;
 
