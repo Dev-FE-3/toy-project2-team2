@@ -1,67 +1,22 @@
-import { createBrowserRouter } from "react-router-dom";
-import Calendar from "./pages/calendar/Calendar";
-import Login from "./pages/login/Login";
-import MySalary from "./pages/mySalary/MySalary";
-import SalaryAdjustment from "./pages/salaryAdjustment/SalaryAdjustment";
 import { RouterProvider } from "react-router-dom";
-import Layout from "./shared/Layout";
-import { useEffect, useState } from "react";
-import { auth } from "./firebase";
-import styled from "styled-components";
 import LoadingScreen from "./shared/components/LoadingScreen";
-import ProtectedRoute from "./shared/components/ProtectedRoute";
-
-const Wrapper = styled.div`
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-`;
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <ProtectedRoute>
-        <Layout />
-      </ProtectedRoute>
-    ),
-    children: [
-      {
-        path: "",
-        element: <Calendar />,
-      },
-      {
-        path: "MySalary",
-        element: <MySalary />,
-      },
-      {
-        path: "SalaryAdjustment",
-        element: <SalaryAdjustment />,
-      },
-    ],
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-]);
+import GlobalStyle from "./shared/styles/GlobalStyle";
+import router from "./shared/components/router/router";
+import useAuthUser from "./shared/components/router/hooks/useAuthUser";
 
 const App = () => {
-  const [isLoading, setLoading] = useState(true);
-  const init = async () => {
-    //wait for firebase login check
-    await auth.authStateReady();
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    init();
-  }, []);
+  const { userPosition, isLoading } = useAuthUser();
+  const appRouter = router(userPosition);
 
   return (
-    <Wrapper>
-      {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
-    </Wrapper>
+    <>
+      <GlobalStyle />
+      {isLoading || !router ? (
+        <LoadingScreen />
+      ) : (
+        <RouterProvider router={appRouter} />
+      )}
+    </>
   );
 };
 
