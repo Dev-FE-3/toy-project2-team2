@@ -10,6 +10,8 @@ Sweet Ten은 H&B 브랜드의 급여 관리 시스템으로, 직무 수행을 �
 
 본 프로젝트는 React.js와 Firebase를 기반으로 개발되었으며, Redux를 활용하여 로그인한 유저의 상태를 효율적으로 관리하였습니다.
 
+> [▶︎&nbsp;&nbsp;토이프로젝트 2 - 배포 사이트 바로가기&nbsp; 👀](https://toyproject2-baa7f.web.app/)
+
 &nbsp;
 
 ## 🤓 팀 - 후크선장
