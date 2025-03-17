@@ -36,7 +36,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const isDisabled =
-    isLoading || email === "" || password === "" || error.common || error.email;
+    isLoading || email === "" || password === "" || error.loginError || error.email;
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -100,11 +100,11 @@ const Login = () => {
               name="email"
               value={email}
               placeholder="이메일을 입력하세요"
-              error={error.email || error.common}
+              error={error.email || error.loginError}
             />
             <ErrorWrapper>
-              <Error $hasError={!!(error.email || error.common)}>
-                {error.email || error.common || " "}
+              <Error $hasError={!!(error.email || error.loginError)}>
+                {error.email || error.loginError || " "}
               </Error>
             </ErrorWrapper>
             <LoginInput
@@ -114,10 +114,10 @@ const Login = () => {
               value={password}
               placeholder="비밀번호를 입력하세요"
               type="password"
-              error={error.common}
+              error={error.loginError}
             />
             <ErrorWrapper>
-              <Error $hasError={!!error.common}>{error.common || " "}</Error>
+              <Error $hasError={!!error.loginError}>{error.loginError || " "}</Error>
             </ErrorWrapper>
           </InputWrapper>
           <Button
