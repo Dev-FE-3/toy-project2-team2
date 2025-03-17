@@ -78,32 +78,21 @@ const Salary = () => {
       console.log("사용자 정보 없음");
       return;
     }
-    // 사용자 데이터 가져오기 (단, Redux에 데이터가 없을 때만 Firebase 요청)
-    const fetchUserData = async () => {
-      if (!user || !userInfo) return;
 
-      // Redux에 employeeId, hiredDate, location이 없을 때만 Firebase 요청
-      if (!userInfo.employeeId || !userInfo.hiredDate || !userInfo.location) {
+    // Redux 상태가 충분하지 않으면 Firebase에서 데이터 가져오기
+    if (!userInfo.employeeId || !userInfo.hiredDate || !userInfo.location) {
+      const fetchUserData = async () => {
         const docRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          const newUserInfo = docSnap.data();
-
-          // Redux 상태와 비교 후 다를 때만 업데이트
-          if (
-            !userInfo.employeeId ||
-            !userInfo.hiredDate ||
-            !userInfo.location
-          ) {
-            dispatch(setUserInfo({ ...userInfo, ...newUserInfo }));
-          }
+          dispatch(setUserInfo(docSnap.data()));
         }
-      }
-    };
+      };
 
-    fetchUserData();
-  }, [user, userInfo, dispatch]); // userInfo가 변경될 때만 Redux 요청
+      fetchUserData();
+    }
+  }, [user, userInfo, dispatch]);
 
   return (
     <>

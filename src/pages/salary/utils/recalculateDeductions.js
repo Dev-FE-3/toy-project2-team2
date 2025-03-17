@@ -1,4 +1,4 @@
-const useRecalculateDeductions = () => {
+const RecalculateDeductions = () => {
   const recalculateDeductions = (payments) => {
     if (!payments) return {};
 
@@ -17,4 +17,4 @@ const useRecalculateDeductions = () => {
   return { recalculateDeductions };
 };
 
-export default useRecalculateDeductions;
+export default RecalculateDeductions;

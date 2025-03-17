@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import PageTitle from "../../shared/components/PageTitle";
 import Input from "../../shared/components/Input";
-import { useState, useEffect } from "react";
-import { db } from "../../shared/firebase";
-import { collection, getDocs, Timestamp, doc } from "firebase/firestore";
+import { useState } from "react";
+import { useEmployees } from "./hooks/useEmployees";
 import ResetImg from "/images/reset.svg";
 import { useNavigate } from "react-router-dom";
 
@@ -24,6 +23,12 @@ const ResetImgStyle = styled.img`
   width: 18px;
   height: 18px;
   cursor: pointer;
+  position: absolute; // 이미지가 입력창을 밀지 않도록
+  right: 10px;
+  visibility: ${(props) =>
+    props.visible
+      ? "visible"
+      : "hidden"}; // visible prop으로 이미지 보이게 설정
 `;
 
 const Table = styled.table`
@@ -87,54 +92,39 @@ const Table = styled.table`
 `;
 
 const EmployeeList = () => {
-  const [employees, setEmployees] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태 추가
-  const [filteredEmployees, setFilteredEmployees] = useState([]); // 필터링된 직원 목록
+  const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태
+  const { employees, fetchEmployees } = useEmployees(); // 커스텀 훅 사용
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "users"));
-        const employeeData = querySnapshot.docs
-          .map((doc) => {
-            const data = doc.data();
-            return {
-              id: doc.id,
-              ...data,
-              formattedHiredDate: data.hiredDate?.seconds
-                ? new Date(data.hiredDate.seconds * 1000)
-                    .toISOString()
-                    .split("T")[0]
-                : "입사일 없음",
-            };
-          })
-          .sort((a, b) => a.name.localeCompare(b.name)); // 가나다 정렬 넣을지 뺄지 고민
-        setEmployees(employeeData);
-        setFilteredEmployees(employeeData); // 초기 필터 데이터 설정
-      } catch (error) {
-        console.error("직원 데이터를 가져오는 중 오류 발생:", error);
-      }
-    };
-
-    fetchEmployees();
-  }, []);
-
-  // 검색 핸들러 (Enter 입력 시 실행 - 컴포넌트도 수정!!)
+  // 검색 핸들러 (Enter 입력 시 실행)
   const handleSearch = (event) => {
     if (event.key === "Enter") {
-      const filtered = employees.filter(
-        (emp) =>
-          (emp.name && emp.name.includes(searchTerm)) || // 이름 포함 여부
-          (emp.employeeId && emp.employeeId.toString().includes(searchTerm)) // 사번 포함 여부 (문자열로 변환)
-      );
-      setFilteredEmployees(filtered);
+      if (searchTerm === "") {
+        // 검색어가 비어 있으면 전체 리스트
+        fetchEmployees();
+      } else {
+        const filtered = employees.filter(
+          (emp) =>
+            (emp.name && emp.name.includes(searchTerm)) ||
+            (emp.employeeId && emp.employeeId.toString().includes(searchTerm))
+        );
+        // 검색어에 맞는 필터링된 데이터로 업데이트
+        fetchEmployees(filtered);
+      }
+    }
+  };
+
+  // 검색어 변경 시 필터링된 결과 처리
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value);
+    if (e.target.value === "") {
+      fetchEmployees(); // 검색어가 비어 있으면 전체 직원 목록을 다시 불러옴
     }
   };
 
   const resetSearch = () => {
     setSearchTerm(""); // 검색어 초기화
-    setFilteredEmployees(employees); // 필터 초기화 (전체 직원 리스트로 복구)
+    fetchEmployees(); // 전체 직원 목록을 다시 불러옴
   };
 
   const handleRowClick = (employeeId) => {
@@ -146,22 +136,22 @@ const EmployeeList = () => {
       <TitleContainer>
         <PageTitle title="급여 확인" subtitle="직원 리스트" />
         <SearchContainer>
-          {searchTerm && (
-            <ResetImgStyle
-              src={ResetImg}
-              alt="reset search"
-              onClick={resetSearch}
-            />
-          )}
-
           <Input
             id="search"
             label="검색 :"
             placeholder="이름 또는 사번으로 검색"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyDown={handleSearch} // Enter 입력 감지
+            onChange={handleInputChange} // 검색어 변경 시 호출
+            onKeyDown={handleSearch} // Enter 입력 시 실행
           />
+          {searchTerm && (
+            <ResetImgStyle
+              src={ResetImg}
+              alt="reset search"
+              visible={searchTerm !== ""}
+              onClick={resetSearch}
+            />
+          )}
         </SearchContainer>
       </TitleContainer>
       <Table>
@@ -175,8 +165,8 @@ const EmployeeList = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredEmployees.length > 0 ? (
-            filteredEmployees.map((employee) => (
+          {employees.length > 0 ? (
+            employees.map((employee) => (
               <tr
                 key={employee.id}
                 onClick={() => handleRowClick(employee.employeeId)}

@@ -9,7 +9,7 @@ import EditableCalcBox from "../salary/components/EditableCalcBox";
 import styled from "styled-components";
 import useAvailableMonths from "./hooks/useAvailableMonths";
 import useSalaryData from "./hooks/useSalaryData";
-import useRecalculateDeductions from "./hooks/useRecalculateDeductions";
+import RecalculateDeductions from "./utils/RecalculateDeductions";
 import formatHiredDate from "./utils/formatHiredDate";
 
 const ContentBox = styled.div`
@@ -65,7 +65,7 @@ const CalcWrapper = styled.div`
 const SalaryAdmin = () => {
   const { employeeId } = useParams();
   const [userInfo, setUserInfo] = useState(null);
-  const { recalculateDeductions } = useRecalculateDeductions();
+  const { recalculateDeductions } = RecalculateDeductions();
   const formattedHiredDate = formatHiredDate(userInfo?.hiredDate);
 
   useEffect(() => {
