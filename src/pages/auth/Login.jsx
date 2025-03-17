@@ -103,7 +103,7 @@ const Login = () => {
               error={error.email || error.loginError}
             />
             <ErrorWrapper>
-              <Error $hasError={!!(error.email || error.loginError)}>
+              <Error hasError={!!(error.email || error.loginError)}>
                 {error.email || error.loginError || " "}
               </Error>
             </ErrorWrapper>
@@ -117,7 +117,7 @@ const Login = () => {
               error={error.loginError}
             />
             <ErrorWrapper>
-              <Error $hasError={!!error.loginError}>{error.loginError || " "}</Error>
+              <Error hasError={!!error.loginError}>{error.loginError || " "}</Error>
             </ErrorWrapper>
           </InputWrapper>
           <Button

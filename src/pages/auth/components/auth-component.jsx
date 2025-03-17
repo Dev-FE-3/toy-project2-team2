@@ -34,7 +34,7 @@ const Error = styled.span`
   font-size: var(--font-size-small);
   color: var(--red);
   padding-left: 10px;
-  visibility: ${(props) => (props.$hasError ? "visible" : "hidden")};
+  visibility: ${(props) => (props.hasError ? "visible" : "hidden")};
 `;
 
 const Logo = styled.img`
