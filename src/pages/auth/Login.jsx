@@ -4,7 +4,6 @@ import { authErrors } from "./constant/authErrors";
 import { FirebaseError } from "@firebase/util";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { handleError } from "./util/handleError";
 import logo from "/images/logo.svg";
 import {
   Wrapper,
@@ -26,43 +25,18 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../shared/firebase";
 import { Timestamp } from "firebase/firestore";
 import { toast } from "react-toastify";
+import useLoginForm from "./hooks/useLoginForm";
 
 const Login = () => {
   const dispatch = useDispatch(); // 추가
 
   const navigate = useNavigate();
+  const { email, password, error, onChangeEmail, onChangePassword, setError } =
+    useLoginForm();
   const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState({
-    common: "",
-    email: "",
-  });
 
   const isDisabled =
     isLoading || email === "" || password === "" || error.common || error.email;
-
-  const onChange = (e) => {
-    const {
-      target: { name, value },
-    } = e;
-
-    if (name === "email") {
-      setEmail(value);
-      const isValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
-        value
-      );
-      handleError(setError, {
-        email: isValid ? "" : "올바른 이메일 형식을 입력하세요.",
-        common: "",
-      });
-    }
-
-    if (name === "password") {
-      setPassword(value);
-      handleError(setError, { common: "" });
-    }
-  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -127,7 +101,7 @@ const Login = () => {
           <InputWrapper>
             <LoginInput
               id="email"
-              onChange={onChange}
+              onChange={onChangeEmail}
               name="email"
               value={email}
               placeholder="이메일을 입력하세요"
@@ -140,7 +114,7 @@ const Login = () => {
             </ErrorWrapper>
             <LoginInput
               id="password"
-              onChange={onChange}
+              onChange={onChangePassword}
               name="password"
               value={password}
               placeholder="비밀번호를 입력하세요"
