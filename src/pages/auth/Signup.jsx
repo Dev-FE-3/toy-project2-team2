@@ -149,7 +149,7 @@ const Signup = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (isLoading || isDisabled) return;
+    if (isDisabled) return;
     if (
       userData.location === placeholder.location ||
       userData.position === placeholder.position
