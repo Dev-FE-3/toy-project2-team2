@@ -11,18 +11,10 @@ const ScheduleBarWrapper = styled.span`
   font-weight: 700;
   letter-spacing: -0.36px;
   color: ${({ color }) => 
-    color === "orange" ? "var(--orange)" : 
-    color === "regular" ? "var(--regular)" : 
-    color === "red" ? "var(--red)" : 
-    color === "green" ? "var(--green)" : 
-    color === "blue" ? "var(--blue)" : "var(--text-primary)"};
+    color ? `var(--${color})` : "var(--text-primary)"};
   background-color: ${({ $empty, color }) => 
     $empty === "" ? "transparent" :
-    color === "orange" ? "var(--orange-bg)" : 
-    color === "regular" ? "var(--regular-bg)" : 
-    color === "red" ? "var(--red-bg)" : 
-    color === "green" ? "var(--green-bg)" : 
-    color === "blue" ? "var(--blue-bg)" : "var(--white)"};
+    color ? `var(--${color}-bg)` : "var(--white)"};
   border-radius: 4px;
   box-sizing: border-box;
   line-height: 22px;
