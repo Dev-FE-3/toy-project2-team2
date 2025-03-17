@@ -234,7 +234,7 @@ const Signup = () => {
               maxLength="10"
             />
             <ErrorWrapper>
-              <Error $hasError={!!error.name}>{error.name || " "}</Error>
+              <Error hasError={!!error.name}>{error.name || " "}</Error>
             </ErrorWrapper>
             <UserInfoWrapper>
               <InputBox>
@@ -250,7 +250,7 @@ const Signup = () => {
                   error={error.position}
                 />
                 <ErrorWrapper className="selectError">
-                  <Error $hasError={!!error.position}>{error.position}</Error>
+                  <Error hasError={!!error.position}>{error.position}</Error>
                 </ErrorWrapper>
               </InputBox>
               <InputBox>
@@ -266,7 +266,7 @@ const Signup = () => {
                   error={error.location}
                 />
                 <ErrorWrapper className="selectError">
-                  <Error $hasError={!!error.location}>{error.location}</Error>
+                  <Error hasError={!!error.location}>{error.location}</Error>
                 </ErrorWrapper>
               </InputBox>
             </UserInfoWrapper>
@@ -280,7 +280,7 @@ const Signup = () => {
               error={error.email}
             />
             <ErrorWrapper>
-              <Error $hasError={!!error.email}>{error.email || " "}</Error>
+              <Error hasError={!!error.email}>{error.email || " "}</Error>
             </ErrorWrapper>
             <LoginInput
               id="password"
@@ -294,7 +294,7 @@ const Signup = () => {
               minLength="6"
             />
             <ErrorWrapper>
-              <Error $hasError={!!error.password}>
+              <Error hasError={!!error.password}>
                 {error.password || " "}
               </Error>
             </ErrorWrapper>
