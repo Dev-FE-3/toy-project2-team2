@@ -66,7 +66,7 @@ const Login = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (isLoading || !email || !password) return;
+    if (isDisabled) return;
     try {
       setIsLoading(true);
       //await signInWithEmailAndPassword(auth, email, password);
