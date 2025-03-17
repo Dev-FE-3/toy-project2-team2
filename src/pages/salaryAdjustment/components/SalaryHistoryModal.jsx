@@ -40,6 +40,7 @@ const StyledBox = styled.div`
   box-sizing: border-box;
   color: var(--text-primary);
 `;
+
 const SalaryHistoryModalContent = ({ selectedRequest }) => {
   return (
     <List>
@@ -65,33 +66,28 @@ const SalaryHistoryModalContent = ({ selectedRequest }) => {
 };
 
 const SalaryHistoryModal = ({ selectedRequest, setSelectedRequest }) => {
-  const { isOpen, onOpen, onClose } = useModal();
+  // useModal에 기본값으로 selectedRequest 존재 여부를 전달
+  const { isOpen, onOpen, onClose } = useModal({
+    defaultOpen: !!selectedRequest,
+  });
 
-  useEffect(() => {
-    if (selectedRequest) {
-      onOpen(); // selectedRequest가 존재하면 모달을 연다.
-    }
-  }, [selectedRequest, onOpen]);
+  if (selectedRequest && !isOpen) {
+    onOpen();
+  }
 
-  // isOpen 상태가 true일 때만 모달을 표시하도록
   return (
     <>
-      {isOpen && selectedRequest && (
-        <Modal
-          title="정정 내역"
-          content={
-            <SalaryHistoryModalContent
-              setSelectedRequest={setSelectedRequest}
-              selectedRequest={selectedRequest}
-            />
-          }
-          isOpen={isOpen}
-          onClose={() => {
-            setSelectedRequest(null);
-            onClose;
-          }}
-        />
-      )}
+      <Modal
+        title="정정 내역"
+        content={
+          <SalaryHistoryModalContent selectedRequest={selectedRequest} />
+        }
+        isOpen={isOpen}
+        onClose={() => {
+          setSelectedRequest(null);
+          onClose(); // 함수는 실행해야 함
+        }}
+      />
     </>
   );
 };
