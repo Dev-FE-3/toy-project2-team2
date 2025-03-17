@@ -16,6 +16,7 @@ import {
   doc,
 } from "firebase/firestore";
 import { toast } from "react-toastify";
+import { DAYS_OF_WEEK } from "./config/constants";
 
 const StyledCalendarWrapper = styled.div`
   margin-bottom: 82px;
@@ -45,7 +46,6 @@ const StyledCalendarWeek = styled.thead`
 
 const Calendar = () => {
   // 달력
-  const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
   const { currentDate, weeks, handlePrevMonth, handleNextMonth } =
     useCalendar();
 
@@ -207,7 +207,7 @@ const Calendar = () => {
         <StyledCalendar>
           <StyledCalendarWeek>
             <tr>
-              {daysOfWeek.map((day, index) => (
+              {DAYS_OF_WEEK.map((day, index) => (
                 <th key={index}>{day}</th>
               ))}
             </tr>
