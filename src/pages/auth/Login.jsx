@@ -44,12 +44,7 @@ const Login = () => {
     try {
       setIsLoading(true);
       //await signInWithEmailAndPassword(auth, email, password);
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      ); // userCredential 변수 할당
-      const user = userCredential.user; // user 추출
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
 
       // Firestore에서 해당 유저의 정보 가져오기
       const docRef = doc(db, "users", user.uid);
