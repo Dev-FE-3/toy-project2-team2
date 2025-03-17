@@ -8,7 +8,7 @@ const useSalaryData = (userId, month) => {
     payments: [],
     deductions: [],
   });
-  const [isloading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!userId || !month) return;
@@ -46,7 +46,7 @@ const useSalaryData = (userId, month) => {
     }
   };
 
-  return { salaryData, isloading, updateSalaryData };
+  return { salaryData, isLoading, updateSalaryData };
 };
 
 export default useSalaryData;

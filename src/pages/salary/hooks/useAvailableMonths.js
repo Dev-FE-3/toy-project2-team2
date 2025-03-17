@@ -5,7 +5,7 @@ import { db } from "../../../shared/firebase";
 const useAvailableMonths = (userId) => {
   const [months, setMonths] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(null);
-  const [isloading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!userId) return;
@@ -45,7 +45,7 @@ const useAvailableMonths = (userId) => {
     fetchMonths();
   }, [userId]);
 
-  return { months, selectedMonth, setSelectedMonth, isloading };
+  return { months, selectedMonth, setSelectedMonth, isLoading };
 };
 
 export default useAvailableMonths;
