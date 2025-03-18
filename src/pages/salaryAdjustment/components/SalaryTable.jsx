@@ -147,7 +147,7 @@ const SalaryTable = ({
 
               return (
                 <tr key={index} onClick={() => handleRowClick(request)}>
-                  <td>{request.userName}</td>
+                  <td>{request.name}</td>
                   <td>{formattedDate}</td>
                   <td>{request.type}</td>
                   <td title={request.reason}>{request.reason}</td>

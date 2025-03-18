@@ -9,6 +9,7 @@ import SelectBox from "../../../shared/components/SelectBox";
 import DatePicker from "../../../shared/components/DatePicker";
 import TextArea from "../../../shared/components/TextArea";
 import { toast } from "react-toastify";
+import { formatYearMonth } from "../util/formatYearMonth";
 
 const List = styled.ul`
   display: flex;
@@ -90,11 +91,11 @@ const SalaryRegisterModalContent = ({
   );
 };
 
-const SalaryRegisterModal = ({ userName, userId, userEmployeeId }) => {
+const SalaryRegisterModal = ({ name, userId, employeeId }) => {
   const { isOpen, onOpen, onClose } = useModal();
-  const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedLeaveType, setSelectedLeaveType] = useState("유형");
   const [inputValue, setInputValue] = useState("");
+  const [yearMonth, setYearMonth] = useState(new Date());
 
   const handleSubmit = async () => {
     if (selectedLeaveType === "유형" || inputValue.trim() === "") {
@@ -106,13 +107,13 @@ const SalaryRegisterModal = ({ userName, userId, userEmployeeId }) => {
       const collectionRef = collection(db, "salary_requests");
       await addDoc(collectionRef, {
         userId,
-        date: currentDate.toISOString().split("T")[0],
+        date: formatYearMonth(yearMonth),
         type: selectedLeaveType,
         reason: inputValue,
         status: "대기 중",
         createdAt: new Date(),
-        userName,
-        userEmployeeId,
+        name,
+        employeeId,
       });
 
       toast.success("정정 신청이 완료되었습니다!");
@@ -131,7 +132,7 @@ const SalaryRegisterModal = ({ userName, userId, userEmployeeId }) => {
           {
             /*상태 초기화*/
           }
-          setCurrentDate(new Date());
+          setYearMonth(new Date());
           setInputValue("");
           setSelectedLeaveType("유형");
           onOpen();
@@ -145,10 +146,9 @@ const SalaryRegisterModal = ({ userName, userId, userEmployeeId }) => {
         title="정정 신청"
         content={
           <SalaryRegisterModalContent
-            currentDate={currentDate}
+            yearMonth={yearMonth}
             selectedLeaveType={selectedLeaveType}
-            inputValue={inputValue}
-            setCurrentDate={setCurrentDate}
+            setYearMonth={setYearMonth}
             setSelectedLeaveType={setSelectedLeaveType}
             setInputValue={setInputValue}
           />

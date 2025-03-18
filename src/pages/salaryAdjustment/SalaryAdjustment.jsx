@@ -77,9 +77,8 @@ const SalaryAdjustment = () => {
     return () => unsubscribe();
   }, [user, position]);
 
-  if (!position) {
-    return <LoadingScreen />;
-  }
+  if (!position) return <LoadingScreen />;
+
   //정정 내역 모달 열기
   const handleRowClick = (request) => {
     setSelectedRequest(request);
@@ -94,7 +93,7 @@ const SalaryAdjustment = () => {
         position={position}
         employeeId={employeeId}
         name={name}
-        userId={user.uid}
+        userId={user?.uid}
         rolesPermissions={rolesPermissions} // rolesPermissions을 props로 전달
       />
       <SalaryTable
