@@ -102,9 +102,9 @@ const EmployeeList = () => {
         setFilteredEmployees(employees); // 검색어가 비어 있으면 전체 직원 목록
       } else {
         const filtered = employees.filter(
-          (emp) =>
-            (emp.name && emp.name.includes(term)) ||
-            (emp.employeeId && emp.employeeId.toString().includes(term))
+          ({ name, employeeId }) =>
+            (name && name.includes(term)) ||
+            (employeeId && employeeId.toString().includes(term))
         );
         setFilteredEmployees(filtered); // 필터링된 데이터로 상태 업데이트
       }
@@ -152,41 +152,41 @@ const EmployeeList = () => {
         </SearchContainer>
       </TitleContainer>
 
-      {isLoading ? (
-        <p>로딩 중...</p>
-      ) : (
-        <Table>
-          <thead>
+      <Table>
+        <thead>
+          <tr>
+            <th>이름</th>
+            <th>사번</th>
+            <th>근무 지점</th>
+            <th>직급</th>
+            <th>입사일</th>
+          </tr>
+        </thead>
+        <tbody>
+          {isLoading ? (
             <tr>
-              <th>이름</th>
-              <th>사번</th>
-              <th>근무 지점</th>
-              <th>직급</th>
-              <th>입사일</th>
+              <td colSpan="5">로딩 중...</td>
             </tr>
-          </thead>
-          <tbody>
-            {filteredEmployees.length > 0 ? (
-              filteredEmployees.map((employee) => (
-                <tr
-                  key={employee.id}
-                  onClick={() => handleRowClick(employee.employeeId)}
-                >
-                  <td>{employee.name}</td>
-                  <td>{employee.employeeId}</td>
-                  <td>{employee.location}</td>
-                  <td>{employee.position}</td>
-                  <td>{employee.formattedHiredDate}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5">검색 결과가 없습니다.</td>
+          ) : filteredEmployees.length > 0 ? (
+            filteredEmployees.map((employee) => (
+              <tr
+                key={employee.id}
+                onClick={() => handleRowClick(employee.employeeId)}
+              >
+                <td>{employee.name}</td>
+                <td>{employee.employeeId}</td>
+                <td>{employee.location}</td>
+                <td>{employee.position}</td>
+                <td>{employee.formattedHiredDate}</td>
               </tr>
-            )}
-          </tbody>
-        </Table>
-      )}
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5">검색 결과가 없습니다.</td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
     </>
   );
 };
