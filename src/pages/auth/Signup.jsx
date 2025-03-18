@@ -49,10 +49,11 @@ const InputBox = styled.div`
   }
 `;
 
-const DEFAULT_USER_LOCATION = "지점을 선택하세요";
-const DEFAULT_USER_POSITION = "직급을 선택하세요";
+const DEFAULT_USER_LOCATION = "지점 선택";
+const DEFAULT_USER_POSITION = "직급 선택";
 const ERROR_INPUT_EMAIL = "올바른 이메일 형식을 입력하세요.";
-const ERROR_INPUT_PASSWORD = "비밀번호는 특수기호를 포함하여 6자 이상이어야 합니다.";
+const ERROR_INPUT_PASSWORD =
+  "비밀번호는 특수기호를 포함하여 6자 이상이어야 합니다.";
 const ERROR_INPUT_NAME = "이름에는 특수기호와 숫자, 공백을 포함할 수 없습니다.";
 
 const Signup = () => {
@@ -87,13 +88,6 @@ const Signup = () => {
     setRandomNum(Math.floor(10000000 + Math.random() * 90000000));
   }, []);
 
-  const handleSelect = (name, value) => {
-    setUserData((prev) => ({ ...prev, [name]: value }));
-    if (value !== placeholder[name]) {
-      handleError(setError, { [name]: "" });
-    }
-  };
-
   const isDisabled =
     isLoading ||
     userData.email === "" ||
@@ -102,7 +96,15 @@ const Signup = () => {
     error.email ||
     error.password ||
     error.name ||
-    error.location;
+    error.location ||
+    error.position;
+
+  const handleSelect = (name, value, defaultValue) => {
+    setUserData((prev) => ({ ...prev, [name]: value }));
+    if (value !== defaultValue) {
+      handleError(setError, { [name]: "" });
+    }
+  };
 
   const validSignupInput = (name, value) => {
     let isValid = true;
@@ -120,18 +122,14 @@ const Signup = () => {
         (value.length > 6 && /[!@#$%^&*(),.?":{}|<>]/.test(value)) ||
         value === "";
       handleError(setError, {
-        password: isValid
-          ? ""
-          : ERROR_INPUT_PASSWORD,
+        password: isValid ? "" : ERROR_INPUT_PASSWORD,
       });
     }
 
     if (name === "name") {
       isValid = /^[a-zA-Z가-힣]+$/.test(value) || value === "";
       handleError(setError, {
-        name: isValid
-          ? ""
-          : ERROR_INPUT_NAME,
+        name: isValid ? "" : ERROR_INPUT_NAME,
       });
     }
   };
@@ -153,12 +151,12 @@ const Signup = () => {
     ) {
       if (userData.location === DEFAULT_USER_LOCATION) {
         handleError(setError, {
-          DEFAULT_USER_LOCATION,
+          location: "지점을 선택하세요",
         });
       }
       if (userData.position === DEFAULT_USER_POSITION) {
         handleError(setError, {
-          DEFAULT_USER_POSITION,
+          position: "직급을 선택하세요",
         });
       }
       return;
@@ -239,7 +237,9 @@ const Signup = () => {
                   id="position"
                   value={userData.position}
                   name="position"
-                  onSelect={(value) => handleSelect("position", value)}
+                  onSelect={(value) =>
+                    handleSelect("position", value, DEFAULT_USER_POSITION)
+                  }
                   label={"직급"}
                   size="autoSmall"
                   options={["메이트", "트레이너"]}
@@ -255,7 +255,9 @@ const Signup = () => {
                   id="location"
                   value={userData.location}
                   name="location"
-                  onSelect={(value) => handleSelect("location", value)}
+                  onSelect={(value) =>
+                    handleSelect("location", value, DEFAULT_USER_LOCATION)
+                  }
                   label={"지점"}
                   size="autoSmall"
                   options={["광복점", "서면점"]}

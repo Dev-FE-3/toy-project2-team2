@@ -1,4 +1,4 @@
-import { AUTH_ERRORS } from "../../shared/firebase";
+import { auth } from "../../shared/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { AUTH_ERRORS } from "./constant/AUTH_ERRORS";
 import { FirebaseError } from "@firebase/util";
