@@ -29,6 +29,7 @@ import SelectBox from "../../shared/components/SelectBox";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "../../store/userSlice";
 import { toast } from "react-toastify";
+import useSignupForm from "./hooks/useSignupForm";
 
 const UserInfoWrapper = styled.div`
   gap: 20px;
@@ -51,29 +52,26 @@ const InputBox = styled.div`
 
 const DEFAULT_USER_LOCATION = "지점 선택";
 const DEFAULT_USER_POSITION = "직급 선택";
-const ERROR_INPUT_EMAIL = "올바른 이메일 형식을 입력하세요.";
-const ERROR_INPUT_PASSWORD =
-  "비밀번호는 특수기호를 포함하여 6자 이상이어야 합니다.";
-const ERROR_INPUT_NAME = "이름에는 특수기호와 숫자, 공백을 포함할 수 없습니다.";
 
 const Signup = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [randomNum, setRandomNum] = useState(null);
-  const [userData, setUserData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    position: DEFAULT_USER_POSITION,
-    location: DEFAULT_USER_LOCATION,
-  });
-  const [error, setError] = useState({
-    email: "",
-    name: "",
-    location: "",
-    position: "",
-  });
+  const {
+    email,
+    password,
+    name,
+    position,
+    location,
+    error,
+    onChangeEmail,
+    onChangePassword,
+    onChangeName,
+    setPosition,
+    setLocation,
+    setError,
+  } = useSignupForm();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -90,9 +88,9 @@ const Signup = () => {
 
   const isDisabled =
     isLoading ||
-    userData.email === "" ||
-    userData.password === "" ||
-    userData.name === "" ||
+    email === "" ||
+    password === "" ||
+    name === "" ||
     error.email ||
     error.password ||
     error.name ||
@@ -100,61 +98,30 @@ const Signup = () => {
     error.position;
 
   const handleSelect = (name, value, defaultValue) => {
-    setUserData((prev) => ({ ...prev, [name]: value }));
     if (value !== defaultValue) {
       handleError(setError, { [name]: "" });
     }
-  };
 
-  const validSignupInput = (name, value) => {
-    let isValid = true;
-    if (name === "email") {
-      isValid =
-        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value) ||
-        value === "";
-      handleError(setError, {
-        email: isValid ? "" : ERROR_INPUT_EMAIL,
-      });
+    if (name === "location") {
+      setLocation(value);
+    } else if (name === "position") {
+      setPosition(value);
     }
-
-    if (name === "password") {
-      isValid =
-        (value.length > 6 && /[!@#$%^&*(),.?":{}|<>]/.test(value)) ||
-        value === "";
-      handleError(setError, {
-        password: isValid ? "" : ERROR_INPUT_PASSWORD,
-      });
-    }
-
-    if (name === "name") {
-      isValid = /^[a-zA-Z가-힣]+$/.test(value) || value === "";
-      handleError(setError, {
-        name: isValid ? "" : ERROR_INPUT_NAME,
-      });
-    }
-  };
-
-  const onChange = (e) => {
-    const {
-      target: { name, value },
-    } = e;
-    setUserData((prev) => ({ ...prev, [name]: value }));
-    validSignupInput(name, value);
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
     if (isDisabled) return;
     if (
-      userData.location === DEFAULT_USER_LOCATION ||
-      userData.position === DEFAULT_USER_POSITION
+      location === DEFAULT_USER_LOCATION ||
+      position === DEFAULT_USER_POSITION
     ) {
-      if (userData.location === DEFAULT_USER_LOCATION) {
+      if (location === DEFAULT_USER_LOCATION) {
         handleError(setError, {
           location: "지점을 선택하세요",
         });
       }
-      if (userData.position === DEFAULT_USER_POSITION) {
+      if (position === DEFAULT_USER_POSITION) {
         handleError(setError, {
           position: "직급을 선택하세요",
         });
@@ -163,20 +130,16 @@ const Signup = () => {
     }
     try {
       setIsLoading(true);
-      await createUserWithEmailAndPassword(
-        auth,
-        userData.email,
-        userData.password
-      );
+      await createUserWithEmailAndPassword(auth, email, password);
 
       const user = auth.currentUser; // 회원가입 후 로그인된 상태에서 auth.currentUser가 존재
 
       await setDoc(doc(db, "users", auth.currentUser.uid), {
         employeeId: randomNum,
         hiredDate: Timestamp.now(),
-        location: userData.location,
-        name: userData.name,
-        position: userData.position,
+        location: location,
+        name: name,
+        position: position,
       });
 
       // Firebase에서 로그인된 유저 정보를 Redux 상태에 저장
@@ -184,22 +147,22 @@ const Signup = () => {
         setUserInfo({
           uid: user.uid,
           email: user.email,
-          name: userData.name,
-          location: userData.location,
-          position: userData.position,
+          name: name,
+          location: location,
+          position: position,
           hiredDate: Timestamp.now(),
           employeeId: randomNum,
         })
       );
 
-      toast.success(`${userData.name} 님 회원이 되신 것을 환영합니다.`);
+      toast.success(`${name} 님 회원이 되신 것을 환영합니다.`);
     } catch (e) {
       if (e instanceof FirebaseError) {
         const errorInfo = AUTH_ERRORS[e.code];
         if (errorInfo) {
           setError((prev) => ({
             ...prev,
-            [errorInfo.field]: errorInfo.message,
+            [errorInfo.name]: errorInfo.message,
           }));
         } else {
           toast.error("예상치 못한 오류가 발생하였습니다.");
@@ -221,9 +184,9 @@ const Signup = () => {
             <LoginInput
               id="name"
               label={"이름"}
-              onChange={onChange}
+              onChange={onChangeName}
               name="name"
-              value={userData.name}
+              value={name}
               placeholder="김스텐"
               error={error.name}
               maxLength="10"
@@ -235,7 +198,7 @@ const Signup = () => {
               <InputBox>
                 <SelectBox
                   id="position"
-                  value={userData.position}
+                  value={position}
                   name="position"
                   onSelect={(value) =>
                     handleSelect("position", value, DEFAULT_USER_POSITION)
@@ -243,7 +206,7 @@ const Signup = () => {
                   label={"직급"}
                   size="autoSmall"
                   options={["메이트", "트레이너"]}
-                  defaultOption={userData.position}
+                  defaultOption={position}
                   error={error.position}
                 />
                 <ErrorWrapper className="selectError">
@@ -253,7 +216,7 @@ const Signup = () => {
               <InputBox>
                 <SelectBox
                   id="location"
-                  value={userData.location}
+                  value={location}
                   name="location"
                   onSelect={(value) =>
                     handleSelect("location", value, DEFAULT_USER_LOCATION)
@@ -261,7 +224,7 @@ const Signup = () => {
                   label={"지점"}
                   size="autoSmall"
                   options={["광복점", "서면점"]}
-                  defaultOption={userData.location}
+                  defaultOption={location}
                   error={error.location}
                 />
                 <ErrorWrapper className="selectError">
@@ -272,9 +235,9 @@ const Signup = () => {
             <LoginInput
               id="email"
               label={"이메일"}
-              onChange={onChange}
+              onChange={onChangeEmail}
               name="email"
-              value={userData.email}
+              value={email}
               placeholder="sweetten@xxxx.xxx"
               error={error.email}
             />
@@ -284,9 +247,9 @@ const Signup = () => {
             <LoginInput
               id="password"
               label={"비밀번호"}
-              onChange={onChange}
+              onChange={onChangePassword}
               name="password"
-              value={userData.password}
+              value={password}
               placeholder="특수기호를 포함하여 6자 이상"
               type="password"
               error={error.password}
