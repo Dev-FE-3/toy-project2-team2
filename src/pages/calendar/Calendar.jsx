@@ -45,7 +45,6 @@ const StyledCalendarWeek = styled.thead`
 
 const Calendar = () => {
   // 달력
-  const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
   const { currentDate, weeks, handlePrevMonth, handleNextMonth } =
     useCalendar();
 
@@ -207,7 +206,7 @@ const Calendar = () => {
         <StyledCalendar>
           <StyledCalendarWeek>
             <tr>
-              {daysOfWeek.map((day, index) => (
+              {DAYS_OF_WEEK.map((day, index) => (
                 <th key={index}>{day}</th>
               ))}
             </tr>
@@ -221,5 +220,7 @@ const Calendar = () => {
     </>
   );
 };
+
+const DAYS_OF_WEEK = ["일", "월", "화", "수", "목", "금", "토"];
 
 export default Calendar;
