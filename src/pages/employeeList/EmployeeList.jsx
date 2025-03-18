@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import PageTitle from "../../shared/components/PageTitle";
 import Input from "../../shared/components/Input";
-import { useState, useEffect } from "react";
-import { db } from "../../shared/firebase";
-import { collection, getDocs, Timestamp, doc } from "firebase/firestore";
+import { useState, useCallback, useEffect } from "react";
+import { useEmployees } from "./hooks/useEmployees";
 import ResetImg from "/images/reset.svg";
 import { useNavigate } from "react-router-dom";
+import { debounce } from "lodash";
 
 const TitleContainer = styled.div`
   display: flex;
@@ -24,6 +24,9 @@ const ResetImgStyle = styled.img`
   width: 18px;
   height: 18px;
   cursor: pointer;
+  position: absolute; // 이미지가 입력창을 밀지 않도록
+  right: 10px;
+  visibility: ${(props) => (props.visible ? "block" : "none")};
 `;
 
 const Table = styled.table`
@@ -64,7 +67,7 @@ const Table = styled.table`
     max-height: 480px;
     overflow-y: scroll;
     :hover {
-      background-color: var(--background-color);
+      background-color: var(--background-color-3);
       cursor: pointer;
     }
 
@@ -87,54 +90,39 @@ const Table = styled.table`
 `;
 
 const EmployeeList = () => {
-  const [employees, setEmployees] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태 추가
-  const [filteredEmployees, setFilteredEmployees] = useState([]); // 필터링된 직원 목록
+  const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태
+  const { employees, filteredEmployees, isLoading, setFilteredEmployees } =
+    useEmployees();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "users"));
-        const employeeData = querySnapshot.docs
-          .map((doc) => {
-            const data = doc.data();
-            return {
-              id: doc.id,
-              ...data,
-              formattedHiredDate: data.hiredDate?.seconds
-                ? new Date(data.hiredDate.seconds * 1000)
-                    .toISOString()
-                    .split("T")[0]
-                : "입사일 없음",
-            };
-          })
-          .sort((a, b) => a.name.localeCompare(b.name)); // 가나다 정렬 넣을지 뺄지 고민
-        setEmployees(employeeData);
-        setFilteredEmployees(employeeData); // 초기 필터 데이터 설정
-      } catch (error) {
-        console.error("직원 데이터를 가져오는 중 오류 발생:", error);
+  // 디바운스된 검색 함수
+  const debouncedSearch = useCallback(
+    debounce((term) => {
+      if (term === "") {
+        setFilteredEmployees(employees); // 검색어가 비어 있으면 전체 직원 목록
+      } else {
+        const filtered = employees.filter(
+          ({ name, employeeId }) =>
+            (name && name.includes(term)) ||
+            (employeeId && employeeId.toString().includes(term))
+        );
+        setFilteredEmployees(filtered); // 필터링된 데이터로 상태 업데이트
       }
-    };
+    }, 300),
+    [employees, setFilteredEmployees] // `employees`와 `setFilteredEmployees` 의존성 추가
+  );
 
-    fetchEmployees();
-  }, []);
-
-  // 검색 핸들러 (Enter 입력 시 실행 - 컴포넌트도 수정!!)
-  const handleSearch = (event) => {
-    if (event.key === "Enter") {
-      const filtered = employees.filter(
-        (emp) =>
-          (emp.name && emp.name.includes(searchTerm)) || // 이름 포함 여부
-          (emp.employeeId && emp.employeeId.toString().includes(searchTerm)) // 사번 포함 여부 (문자열로 변환)
-      );
-      setFilteredEmployees(filtered);
-    }
+  // 검색어 변경 시 디바운스 적용
+  const handleInputChange = (e) => {
+    const { value } = e.target;
+    setSearchTerm(value);
+    debouncedSearch(value); // 디바운스된 함수 호출
   };
 
+  // 검색 리셋
   const resetSearch = () => {
     setSearchTerm(""); // 검색어 초기화
-    setFilteredEmployees(employees); // 필터 초기화 (전체 직원 리스트로 복구)
+    setFilteredEmployees(employees); // 전체 직원 목록을 다시 표시
   };
 
   const handleRowClick = (employeeId) => {
@@ -146,24 +134,24 @@ const EmployeeList = () => {
       <TitleContainer>
         <PageTitle title="급여 확인" subtitle="직원 리스트" />
         <SearchContainer>
-          {searchTerm && (
-            <ResetImgStyle
-              src={ResetImg}
-              alt="reset search"
-              onClick={resetSearch}
-            />
-          )}
-
           <Input
             id="search"
             label="검색 :"
             placeholder="이름 또는 사번으로 검색"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyDown={handleSearch} // Enter 입력 감지
+            onChange={handleInputChange} // 검색어 변경 시 호출
           />
+          {searchTerm && (
+            <ResetImgStyle
+              src={ResetImg}
+              alt="reset search"
+              $visible={searchTerm !== ""}
+              onClick={resetSearch}
+            />
+          )}
         </SearchContainer>
       </TitleContainer>
+
       <Table>
         <thead>
           <tr>
@@ -175,7 +163,11 @@ const EmployeeList = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredEmployees.length > 0 ? (
+          {isLoading ? (
+            <tr>
+              <td colSpan="5">로딩 중...</td>
+            </tr>
+          ) : filteredEmployees.length > 0 ? (
             filteredEmployees.map((employee) => (
               <tr
                 key={employee.id}
