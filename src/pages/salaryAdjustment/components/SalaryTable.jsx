@@ -96,7 +96,7 @@ const Table = styled.table`
 `;
 
 const SalaryTable = ({
-  userPosition,
+  position,
   statusFilter,
   setStatusFilter,
   requests,
@@ -107,7 +107,7 @@ const SalaryTable = ({
     <Table>
       <thead>
         <tr>
-          {rolesPermissions[userPosition].canConfirm ? (
+          {rolesPermissions[position].canConfirm ? (
             <>
               <th>신청자</th>
               <th>신청 날짜</th>
@@ -131,7 +131,7 @@ const SalaryTable = ({
         </tr>
       </thead>
       <tbody>
-        {rolesPermissions[userPosition].canConfirm ? (
+        {rolesPermissions[position].canConfirm ? (
           filteredRequests.length === 0 ? (
             <tr>
               <td colSpan="5">신청된 정정 내역이 없습니다.</td>
