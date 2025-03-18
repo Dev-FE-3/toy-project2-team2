@@ -4,9 +4,11 @@ import { collection, getDocs } from "firebase/firestore";
 
 export const useEmployees = () => {
   const [employees, setEmployees] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // 직원 데이터를 가져오는 함수
   const fetchEmployees = async (filteredData = null) => {
+    setIsLoading(true); // 로딩 추가!
     try {
       const querySnapshot = await getDocs(collection(db, "users"));
       const employeeData = querySnapshot.docs
@@ -31,6 +33,8 @@ export const useEmployees = () => {
       }
     } catch (error) {
       console.error("직원 데이터를 가져오는 중 오류 발생:", error);
+    } finally {
+      setIsLoading(false); // 로딩 종료
     }
   };
 
@@ -41,6 +45,7 @@ export const useEmployees = () => {
 
   return {
     employees,
+    isLoading,
     fetchEmployees,
   };
 };

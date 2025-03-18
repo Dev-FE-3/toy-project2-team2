@@ -8,14 +8,13 @@ const useSalaryData = (userId, month) => {
     payments: [],
     deductions: [],
   });
-  const [isLoading, setLoading] = useState(false);
+  const [isLoadingSalaryData, setLoading] = useState(false);
 
   useEffect(() => {
     if (!userId || !month) return;
-    setLoading(true);
 
     const fetchSalaryData = async () => {
-      // setLoading(true);
+      setLoading(true);
       try {
         const salaryRef = doc(db, "salaries", userId, "months", month);
         const snapshot = await getDoc(salaryRef);
@@ -46,7 +45,7 @@ const useSalaryData = (userId, month) => {
     }
   };
 
-  return { salaryData, isLoading, updateSalaryData };
+  return { salaryData, isLoadingSalaryData, updateSalaryData };
 };
 
 export default useSalaryData;

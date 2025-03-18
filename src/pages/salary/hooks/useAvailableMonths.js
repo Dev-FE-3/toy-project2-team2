@@ -5,14 +5,13 @@ import { db } from "../../../shared/firebase";
 const useAvailableMonths = (userId) => {
   const [months, setMonths] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(null);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoadingMonths, setLoading] = useState(false);
 
   useEffect(() => {
     if (!userId) return;
-    setLoading(true);
 
     const fetchMonths = async () => {
-      // setLoading(true);
+      setLoading(true);
       try {
         const monthsRef = collection(db, "salaries", userId, "months");
         const snapshot = await getDocs(monthsRef);
@@ -45,7 +44,7 @@ const useAvailableMonths = (userId) => {
     fetchMonths();
   }, [userId]);
 
-  return { months, selectedMonth, setSelectedMonth, isLoading };
+  return { months, selectedMonth, setSelectedMonth, isLoadingMonths };
 };
 
 export default useAvailableMonths;

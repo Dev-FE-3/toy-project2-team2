@@ -93,7 +93,7 @@ const Table = styled.table`
 
 const EmployeeList = () => {
   const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태
-  const { employees, fetchEmployees } = useEmployees(); // 커스텀 훅 사용
+  const { employees, isLoading, fetchEmployees } = useEmployees(); // 커스텀 훅 사용
   const navigate = useNavigate();
 
   // 검색 핸들러 (Enter 입력 시 실행)
@@ -154,37 +154,42 @@ const EmployeeList = () => {
           )}
         </SearchContainer>
       </TitleContainer>
-      <Table>
-        <thead>
-          <tr>
-            <th>이름</th>
-            <th>사번</th>
-            <th>근무 지점</th>
-            <th>직급</th>
-            <th>입사일</th>
-          </tr>
-        </thead>
-        <tbody>
-          {employees.length > 0 ? (
-            employees.map((employee) => (
-              <tr
-                key={employee.id}
-                onClick={() => handleRowClick(employee.employeeId)}
-              >
-                <td>{employee.name}</td>
-                <td>{employee.employeeId}</td>
-                <td>{employee.location}</td>
-                <td>{employee.position}</td>
-                <td>{employee.formattedHiredDate}</td>
-              </tr>
-            ))
-          ) : (
+
+      {isLoading ? (
+        <p>로딩 중...</p>
+      ) : (
+        <Table>
+          <thead>
             <tr>
-              <td colSpan="5">검색 결과가 없습니다.</td>
+              <th>이름</th>
+              <th>사번</th>
+              <th>근무 지점</th>
+              <th>직급</th>
+              <th>입사일</th>
             </tr>
-          )}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {employees.length > 0 ? (
+              employees.map((employee) => (
+                <tr
+                  key={employee.id}
+                  onClick={() => handleRowClick(employee.employeeId)}
+                >
+                  <td>{employee.name}</td>
+                  <td>{employee.employeeId}</td>
+                  <td>{employee.location}</td>
+                  <td>{employee.position}</td>
+                  <td>{employee.formattedHiredDate}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5">검색 결과가 없습니다.</td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+      )}
     </>
   );
 };

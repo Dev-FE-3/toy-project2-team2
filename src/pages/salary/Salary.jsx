@@ -10,6 +10,7 @@ import { selectUserInfo, setUserInfo } from "../../store/userSlice";
 import useAvailableMonths from "./hooks/useAvailableMonths";
 import useSalaryData from "./hooks/useSalaryData";
 import formatHiredDate from "./utils/formatHiredDate";
+import LoadingScreen from "../../shared/components/LoadingScreen";
 
 const ContentBox = styled.div`
   margin-top: 30px;
@@ -66,10 +67,12 @@ const Salary = () => {
   const dispatch = useDispatch();
   const userInfo = useSelector(selectUserInfo); // Redux 상태에서 바로 가져오기
   const user = auth.currentUser;
-  const { months, selectedMonth, setSelectedMonth } = useAvailableMonths(
-    user?.uid
+  const { months, selectedMonth, setSelectedMonth, isLoadingMonths } =
+    useAvailableMonths(user?.uid);
+  const { salaryData, isLoadingSalaryData } = useSalaryData(
+    user?.uid,
+    selectedMonth
   );
-  const { salaryData } = useSalaryData(user?.uid, selectedMonth);
   const { employeeId, name, location, position, hiredDate } = userInfo;
   const formattedHiredDate = formatHiredDate(hiredDate);
 
@@ -94,6 +97,11 @@ const Salary = () => {
     }
   }, [user, userInfo, dispatch]);
 
+  // 전체 화면 LoadingScreen 표시
+  if (!userInfo || isLoadingMonths || isLoadingSalaryData) {
+    return <LoadingScreen />;
+  }
+
   return (
     <>
       <PageTitle title="급여 확인" />
@@ -108,21 +116,28 @@ const Salary = () => {
             <span>입사일 : {formattedHiredDate}</span>
           </MyInfo>
 
-          <SelectBox
-            options={months.length > 0 ? months : ["없음"]}
-            defaultOption={months.length > 0 ? selectedMonth : "없음"}
-            size="small"
-            onSelect={(value) => setSelectedMonth(value)}
-          />
+          {isLoadingMonths ? (
+            <span>로딩 중...</span>
+          ) : (
+            <SelectBox
+              options={months.length > 0 ? months : ["없음"]}
+              defaultOption={months.length > 0 ? selectedMonth : "없음"}
+              size="small"
+              onSelect={(value) => setSelectedMonth(value)}
+            />
+          )}
         </InfoWrap>
-        {salaryData && (
-          <SalaryCalcBox>
-            <Left>실 지급액</Left>
-            <Right>
-              {salaryData ? salaryData.netSalary.toLocaleString() : 0} 원
-            </Right>
-          </SalaryCalcBox>
-        )}
+        <SalaryCalcBox>
+          <Left>실 지급액</Left>
+          <Right>
+            {isLoadingSalaryData
+              ? "로딩 중..."
+              : salaryData
+              ? salaryData.netSalary.toLocaleString()
+              : "0"}{" "}
+            원
+          </Right>
+        </SalaryCalcBox>
         <CalcWrapper>
           <CalcBox
             type="payments"

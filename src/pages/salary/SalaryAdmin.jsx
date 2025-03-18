@@ -9,8 +9,9 @@ import EditableCalcBox from "../salary/components/EditableCalcBox";
 import styled from "styled-components";
 import useAvailableMonths from "./hooks/useAvailableMonths";
 import useSalaryData from "./hooks/useSalaryData";
-import RecalculateDeductions from "./utils/RecalculateDeductions";
+import recalculateDeductions from "./utils/recalculateDeductions";
 import formatHiredDate from "./utils/formatHiredDate";
+import LoadingScreen from "../../shared/components/LoadingScreen";
 
 const ContentBox = styled.div`
   margin-top: 30px;
@@ -65,7 +66,6 @@ const CalcWrapper = styled.div`
 const SalaryAdmin = () => {
   const { employeeId } = useParams();
   const [userInfo, setUserInfo] = useState(null);
-  const { recalculateDeductions } = RecalculateDeductions();
   const formattedHiredDate = formatHiredDate(userInfo?.hiredDate);
 
   useEffect(() => {
@@ -96,9 +96,10 @@ const SalaryAdmin = () => {
     months: availableMonths,
     selectedMonth,
     setSelectedMonth,
+    isLoadingMonths,
   } = useAvailableMonths(userInfo?.uid);
 
-  const { salaryData, updateSalaryData } = useSalaryData(
+  const { salaryData, isLoadingSalaryData, updateSalaryData } = useSalaryData(
     userInfo?.uid,
     selectedMonth
   );
@@ -110,7 +111,7 @@ const SalaryAdmin = () => {
       (acc, val) => acc + val,
       0
     );
-    const updatedDeductions = recalculateDeductions(updatedPayments); // 훅 사용
+    const updatedDeductions = recalculateDeductions(updatedPayments);
     const totalDeductions = Object.values(updatedDeductions).reduce(
       (acc, val) => acc + val,
       0
@@ -123,6 +124,11 @@ const SalaryAdmin = () => {
       netSalary: updatedNetSalary,
     });
   };
+
+  // 전체 화면 LoadingScreen 표시
+  if (!userInfo || isLoadingMonths || isLoadingSalaryData) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
@@ -138,28 +144,30 @@ const SalaryAdmin = () => {
             </span>
             <span>입사일 : {formattedHiredDate}</span>
           </MyInfo>
-          <SelectBox
-            options={availableMonths.length > 0 ? availableMonths : ["없음"]}
-            defaultOption={availableMonths.length > 0 ? selectedMonth : "없음"}
-            size="small"
-            onSelect={(selectedValue) => {
-              if (selectedValue !== "없음") {
-                setSelectedMonth(selectedValue); // 유효한 값만 업데이트
+          {isLoadingMonths ? (
+            <span>로딩 중...</span>
+          ) : (
+            <SelectBox
+              options={availableMonths.length > 0 ? availableMonths : ["없음"]}
+              defaultOption={
+                availableMonths.length > 0 ? selectedMonth : "없음"
               }
-            }}
-          />
+              size="small"
+              onSelect={(value) => setSelectedMonth(value)}
+            />
+          )}
         </InfoWrap>
-        {salaryData ? (
-          <SalaryCalcBox>
-            <Left>실 지급액</Left>
-            <Right>{salaryData.netSalary.toLocaleString()} 원</Right>
-          </SalaryCalcBox>
-        ) : (
-          <SalaryCalcBox>
-            <Left>실 지급액</Left>
-            <Right>0 원</Right>
-          </SalaryCalcBox>
-        )}
+        <SalaryCalcBox>
+          <Left>실 지급액</Left>
+          <Right>
+            {isLoadingSalaryData
+              ? "로딩 중..."
+              : salaryData
+              ? salaryData.netSalary.toLocaleString()
+              : "0"}{" "}
+            원
+          </Right>
+        </SalaryCalcBox>
         <CalcWrapper>
           <EditableCalcBox
             data={salaryData?.payments || []}
