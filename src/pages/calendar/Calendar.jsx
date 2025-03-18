@@ -8,13 +8,7 @@ import Modal from "./../../shared/components/modal/Modal";
 import ModalContent from "./components/ModalContent";
 import { useCalendar } from "./hooks/useCalendar";
 import { db, auth } from "../../shared/firebase";
-import {
-  collection,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-} from "firebase/firestore";
+import { collection, doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 
 const StyledCalendarWrapper = styled.div`
@@ -43,29 +37,36 @@ const StyledCalendarWeek = styled.thead`
   }
 `;
 
+const DAYS_OF_WEEK = ["일", "월", "화", "수", "목", "금", "토"];
+
+const DEFAULT_FORM_DATA = {
+  title: "",
+  startDate: new Date(),
+  endDate: new Date(),
+  selectedColor: "orange",
+  contents: "",
+  selectedSchedule: null,
+};
+
 const Calendar = () => {
   // 달력
-  const { currentDate, weeks, handlePrevMonth, handleNextMonth } =
-    useCalendar();
+  const { currentDate, weeks, handlePrevMonth, handleNextMonth } = useCalendar();
 
   // 모달
   const { isOpen, onOpen, onClose } = useModal();
-  const [inputValue, setInputValue] = useState("");
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const [selectedColor, setSelectedColor] = useState("orange");
-  const [textAreaValue, setTextAreaValue] = useState("");
-  const [selectedSchedule, setSelectedSchedule] = useState(null);
+  const [formData, setFormData] = useState(DEFAULT_FORM_DATA);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleFormData = ({ key, value }) => {
+    setFormData((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
 
   const handleModalClose = () => {
     // 상태 초기화
-    setSelectedSchedule(null);
-    setInputValue("");
-    setStartDate(new Date());
-    setEndDate(new Date());
-    setSelectedColor("orange");
-    setTextAreaValue("");
+    setFormData(DEFAULT_FORM_DATA);
     setIsSubmitted(false);
 
     // 모달 닫기
@@ -76,51 +77,39 @@ const Calendar = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 제목 필수 입력 확인
-    if (inputValue === "") {
+    if (formData.title === "") {
       return toast.warn("제목을 입력해 주세요.");
     }
 
-    const user = auth.currentUser;
-
     try {
       await addDoc(collection(db, "schedules"), {
-        title: inputValue,
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
-        selectedColor,
-        contents: textAreaValue,
-        userId: user.uid,
+        title: formData.title,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+        selectedColor: formData.selectedColor,
+        contents: formData.contents,
+        userId: auth.currentUser.uid,
       });
-
       handleModalClose();
     } catch (error) {
       console.error("일정 추가 실패: ", error);
     }
   };
 
-  // 일정 수정 가능 상태
-  const handleEdit = () => {
-    setIsSubmitted(false);
-  };
-
   // 일정 수정 후 저장
-  const handleSave = async (schedule) => {
-    // 제목 필수 입력 확인
-    if (inputValue === "") {
+  const handleSave = async () => {
+    if (formData.title === "") {
       return toast.warn("제목을 입력해 주세요.");
     }
 
-    const scheduleRef = doc(db, "schedules", schedule.id);
     try {
-      await updateDoc(scheduleRef, {
-        title: inputValue,
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
-        selectedColor,
-        contents: textAreaValue,
+      await updateDoc(doc(db, "schedules", formData.selectedSchedule.id), {
+        title: formData.title,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+        selectedColor: formData.selectedColor,
+        contents: formData.contents,
       });
-
       handleModalClose();
     } catch (error) {
       console.error("일정 수정 실패: ", error);
@@ -130,12 +119,14 @@ const Calendar = () => {
   // 등록된 일정 클릭
   const handleScheduleClick = (schedule) => {
     // 등록된 일정 내용 업데이트
-    setSelectedSchedule(schedule);
-    setInputValue(schedule.title);
-    setStartDate(new Date(schedule.startDate));
-    setEndDate(new Date(schedule.endDate));
-    setSelectedColor(schedule.selectedColor);
-    setTextAreaValue(schedule.contents);
+    setFormData({
+      title: schedule.title,
+      startDate: schedule.startDate,
+      endDate: schedule.endDate,
+      selectedColor: schedule.selectedColor,
+      contents: schedule.contents,
+      selectedSchedule: schedule,
+    });
 
     // 수정 비활성화
     setIsSubmitted(true);
@@ -147,14 +138,13 @@ const Calendar = () => {
   // 일정 삭제
   const handleDelete = async () => {
     const ok = confirm("일정을 삭제하시겠습니까?");
-    if (!ok || !selectedSchedule?.id) return;
+    if (!ok || !formData.selectedSchedule?.id) return;
 
     try {
-      await deleteDoc(doc(db, "schedules", selectedSchedule.id));
-
+      await deleteDoc(doc(db, "schedules", formData.selectedSchedule.id));
       handleModalClose();
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.error("일정 삭제 실패: ", error);
     }
   };
 
@@ -171,30 +161,18 @@ const Calendar = () => {
         />
         {isOpen && (
           <Modal
-            title={selectedSchedule ? "일정 상세" : "일정 등록"}
+            title={formData.selectedSchedule ? "일정 상세" : "일정 등록"}
             content={
               <ModalContent
-                inputValue={inputValue}
-                setInputValue={setInputValue}
-                startDate={startDate}
-                setStartDate={setStartDate}
-                endDate={endDate}
-                setEndDate={setEndDate}
-                selectedColor={selectedColor}
-                setSelectedColor={setSelectedColor}
-                textAreaValue={textAreaValue}
-                setTextAreaValue={setTextAreaValue}
+                formData={formData}
+                handleFormData={handleFormData}
                 isSubmitted={isSubmitted}
               />
             }
-            buttonName={selectedSchedule ? "저장하기" : "등록하기"}
-            onSubmit={
-              selectedSchedule
-                ? () => handleSave(selectedSchedule)
-                : handleSubmit
-            }
-            onEdit={isSubmitted ? handleEdit : null}
-            onDelete={selectedSchedule ? handleDelete : null}
+            buttonName={formData.selectedSchedule ? "저장하기" : "등록하기"}
+            onSubmit={formData.selectedSchedule ? handleSave : handleSubmit}
+            onEdit={isSubmitted ? () => setIsSubmitted(false) : null}
+            onDelete={formData.selectedSchedule ? handleDelete : null}
             isOpen={isOpen}
             onClose={handleModalClose}
           />
@@ -216,7 +194,5 @@ const Calendar = () => {
     </>
   );
 };
-
-const DAYS_OF_WEEK = ["일", "월", "화", "수", "목", "금", "토"];
 
 export default Calendar;
