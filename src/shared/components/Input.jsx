@@ -1,12 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-// const InputWrapper = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: space-between;
-// `;
-
 const Label = styled.label`
   font-size: var(--font-size-primary);
   font-weight: 400;
@@ -57,7 +51,6 @@ const Input = ({
   placeholder = "필요에 의한 내용을 바꿔주세요",
   onChange,
   value,
-  onKeyDown,
   style,
 }) => {
   return (
@@ -74,7 +67,6 @@ const Input = ({
         value={value}
         onChange={onChange}
         $issubmitted={isSubmitted} // 여기서 'issubmitted'로 전달!!!
-        onKeyDown={onKeyDown} // 여기서 onKeyDown 전달
         style={style}
       />
     </>
