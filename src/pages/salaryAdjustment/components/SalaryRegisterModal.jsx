@@ -36,7 +36,7 @@ const List = styled.ul`
   }
 `;
 
-const leaveOptions = [
+const LEAVE_OPTIONS = [
   "유급 휴가",
   "무급 휴가",
   "업무 연장",
@@ -68,7 +68,7 @@ const SalaryRegisterModalContent = ({
       <li>
         <label>정정 유형</label>
         <SelectBox
-          options={leaveOptions}
+          options={LEAVE_OPTIONS}
           defaultOption={selectedLeaveType}
           onSelect={setSelectedLeaveType}
           size="large"
@@ -92,25 +92,23 @@ const SalaryRegisterModalContent = ({
 
 const SalaryRegisterModal = ({ userName, userId, userEmployeeId }) => {
   const { isOpen, onOpen, onClose } = useModal();
-  const [yearMonth, setYearMonth] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedLeaveType, setSelectedLeaveType] = useState("유형");
   const [inputValue, setInputValue] = useState("");
 
-  const handleRegister = async (
-    userId,
-    date,
-    type,
-    reason,
-    userName,
-    userEmployeeId
-  ) => {
+  const handleSubmit = async () => {
+    if (selectedLeaveType === "유형" || inputValue.trim() === "") {
+      toast.warn("모든 항목을 입력해주세요.");
+      return;
+    }
+
     try {
       const collectionRef = collection(db, "salary_requests");
       await addDoc(collectionRef, {
         userId,
-        date: date.toISOString().split("T")[0],
-        type,
-        reason,
+        date: currentDate.toISOString().split("T")[0],
+        type: selectedLeaveType,
+        reason: inputValue,
         status: "대기 중",
         createdAt: new Date(),
         userName,
@@ -125,21 +123,6 @@ const SalaryRegisterModal = ({ userName, userId, userEmployeeId }) => {
     }
   };
 
-  const handleSubmit = () => {
-    if (selectedLeaveType === "유형" || inputValue.trim() === "") {
-      toast.warn("모든 항목을 입력해주세요.");
-      return;
-    }
-    handleRegister(
-      userId,
-      yearMonth,
-      selectedLeaveType,
-      inputValue,
-      userName,
-      userEmployeeId
-    );
-  };
-
   return (
     <>
       {/* 정정 신청 버튼 */}
@@ -148,7 +131,7 @@ const SalaryRegisterModal = ({ userName, userId, userEmployeeId }) => {
           {
             /*상태 초기화*/
           }
-          setYearMonth(new Date());
+          setCurrentDate(new Date());
           setInputValue("");
           setSelectedLeaveType("유형");
           onOpen();
@@ -157,26 +140,25 @@ const SalaryRegisterModal = ({ userName, userId, userEmployeeId }) => {
       >
         정정 신청
       </Button>
-      {isOpen && (
-        <Modal
-          title="정정 신청"
-          content={
-            <SalaryRegisterModalContent
-              yearMonth={yearMonth}
-              selectedLeaveType={selectedLeaveType}
-              inputValue={inputValue}
-              setYearMonth={setYearMonth}
-              setSelectedLeaveType={setSelectedLeaveType}
-              setInputValue={setInputValue}
-            />
-          }
-          buttonName="등록하기"
-          // hasSubmitButton={true}
-          onSubmit={handleSubmit}
-          isOpen={isOpen}
-          onClose={onClose}
-        />
-      )}
+
+      <Modal
+        title="정정 신청"
+        content={
+          <SalaryRegisterModalContent
+            currentDate={currentDate}
+            selectedLeaveType={selectedLeaveType}
+            inputValue={inputValue}
+            setCurrentDate={setCurrentDate}
+            setSelectedLeaveType={setSelectedLeaveType}
+            setInputValue={setInputValue}
+          />
+        }
+        buttonName="등록하기"
+        // hasSubmitButton={true}
+        onSubmit={handleSubmit}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
     </>
   );
 };

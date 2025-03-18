@@ -4,10 +4,10 @@ const CalendarBody = ({ weeks, handleScheduleClick }) => {
   return (
     <tbody>
       {weeks.map((week, weekIndex) => (
-        <tr key={weekIndex}>
+        <tr key={`week-${weekIndex}`}>
           {week.map(({ day, isDisabled, date }, dayIndex) => (
             <CalendarCell
-              key={dayIndex}
+              key={`day-${dayIndex}`}
               date={date}
               day={day}
               isDisabled={isDisabled}
