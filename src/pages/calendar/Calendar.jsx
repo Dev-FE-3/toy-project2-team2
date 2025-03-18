@@ -90,6 +90,7 @@ const Calendar = () => {
         contents: formData.contents,
         userId: auth.currentUser.uid,
       });
+      toast.success("일정이 추가되었습니다.");
       handleModalClose();
     } catch (error) {
       console.error("일정 추가 실패: ", error);
@@ -110,6 +111,7 @@ const Calendar = () => {
         selectedColor: formData.selectedColor,
         contents: formData.contents,
       });
+      toast.success("일정이 수정되었습니다.");
       handleModalClose();
     } catch (error) {
       console.error("일정 수정 실패: ", error);
@@ -142,6 +144,7 @@ const Calendar = () => {
 
     try {
       await deleteDoc(doc(db, "schedules", formData.selectedSchedule.id));
+      toast.success("일정이 삭제되었습니다.");
       handleModalClose();
     } catch (error) {
       console.error("일정 삭제 실패: ", error);
