@@ -10,8 +10,7 @@ const ScheduleBarWrapper = styled.span`
   font-size: var(--font-size-title-small);
   font-weight: 700;
   letter-spacing: -0.36px;
-  color: ${({ color }) => 
-    color ? `var(--${color})` : "var(--text-primary)"};
+  color: ${({ color }) => color ? `var(--${color})` : "var(--text-primary)"};
   background-color: ${({ $empty, color }) => 
     $empty === "" ? "transparent" :
     color ? `var(--${color}-bg)` : "var(--white)"};
@@ -27,12 +26,9 @@ const ScheduleBarWrapper = styled.span`
     margin-top: 6px;
   }
 
-  ${({ $empty }) =>
-    $empty === "" &&
-    `
-      pointer-events: none;
-    `
-  }
+  ${({ $empty }) => $empty === "" && `
+    pointer-events: none;
+  `}
 `;
 
 const ScheduleBar = ({ colSpan, color, onClick, $empty, title }) => {

@@ -35,19 +35,7 @@ const LabelList = styled.ul`
   gap: 12px;
 `;
 
-const ModalContent = ({
-  inputValue,
-  setInputValue,
-  startDate,
-  setStartDate,
-  endDate,
-  setEndDate,
-  selectedColor,
-  setSelectedColor,
-  textAreaValue,
-  setTextAreaValue,
-  isSubmitted,
-}) => {
+const ModalContent = ({ formData, handleFormData, isSubmitted }) => {
   return (
     <List>
       <li>
@@ -55,10 +43,8 @@ const ModalContent = ({
           id="title"
           label="제목"
           placeholder="제목을 입력해 주세요."
-          value={inputValue}
-          onChange={(e) => {
-            setInputValue(e.target.value);
-          }}
+          value={formData.title}
+          onChange={(e) => handleFormData({ key: "title", value: e.target.value })}
           isSubmitted={isSubmitted}
         />
       </li>
@@ -66,8 +52,8 @@ const ModalContent = ({
         <DatePicker
           label="시작일"
           type="date"
-          value={startDate}
-          onChange={setStartDate}
+          value={formData.startDate}
+          onChange={(value) => handleFormData({ key: "startDate", value })}
           isSubmitted={isSubmitted}
         />
       </li>
@@ -75,8 +61,8 @@ const ModalContent = ({
         <DatePicker
           label="종료일"
           type="date"
-          value={endDate}
-          onChange={setEndDate}
+          value={formData.endDate}
+          onChange={(value) => handleFormData({ key: "endDate", value })}
           isSubmitted={isSubmitted}
         />
       </li>
@@ -87,8 +73,8 @@ const ModalContent = ({
             <li key={color}>
               <LabelColor
                 color={color}
-                selectedColor={selectedColor}
-                onSelect={setSelectedColor}
+                selectedColor={formData.selectedColor}
+                onSelect={(value) => handleFormData({ key: "selectedColor", value: color })}
                 isSubmitted={isSubmitted}
               />
             </li>
@@ -101,10 +87,8 @@ const ModalContent = ({
           label="내용"
           rows="4"
           placeholder="내용을 입력해 주세요."
-          value={textAreaValue}
-          onChange={(e) => {
-            setTextAreaValue(e.target.value);
-          }}
+          value={formData.contents}
+          onChange={(e) => handleFormData({ key: "contents", value: e.target.value })}
           isSubmitted={isSubmitted}
         />
       </li>

@@ -6,8 +6,7 @@ const Label = styled.label`
   height: 30px;
   border-radius: 50%;
   border: 5px solid ${({ $isSelected }) => ($isSelected ? "var(--text-disabled-2)" : "var(--white)")};
-  background: ${({ color }) =>
-    color ? `linear-gradient(to right, var(--${color}) 50%, var(--${color}-bg) 50%)` : "transparent"};
+  background: ${({ color }) => color ? `linear-gradient(to right, var(--${color}) 50%, var(--${color}-bg) 50%)` : "transparent"};
   cursor: pointer;
 
   ${(props) => props.$issubmitted && `

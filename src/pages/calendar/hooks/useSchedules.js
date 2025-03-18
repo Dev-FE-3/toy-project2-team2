@@ -7,8 +7,7 @@ const useSchedules = () => {
 
   useEffect(() => {
     const user = auth.currentUser;
-    if (!user) return;
-
+    
     const schedulesQuery = query(
       collection(db, "schedules"),
       where("userId", "==", user.uid)
