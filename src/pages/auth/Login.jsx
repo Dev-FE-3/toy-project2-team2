@@ -1,6 +1,6 @@
-import { auth } from "../../shared/firebase";
+import { AUTH_ERRORS } from "../../shared/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { authErrors } from "./constant/authErrors";
+import { AUTH_ERRORS } from "./constant/AUTH_ERRORS";
 import { FirebaseError } from "@firebase/util";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -36,7 +36,11 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const isDisabled =
-    isLoading || email === "" || password === "" || error.loginError || error.email;
+    isLoading ||
+    email === "" ||
+    password === "" ||
+    error.loginError ||
+    error.email;
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -70,7 +74,7 @@ const Login = () => {
     } catch (e) {
       console.error("로그인 실패:", e); // 🔥 에러 로그 확인
       if (e instanceof FirebaseError) {
-        const errorInfo = authErrors[e.code];
+        const errorInfo = AUTH_ERRORS[e.code];
         if (errorInfo) {
           setError((prev) => ({
             ...prev,
@@ -84,7 +88,6 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-
   return (
     <Wrapper>
       <LoginBox>
@@ -117,7 +120,9 @@ const Login = () => {
               error={error.loginError}
             />
             <ErrorWrapper>
-              <Error hasError={!!error.loginError}>{error.loginError || " "}</Error>
+              <Error hasError={!!error.loginError}>
+                {error.loginError || " "}
+              </Error>
             </ErrorWrapper>
           </InputWrapper>
           <Button

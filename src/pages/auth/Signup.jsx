@@ -1,7 +1,7 @@
 import { auth, db } from "../../shared/firebase";
 import { FirebaseError } from "@firebase/util";
 import { setDoc, doc, Timestamp } from "firebase/firestore";
-import { authErrors } from "./constant/authErrors";
+import { AUTH_ERRORS } from "./constant/AUTH_ERRORS";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -49,17 +49,14 @@ const InputBox = styled.div`
   }
 `;
 
+const DEFAULT_USER_LOCATION = "지점을 선택하세요";
+const DEFAULT_USER_POSITION = "직급을 선택하세요";
+const ERROR_INPUT_EMAIL = "올바른 이메일 형식을 입력하세요.";
+const ERROR_INPUT_PASSWORD = "비밀번호는 특수기호를 포함하여 6자 이상이어야 합니다.";
+const ERROR_INPUT_NAME = "이름에는 특수기호와 숫자, 공백을 포함할 수 없습니다.";
+
 const Signup = () => {
   const dispatch = useDispatch();
-
-  const placeholder = {
-    location: "지점 선택",
-    position: "직급 선택",
-    name: "김스텐",
-    password: "특수기호를 포함하여 6자 이상",
-    email: "sweetten@xxxx.xxx",
-  };
-
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [randomNum, setRandomNum] = useState(null);
@@ -67,8 +64,8 @@ const Signup = () => {
     name: "",
     email: "",
     password: "",
-    position: placeholder.position,
-    location: placeholder.location,
+    position: DEFAULT_USER_POSITION,
+    location: DEFAULT_USER_LOCATION,
   });
   const [error, setError] = useState({
     email: "",
@@ -114,7 +111,7 @@ const Signup = () => {
         /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value) ||
         value === "";
       handleError(setError, {
-        email: isValid ? "" : "올바른 이메일 형식을 입력하세요.",
+        email: isValid ? "" : ERROR_INPUT_EMAIL,
       });
     }
 
@@ -125,7 +122,7 @@ const Signup = () => {
       handleError(setError, {
         password: isValid
           ? ""
-          : "비밀번호는 특수기호를 포함하여 6자 이상이어야 합니다.",
+          : ERROR_INPUT_PASSWORD,
       });
     }
 
@@ -134,7 +131,7 @@ const Signup = () => {
       handleError(setError, {
         name: isValid
           ? ""
-          : "이름에는 특수기호와 숫자, 공백을 포함할 수 없습니다.",
+          : ERROR_INPUT_NAME,
       });
     }
   };
@@ -151,17 +148,17 @@ const Signup = () => {
     e.preventDefault();
     if (isDisabled) return;
     if (
-      userData.location === placeholder.location ||
-      userData.position === placeholder.position
+      userData.location === DEFAULT_USER_LOCATION ||
+      userData.position === DEFAULT_USER_POSITION
     ) {
-      if (userData.location === placeholder.location) {
+      if (userData.location === DEFAULT_USER_LOCATION) {
         handleError(setError, {
-          location: "지점을 선택하세요",
+          DEFAULT_USER_LOCATION,
         });
       }
-      if (userData.position === placeholder.position) {
+      if (userData.position === DEFAULT_USER_POSITION) {
         handleError(setError, {
-          position: "직급을 선택하세요",
+          DEFAULT_USER_POSITION,
         });
       }
       return;
@@ -200,7 +197,7 @@ const Signup = () => {
       toast.success(`${userData.name} 님 회원이 되신 것을 환영합니다.`);
     } catch (e) {
       if (e instanceof FirebaseError) {
-        const errorInfo = authErrors[e.code];
+        const errorInfo = AUTH_ERRORS[e.code];
         if (errorInfo) {
           setError((prev) => ({
             ...prev,
@@ -229,7 +226,7 @@ const Signup = () => {
               onChange={onChange}
               name="name"
               value={userData.name}
-              placeholder={placeholder.name}
+              placeholder="김스텐"
               error={error.name}
               maxLength="10"
             />
@@ -276,7 +273,7 @@ const Signup = () => {
               onChange={onChange}
               name="email"
               value={userData.email}
-              placeholder={placeholder.email}
+              placeholder="sweetten@xxxx.xxx"
               error={error.email}
             />
             <ErrorWrapper>
@@ -288,15 +285,13 @@ const Signup = () => {
               onChange={onChange}
               name="password"
               value={userData.password}
-              placeholder={placeholder.password}
+              placeholder="특수기호를 포함하여 6자 이상"
               type="password"
               error={error.password}
               minLength="6"
             />
             <ErrorWrapper>
-              <Error hasError={!!error.password}>
-                {error.password || " "}
-              </Error>
+              <Error hasError={!!error.password}>{error.password || " "}</Error>
             </ErrorWrapper>
           </InputWrapper>
           <Button
