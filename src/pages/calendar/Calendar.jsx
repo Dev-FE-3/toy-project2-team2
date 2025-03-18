@@ -82,7 +82,6 @@ const Calendar = () => {
     }
 
     const user = auth.currentUser;
-    if (!user) return;
 
     try {
       await addDoc(collection(db, "schedules"), {
@@ -111,9 +110,6 @@ const Calendar = () => {
     if (inputValue === "") {
       return toast.warn("제목을 입력해 주세요.");
     }
-
-    const user = auth.currentUser;
-    if (!user) return;
 
     const scheduleRef = doc(db, "schedules", schedule.id);
     try {
