@@ -181,7 +181,7 @@ const Calendar = () => {
           <StyledCalendarWeek>
             <tr>
               {DAYS_OF_WEEK.map((day, index) => (
-                <th key={index}>{day}</th>
+                <th key={`days-of-week-${index}`}>{day}</th>
               ))}
             </tr>
           </StyledCalendarWeek>
