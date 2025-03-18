@@ -111,7 +111,6 @@ const Signup = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (isDisabled) return;
     if (
       location === DEFAULT_USER_LOCATION ||
       position === DEFAULT_USER_POSITION
