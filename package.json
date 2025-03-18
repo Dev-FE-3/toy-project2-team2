@@ -8,14 +8,15 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy" : "npm run build",
-    "deploy" : "firebase deploy"
+    "predeploy": "npm run build",
+    "deploy": "firebase deploy"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.6.1",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "firebase": "^11.3.1",
+    "lodash": "^4.17.21",
     "react": "^19.0.0",
     "react-datepicker": "^8.1.0",
     "react-dom": "^19.0.0",
