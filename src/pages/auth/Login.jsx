@@ -29,7 +29,6 @@ import useLoginForm from "./hooks/useLoginForm";
 
 const Login = () => {
   const dispatch = useDispatch(); // 추가
-
   const navigate = useNavigate();
   const { email, password, error, onChangeEmail, onChangePassword, setError } =
     useLoginForm();
@@ -46,7 +45,6 @@ const Login = () => {
     e.preventDefault();
     try {
       setIsLoading(true);
-      //await signInWithEmailAndPassword(auth, email, password);
       const { user } = await signInWithEmailAndPassword(auth, email, password);
 
       // Firestore에서 해당 유저의 정보 가져오기
@@ -54,7 +52,7 @@ const Login = () => {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        let userData = docSnap.data();
+        const userData = docSnap.data();
 
         if (userData.hiredDate instanceof Timestamp) {
           userData.hiredDate = new Date(

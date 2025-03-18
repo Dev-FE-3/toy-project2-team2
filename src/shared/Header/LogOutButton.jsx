@@ -9,12 +9,12 @@ const LogOut = () => {
     auth
       .signOut()
       .then(() => {
+        localStorage.clear();
         navigate("/login");
       })
       .catch((error) => {
         console.error("로그아웃 실패:", error);
       });
-    localStorage.clear();
   };
 
   return (
