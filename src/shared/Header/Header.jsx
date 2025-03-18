@@ -72,43 +72,8 @@ const UserWrap = styled.div`
 
 const Header = () => {
   const user = auth.currentUser;
-  const dispatch = useDispatch();
   const [profile, setProfile] = useState(user?.photoURL);
   const { name, position } = useSelector(selectUserInfo);
-  const userInfo = useSelector(selectUserInfo); // Redux 상태에서 바로 가져오기
-
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      if (!user) return;
-
-      // Redux에 필요한 정보가 없는 경우만 실행
-      if (
-        !userInfo ||
-        !userInfo.name ||
-        !userInfo.position ||
-        !userInfo.employeeId
-      ) {
-        try {
-          const docRef = doc(db, "users", user.uid);
-          const docSnap = await getDoc(docRef);
-
-          if (docSnap.exists()) {
-            const newUserInfo = docSnap.data();
-
-            // 기존 Redux 상태와 비교 후 변경된 경우에만 업데이트
-            if (JSON.stringify(userInfo) !== JSON.stringify(newUserInfo)) {
-              dispatch(setUserInfo(newUserInfo));
-              //console.log("사용자 데이터를 Redux에 한 번만 저장");
-            }
-          }
-        } catch (error) {
-          console.error("Error fetching user info:", error);
-        }
-      }
-    };
-
-    fetchUserInfo();
-  }, [user, dispatch, userInfo]); // userInfo가 변경될 때만 실행
 
   const onProfileChange = async (e) => {
     const { files } = e.target;
