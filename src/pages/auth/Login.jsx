@@ -78,7 +78,7 @@ const Login = () => {
             [errorInfo.field]: errorInfo.message,
           }));
         } else {
-          alert("예상치 못한 오류가 발생하였습니다.");
+          toast.warning("예상치 못한 오류가 발생하였습니다.");
         }
       }
     } finally {

@@ -30,7 +30,9 @@ const Form = styled.form`
   }
 `;
 
-const Error = styled.span`
+const Error = styled.span.withConfig({
+  shouldForwardProp: (prop) => prop !== 'hasError', // 'hasError'는 DOM에 전달되지 않음
+})`
   font-size: var(--font-size-small);
   color: var(--red);
   padding-left: 10px;
