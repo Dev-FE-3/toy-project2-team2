@@ -9,7 +9,6 @@ const LogOut = () => {
     auth
       .signOut()
       .then(() => {
-        localStorage.clear();
         navigate("/login");
       })
       .catch((error) => {
