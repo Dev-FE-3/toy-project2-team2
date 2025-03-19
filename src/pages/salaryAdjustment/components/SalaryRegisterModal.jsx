@@ -9,6 +9,7 @@ import SelectBox from "../../../shared/components/SelectBox";
 import DatePicker from "../../../shared/components/DatePicker";
 import TextArea from "../../../shared/components/TextArea";
 import { toast } from "react-toastify";
+import { formatYearMonth } from "../util/formatYearMonth";
 
 const List = styled.ul`
   display: flex;
@@ -36,7 +37,7 @@ const List = styled.ul`
   }
 `;
 
-const leaveOptions = [
+const LEAVE_OPTIONS = [
   "유급 휴가",
   "무급 휴가",
   "업무 연장",
@@ -68,7 +69,7 @@ const SalaryRegisterModalContent = ({
       <li>
         <label>정정 유형</label>
         <SelectBox
-          options={leaveOptions}
+          options={LEAVE_OPTIONS}
           defaultOption={selectedLeaveType}
           onSelect={setSelectedLeaveType}
           size="large"
@@ -90,31 +91,29 @@ const SalaryRegisterModalContent = ({
   );
 };
 
-const SalaryRegisterModal = ({ userName, userId, userEmployeeId }) => {
+const SalaryRegisterModal = ({ name, userId, employeeId }) => {
   const { isOpen, onOpen, onClose } = useModal();
-  const [yearMonth, setYearMonth] = useState(new Date());
   const [selectedLeaveType, setSelectedLeaveType] = useState("유형");
   const [inputValue, setInputValue] = useState("");
+  const [yearMonth, setYearMonth] = useState(new Date());
 
-  const handleRegister = async (
-    userId,
-    date,
-    type,
-    reason,
-    userName,
-    userEmployeeId
-  ) => {
+  const handleSubmit = async () => {
+    if (selectedLeaveType === "유형" || inputValue.trim() === "") {
+      toast.warn("모든 항목을 입력해주세요.");
+      return;
+    }
+
     try {
       const collectionRef = collection(db, "salary_requests");
       await addDoc(collectionRef, {
         userId,
-        date: date.toISOString().split("T")[0],
-        type,
-        reason,
+        date: formatYearMonth(yearMonth),
+        type: selectedLeaveType,
+        reason: inputValue,
         status: "대기 중",
         createdAt: new Date(),
-        userName,
-        userEmployeeId,
+        name,
+        employeeId,
       });
 
       toast.success("정정 신청이 완료되었습니다!");
@@ -123,21 +122,6 @@ const SalaryRegisterModal = ({ userName, userId, userEmployeeId }) => {
       console.error("정정 신청 오류:", error);
       toast.error("정정 신청에 실패했습니다.");
     }
-  };
-
-  const handleSubmit = () => {
-    if (selectedLeaveType === "유형" || inputValue.trim() === "") {
-      toast.warn("모든 항목을 입력해주세요.");
-      return;
-    }
-    handleRegister(
-      userId,
-      yearMonth,
-      selectedLeaveType,
-      inputValue,
-      userName,
-      userEmployeeId
-    );
   };
 
   return (
@@ -157,26 +141,24 @@ const SalaryRegisterModal = ({ userName, userId, userEmployeeId }) => {
       >
         정정 신청
       </Button>
-      {isOpen && (
-        <Modal
-          title="정정 신청"
-          content={
-            <SalaryRegisterModalContent
-              yearMonth={yearMonth}
-              selectedLeaveType={selectedLeaveType}
-              inputValue={inputValue}
-              setYearMonth={setYearMonth}
-              setSelectedLeaveType={setSelectedLeaveType}
-              setInputValue={setInputValue}
-            />
-          }
-          buttonName="등록하기"
-          // hasSubmitButton={true}
-          onSubmit={handleSubmit}
-          isOpen={isOpen}
-          onClose={onClose}
-        />
-      )}
+
+      <Modal
+        title="정정 신청"
+        content={
+          <SalaryRegisterModalContent
+            yearMonth={yearMonth}
+            selectedLeaveType={selectedLeaveType}
+            setYearMonth={setYearMonth}
+            setSelectedLeaveType={setSelectedLeaveType}
+            setInputValue={setInputValue}
+          />
+        }
+        buttonName="등록하기"
+        // hasSubmitButton={true}
+        onSubmit={handleSubmit}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
     </>
   );
 };

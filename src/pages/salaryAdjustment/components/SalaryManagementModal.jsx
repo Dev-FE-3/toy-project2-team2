@@ -36,9 +36,9 @@ const List = styled.ul`
 
 const StyledBox = styled.div`
   width: 170px;
-  padding: 12px 16px; // 내부 여백 추가
-  border: 1px solid var(--disabled); // 테두리 추가
-  border-radius: 8px; // 둥근 모서리 적용
+  padding: 12px 16px;
+  border: 1px solid var(--disabled);
+  border-radius: 8px;
   background-color: var(--background-color-3);
   font-weight: 400;
   box-sizing: border-box;
@@ -48,15 +48,15 @@ const StyledBox = styled.div`
 const SalaryManagementModalContent = ({
   selectedRequest,
   updatedStatus,
-  userName,
-  userEmployeeId,
+  name,
+  employeeId,
   setUpdatedStatus,
 }) => {
   return (
     <List>
       <li>
         <label>이름/사번</label>
-        <StyledBox>{`${userName} / ${userEmployeeId}`}</StyledBox>
+        <StyledBox>{`${name} / ${employeeId}`}</StyledBox>
       </li>
       <li>
         <label>정정 대상</label>
@@ -91,26 +91,24 @@ const SalaryManagementModalContent = ({
 const SalaryManagementModal = ({
   setSelectedRequest,
   selectedRequest,
-  userName,
-  userEmployeeId,
+  name,
+  employeeId,
 }) => {
   const { isOpen, onOpen, onClose } = useModal();
-  const [updatedStatus, setUpdatedStatus] = useState(selectedRequest.status);
+  const [updatedStatus, setUpdatedStatus] = useState(
+    selectedRequest?.status || "대기 중"
+  );
+  if (selectedRequest && !isOpen) {
+    onOpen();
+  }
 
-  useEffect(() => {
-    if (selectedRequest) {
-      setUpdatedStatus(selectedRequest.status); // 새로운 요청이 들어올 때 상태 업데이트
-      onOpen(); // 모달 열기
-    }
-  }, [selectedRequest, onOpen]);
-
-  const handleStatus = async (updatedStatus) => {
+  const handleSubmit = async () => {
     try {
       const docRef = doc(db, "salary_requests", selectedRequest.id);
-      await updateDoc(docRef, {
-        status: updatedStatus,
-      });
+      await updateDoc(docRef, { status: updatedStatus });
+
       toast.success("처리 상태 수정이 완료되었습니다.");
+      setSelectedRequest(null); // 모달 닫기 전에 selectedRequest 초기화
       onClose();
     } catch (error) {
       console.error("처리 상태 수정 오류:", error);
@@ -118,37 +116,27 @@ const SalaryManagementModal = ({
     }
   };
 
-  const handleSubmit = () => {
-    handleStatus(updatedStatus);
-  };
-  // isOpen 상태가 true일 때만 모달을 표시하도록
   return (
     <>
-      {isOpen && selectedRequest && (
-        <Modal
-          title="정정 내역"
-          content={
-            <SalaryManagementModalContent
-              setSelectedRequest={setSelectedRequest}
-              selectedRequest={selectedRequest}
-              updatedStatus={updatedStatus}
-              setUpdatedStatus={setUpdatedStatus}
-              userName={userName}
-              userEmployeeId={userEmployeeId}
-            />
-          }
-          onSubmit={() => {
-            setSelectedRequest(null);
-            handleSubmit();
-          }}
-          buttonName="저장하기"
-          isOpen={isOpen}
-          onClose={() => {
-            setSelectedRequest(null);
-            onClose;
-          }}
-        />
-      )}
+      <Modal
+        title="정정 내역"
+        content={
+          <SalaryManagementModalContent
+            selectedRequest={selectedRequest}
+            updatedStatus={updatedStatus}
+            setUpdatedStatus={setUpdatedStatus}
+            name={name}
+            employeeId={employeeId}
+          />
+        }
+        onSubmit={handleSubmit}
+        buttonName="저장하기"
+        isOpen={isOpen}
+        onClose={() => {
+          setSelectedRequest(null);
+          onClose();
+        }}
+      />
     </>
   );
 };

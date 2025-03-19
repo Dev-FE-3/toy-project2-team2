@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import Header from "./header/Header";
+import DispatchUserWrapper from "./Header/DispatchUserWrapper";
 
 const Wrapper = styled.div`
   width: 1440px;
@@ -12,7 +13,9 @@ const Wrapper = styled.div`
 const Layout = () => {
   return (
     <>
-      <Header />
+      <DispatchUserWrapper>
+        <Header />
+      </DispatchUserWrapper>
       <Wrapper>
         <Outlet />
       </Wrapper>
