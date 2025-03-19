@@ -161,7 +161,7 @@ const Signup = () => {
         if (errorInfo) {
           setError((prev) => ({
             ...prev,
-            [errorInfo.name]: errorInfo.message,
+            [errorInfo.field]: errorInfo.message,
           }));
         } else {
           toast.error("예상치 못한 오류가 발생하였습니다.");
