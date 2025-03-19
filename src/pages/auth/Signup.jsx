@@ -109,8 +109,8 @@ const Signup = () => {
     }
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (error) => {
+    error.preventDefault();
     if (
       location === DEFAULT_USER_LOCATION ||
       position === DEFAULT_USER_POSITION
@@ -155,9 +155,9 @@ const Signup = () => {
       );
 
       toast.success(`${name} 님 회원이 되신 것을 환영합니다.`);
-    } catch (e) {
-      if (e instanceof FirebaseError) {
-        const errorInfo = AUTH_ERRORS[e.code];
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        const errorInfo = AUTH_ERRORS[error.code];
         if (errorInfo) {
           setError((prev) => ({
             ...prev,

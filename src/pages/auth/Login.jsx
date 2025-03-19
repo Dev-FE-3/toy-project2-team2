@@ -41,8 +41,8 @@ const Login = () => {
     error.loginError ||
     error.email;
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (error) => {
+    error.preventDefault();
     try {
       setIsLoading(true);
       const { user } = await signInWithEmailAndPassword(auth, email, password);
@@ -68,10 +68,10 @@ const Login = () => {
       }
 
       navigate("/");
-    } catch (e) {
-      console.error("로그인 실패:", e); // 🔥 에러 로그 확인
-      if (e instanceof FirebaseError) {
-        const errorInfo = AUTH_ERRORS[e.code];
+    } catch (error) {
+      console.error("로그인 실패:", error); // 🔥 에러 로그 확인
+      if (error instanceof FirebaseError) {
+        const errorInfo = AUTH_ERRORS[error.code];
         if (errorInfo) {
           setError((prev) => ({
             ...prev,
