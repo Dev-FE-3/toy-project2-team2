@@ -14,21 +14,20 @@ const TitleContainer = styled.div`
 `;
 
 const TitleContainerComponent = ({
-  userPosition,
-  userEmployeeId,
-  userName,
+  position,
+  employeeId,
+  name,
   userId,
   rolesPermissions, // props로 받아옵니다.
 }) => (
   <TitleContainer>
     <PageTitle title="정정 신청 / 내역" subtitle="정정 내역" />
-    {rolesPermissions[userPosition] &&
-    rolesPermissions[userPosition].canConfirm ? (
+    {rolesPermissions[position] && rolesPermissions[position].canConfirm ? (
       ""
     ) : (
       <RegisterModalButton
-        userEmployeeId={userEmployeeId}
-        userName={userName}
+        employeeId={employeeId}
+        name={name}
         userId={userId}
         className="registerBtn"
       />
