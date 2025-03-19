@@ -1,7 +1,7 @@
 import { auth, db } from "../../shared/firebase";
 import { FirebaseError } from "@firebase/util";
 import { setDoc, doc, Timestamp } from "firebase/firestore";
-import { AUTH_ERRORS } from "./constant/AUTH_ERRORS";
+import { AUTH_ERRORS } from "./constants/AUTH_ERRORS";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,

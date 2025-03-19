@@ -1,6 +1,6 @@
 import { auth } from "../../shared/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { AUTH_ERRORS } from "./constant/AUTH_ERRORS";
+import { AUTH_ERRORS } from "./constants/AUTH_ERRORS";
 import { FirebaseError } from "@firebase/util";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
