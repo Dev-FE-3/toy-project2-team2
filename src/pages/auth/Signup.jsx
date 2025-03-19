@@ -133,7 +133,7 @@ const Signup = () => {
 
       const user = auth.currentUser; // 회원가입 후 로그인된 상태에서 auth.currentUser가 존재
 
-      await setDoc(doc(db, "users", auth.currentUser.uid), {
+      await setDoc(doc(db, "users", user.uid), {
         employeeId: randomNum,
         hiredDate: Timestamp.now(),
         location: location,
