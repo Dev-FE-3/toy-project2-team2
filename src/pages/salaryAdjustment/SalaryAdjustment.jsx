@@ -34,7 +34,7 @@ const SalaryAdjustment = () => {
     }
 
     // Redux 상태가 충분하지 않으면 Firebase에서 데이터 가져오기
-    if (!userInfo.employeeId || !userInfo.position || !userInfo.name) {
+    if (!userInfo.employeeId) {
       const fetchUserData = async () => {
         const docRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(docRef);
@@ -46,13 +46,7 @@ const SalaryAdjustment = () => {
 
       fetchUserData();
     }
-  }, [
-    user,
-    userInfo?.employeeId,
-    userInfo?.position,
-    userInfo?.name,
-    dispatch,
-  ]);
+  }, [user, userInfo?.employeeId, dispatch]);
 
   // 급여 요청 데이터 가져오기
   useEffect(() => {
